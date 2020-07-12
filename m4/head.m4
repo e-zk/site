@@ -7,6 +7,6 @@ define(`_HEAD',`<head>
 )
 
 define(`_NAV', `<nav>
-		<p><a href="https://zakaria.org/">zakaria.org</a> / <a href="https://zakaria.org/posts">blog</a></p>
+		<p><a href="/">zakaria.org</a> / <a href="/posts">blog</a></p>
 	</nav>'
 )
