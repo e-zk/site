@@ -84,7 +84,7 @@ update_index() {
 		html="
 	<tr>
 		<td>${post_date}</td>
-		<td><a href=\"${WWW}/posts/${post_bname}/\">${post_title}</a></td>
+		<td><a href=\"${post_bname}/\">${post_title}</a></td>
 	</tr>"
 
 		html_table="${html_table}${html}"
