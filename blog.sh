@@ -98,7 +98,7 @@ update_index() {
 	html_table=$(echo "${html_table}" | sed -e 's/^/		/g')
 
 	echo "+ running m4 ..."
-	m4 -DTABLE="$html_table" "$INDEXM4" > "${POSTSDIR}/index.html"
+	m4 -DTITLE="blog" -DTABLE="$html_table" "$INDEXM4" > "${POSTSDIR}/index.html"
 	
 }
 
