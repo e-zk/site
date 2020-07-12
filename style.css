@@ -1,0 +1,188 @@
+/* TODO self-host webfonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto+Mono:wght@400;500&display=swap');
+
+:root {
+	--bfont: "Open Sans", sans-serif;
+	--hfont: "Roboto Mono", monospace;
+}
+
+html,
+body {
+	background: #ffffff;
+	/*background: #aaafaf;*/
+	/*background: #af305f;*/
+	/*background: #9f305f;*/
+	/*background: #afa02f;*/
+	/*background: #edeae0;*/
+	/*background: #df3010;*/
+	margin: 0;
+	font-family: var(--bfont);
+	font-size: 16px;
+	padding: 1rem;
+}
+
+body {
+	color: #333;
+}
+
+a {
+	color: #333;
+	color: rgb(176,0,64);
+	text-decoration: none;
+	border-bottom: 2px solid rgba(0,0,0,.25);
+	border-bottom: 2px solid rgba(176,0,64,.25);
+}
+
+a:focus,
+a:hover {
+	color: rgba(176,0,64,1);
+	border-bottom: 2px solid rgb(176,0,64);
+}
+
+h1 {
+	color: #000000;
+	font-family: var(--hfont);
+	font-weight: 500;
+	margin: 2.5rem 0 1.5rem;
+}
+h2, h3, h4, h5, h6 {
+	color: #202020;
+	font-family: var(--hfont);
+	font-weight: normal;
+	margin: 2.5rem 0 1.5rem;
+}
+
+ul {
+	padding-left: 2rem;
+}
+
+li {
+	margin-bottom: 1rem;
+}
+
+.info {
+	color: #4f4f4f;
+	color: rgba(0,0,0,0.6);
+	font-family: var(--hfont);
+	margin: 2.5rem 0 1.5rem;
+}
+
+.info a {
+	color: #4f4f4f;
+	color: rgba(0,0,0,0.6);
+	border-bottom: none;
+}
+.info a:hover {
+	color: #2f2f2f;
+	color: rgb(176,0,64);
+	border-bottom: none;
+}
+
+nav {
+	display: block;
+	margin: 0 auto;
+	max-width: 800px;
+	font-family: var(--hfont);
+	font-size: inherit;
+}
+nav p,
+nav a {
+	color: #000;
+	border-bottom: none;
+}
+nav a:hover {
+	color: rgb(176,0,64);
+	border-bottom: none;
+}
+
+main {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+p {
+	margin: 1rem 0;
+	line-height: 2;
+}
+
+p code {
+	background: #f0f0f0;
+	color: #b00040;
+	padding: 3px;
+	border-radius: 2px;
+	/*border: 1px solid #e0e0e0;*/
+}
+
+pre {
+	background: #f0f0f0;
+	color: #111;
+	border-radius: 2px;
+	margin: 0 !important;
+	padding: 1rem;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+img {
+	max-width: 100%;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+/* posts page shit */
+.poststable {
+	font-family: var(--hfont);
+	font-size: inherit;
+}
+.poststable td {
+	padding-bottom: 1rem;
+}
+.poststable td:nth-child(2) {
+	padding-left: 1.5rem;
+}
+
+::selection {
+	background-color: #b00040;
+	color: #fff;
+}
+
+@media only screen and (max-width: 320px) {
+	body {
+		font-size: 10.5pt;
+	}
+}
+
+
+@media (prefers-color-scheme: dark) {
+	html, body {
+		background: #1f1f1f;
+		color: #eee;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		color: #ffffff;
+	}
+
+	nav p,
+	nav a {
+		color: #eee;
+	}
+	
+
+	p code {
+		background: #1f1f1f;
+		border: 1px solid #2f2f2f;
+	}
+
+	pre {
+		background: #101010;
+		color: #eee;
+	}
+
+	.info,
+	.info a {
+		color: #aaa;
+	}
+}
