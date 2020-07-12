@@ -2,10 +2,8 @@
 
 # website url
 WWW="${WWW:-https://zakaria.org}"
-# httpd root
-ROOT=${WEBROOT:-/www/htdocs}
 # posts directory
-POSTSDIR=${ROOT}/posts
+POSTSDIR=posts
 
 # template paths
 POSTM4=m4/post.m4
