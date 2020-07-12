@@ -113,10 +113,10 @@ make_post() {
 	echo "++ populating ${post_dir}/ ..."
 	mkdir -p "${post_dir}"
 
-	echo "+ compiling html w/ lowdown + m4 ..."
+	echo "+ compiling html ..."
 	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$mdfile" "$POSTM4" > "${post_dir}/post.html"
 
-	echo "+ copying plaintext to ${post_dir}/${filename} ..."
+	echo "+ copying plaintext ..."
 	cp -v "$mdfile" "${post_dir}/${filename}"
 }
 
