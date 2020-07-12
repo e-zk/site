@@ -15,7 +15,7 @@ define(CONTENT, `esyscmd(`lowdown -T html -D smarty' MDFILE)')dnl
 		CONTENT
 		<ul class="info">
 			<li>CREATED</li>
-			<li><a href="https://MDFILE">MDFILE</a></li>
+			<li><a href="MDFILE">MDFILE</a></li>
 			<li>LAST `MODIFIED': MODIFIED</li>
 		</ul>
 	</main>
