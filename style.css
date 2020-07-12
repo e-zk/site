@@ -61,11 +61,18 @@ li {
 	margin-bottom: 1rem;
 }
 
+.home-links,
+.home-links a {
+	font-family: monospace;
+	border-bottom: none;
+}
+
 .info {
 	color: #4f4f4f;
 	color: rgba(0,0,0,0.6);
 	font-family: var(--hfont);
 	margin: 2.5rem 0 1.5rem;
+	list-style: none;
 }
 
 .info a {
