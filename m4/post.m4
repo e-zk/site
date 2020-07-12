@@ -7,6 +7,7 @@ dnl
 dnl compile .md to html, and append two tab chars to the beginning of each line.dnl
 dnl define(CONTENT, `esyscmd(`lowdown -T html -D smarty' MDFILE `| sed -E "s/^/		/g"')')dnl
 define(CONTENT, `esyscmd(`lowdown -T html -D smarty' MDFILE)')dnl
+<!DOCTYPE html>
 <html>
 	_HEAD(TITLE)
 	<body>
