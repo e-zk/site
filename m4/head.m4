@@ -1,5 +1,5 @@
 define(`_HEAD',`<head>
-		<title>$1</title>
+		<title>$1 - zakaria.org</title>
 		<link rel="stylesheet" href="/style.css"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>'
