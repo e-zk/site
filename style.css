@@ -81,7 +81,7 @@ li {
 	border-bottom: none;
 }
 .info a:hover {
-	color: #2f2f2f;
+	color: #b00040;
 	color: rgb(176,0,64);
 	border-bottom: none;
 }
@@ -114,8 +114,8 @@ p {
 }
 
 p code {
-	background: #f0f0f0;
-	color: #b00040;
+	background: #b00040;
+	color: #ffffff;
 	padding: 3px;
 	border-radius: 2px;
 	/*border: 1px solid #e0e0e0;*/
