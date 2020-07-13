@@ -180,8 +180,9 @@ table {
 	
 
 	p code {
-		background: #1f1f1f;
-		border: 1px solid #2f2f2f;
+		background: #b00040;
+		color: #ffffff;
+		/*border: 1px solid #2f2f2f;*/
 	}
 
 	pre {
