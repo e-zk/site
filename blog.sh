@@ -23,6 +23,18 @@ usage:  blog.sh [a|add] FILE
 EOF
 }
 
+log() {
+	message="$1"
+	level="$2"
+
+	if [ -z "$level" ]; then
+		printf "[blog] %s\\n" "$message"
+		return
+	fi
+
+	printf "[%s] %s\\n" "$level" "$message"
+}
+
 # get file basename
 # https://github.com/dylanaraps/pure-sh-bible#get-the-base-name-of-a-file-path
 bname() {
@@ -31,14 +43,6 @@ bname() {
         dir=${dir%"$2"}
         printf '%s\n' "${dir:-/}"
 }
-
-# date to seconds
-#dts() {
-#	# requires BSD `date`
-#	date -j -f "%F %H:%M:%S" "${1} 00:00:00" +"%s"
-#	# for gnu/busybox `date` uncomment:
-#	#date -d "$1" +"%s"
-#}
 
 # get first h1 title from markdown file
 get_md_title() {
@@ -49,20 +53,19 @@ get_md_title() {
 # get post date from markdown filename
 get_md_date() {
 	filename="$1"
-	#echo "$filename" | sed -E 's/^([0-9]{4})-([0-9]{2})-([0-9]{2})-(.*)\.md$/\1-\2-\3/'
 	echo "$filename" | sed -E 's/^([0-9]{4})-([0-9]{2})-([0-9]{2})-(.*)$/\1-\2-\3/'
 }
 
 update_index() {
 	
-	echo "++ updating post index ..."
+	log "updating post index"
 
 	# get list of posts
 	posts=''
 	for f in ${POSTSDIR}/*; do
 		case "$f" in
 			${POSTSDIR}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-*)
-				posts="${posts}\n${f}" ;;
+				posts="${posts}\\n${f}" ;;
 			*) ;;
 		esac
 	done
@@ -72,13 +75,13 @@ update_index() {
 
 	# for each post dir in the sorted post dirs...
 	for post in $(echo "$posts" | sort -r); do
-		post_bname=$(bname $post)
+		post_bname=$(bname "$post")
 		post_date=$(get_md_date "$post_bname")
 		post_title=$(get_md_title "${POSTSDIR}/${post_bname}/${post_bname}.md")
 
 		[ -z "$post_title" ] && post_title="untitled"
 
-		echo "+ adding ${post_bname} ..."
+		log "adding ${post_bname} \"${post_title}\"" "indexing"
 
 		# add a table row to the html
 		html="
@@ -92,12 +95,12 @@ update_index() {
 	done
 
 	# close html table tag
-	html_table="${html_table}\n</table>"
+	html_table="${html_table}\\n</table>"
 	
 	# add indentation
 	html_table=$(echo "${html_table}" | sed -e 's/^/		/g')
 
-	echo "+ running m4 ..."
+	log "running m4" "indexing"
 	m4 -DTITLE="blog" -DTABLE="$html_table" "$INDEXM4" > "${POSTSDIR}/index.html"
 	
 }
@@ -110,14 +113,14 @@ make_post() {
 	filename=$(bname "$mdfile")
 	post_dir="${POSTSDIR}/${filename%%.*}"
 
-	echo "++ populating ${post_dir}/ ..."
+	log "populating ${post_dir}/"
 	mkdir -p "${post_dir}"
 
-	echo "+ compiling html ..."
+	log "compiling html"
 	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$mdfile" "$POSTM4" > "${post_dir}/post.html"
 
-	echo "+ copying plaintext ..."
-	cp -v "$mdfile" "${post_dir}/${filename}"
+	log "copying plaintext"
+	cp "$mdfile" "${post_dir}/${filename}" || { echo "error"; exit 1; }
 }
 
 # check argument length
