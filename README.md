@@ -6,6 +6,12 @@
 	$ git clone https://github.com/e-zk/site.git ./htdocs
 	$ # add blog posts and such
 	$ ./blog.sh add 2020-02-02-somepost.md
+	[blog] populating posts/2020-02-02-somepost/
+	[blog] compiling html
+	[blog] copying plaintext
+	[blog] updating post index
+	[indexing] adding 2020-02-02-somepost "This is a heading"
+	[indexing] running m4
 
 ### index.html
 homepage
