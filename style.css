@@ -114,11 +114,10 @@ p {
 }
 
 p code {
-	background: #b00040;
-	color: #ffffff;
+	background: #f0f0f0;
+	color: #b00040;
 	padding: 3px;
 	border-radius: 2px;
-	/*border: 1px solid #e0e0e0;*/
 }
 
 pre {
@@ -180,8 +179,8 @@ table {
 	
 
 	p code {
-		background: #b00040;
-		color: #ffffff;
+		background: #f0f0f0;
+		color: #b00040;
 		/*border: 1px solid #2f2f2f;*/
 	}
 
