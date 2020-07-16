@@ -1,5 +1,5 @@
 include(m4/head.m4)dnl
-define(TABLE, `Title')dnl
+define(TABLE, `no data')dnl
 <!DOCTYPE html>
 <html>
 	_HEAD(TITLE)
