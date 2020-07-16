@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# website url
-WWW="${WWW:-https://zakaria.org}"
-# posts directory
+# directory to put posts
 POSTSDIR=posts
 
-# template paths
+# path to post template
 POSTM4=m4/post.m4
+
+# path to index template
 INDEXM4=m4/posts.m4
 
 
@@ -57,7 +57,6 @@ get_md_date() {
 }
 
 update_index() {
-	
 	log "updating post index"
 
 	# get list of posts
@@ -122,6 +121,7 @@ make_post() {
 	log "copying plaintext"
 	cp "$mdfile" "${post_dir}/${filename}" || { echo "error"; exit 1; }
 }
+
 
 # check argument length
 if [ $# -lt 1 ]; then 
