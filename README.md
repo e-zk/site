@@ -36,3 +36,12 @@ posts
 ### m4/
 m4 templates
 
+#### head.m4
+`<head>` and `<nav>` macros
+
+#### post.m4
+template for a blog post
+
+#### posts.m4
+template for post index/list
+
