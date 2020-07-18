@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# site info
+DOMAIN=zakaria.org
+WWW="https://${DOMAIN}"
+
 # directory to put posts
 POSTSDIR=posts
 
@@ -19,6 +23,7 @@ usage:  blog.sh [a|add] FILE
         a|add   render a new post from FILE, create necessary dirs,
                 copy plaintext to site root, then regenerate the index
         i|index regenerate index
+	r|rss   regenerate rss
 	h|help  show this help message
 EOF
 }
@@ -44,10 +49,27 @@ bname() {
         printf '%s\n' "${dir:-/}"
 }
 
+# get list of posts
+get_post_list() {
+	posts=''
+	for post in ${POSTSDIR}/*; do
+	        [ "$post" = "posts/index.html" ] && continue
+	        posts="${posts}\\n${post}"
+	done
+
+	# reverse post order
+	posts_rev=''
+	for post in $(echo "$posts" | sort -r); do
+		posts_rev="${posts_rev}\\n${post}"
+	done
+
+	echo "$posts_rev"
+}
+
 # get first h1 title from markdown file
 get_md_title() {
-	mdfile="$1"
-	head -n 1 "$mdfile" | sed -e 's/^# //g'
+	md_file="$1"
+	head -n 1 "$md_file" | sed -e 's/^# //g'
 }
 
 # get post date from markdown filename
@@ -56,24 +78,19 @@ get_md_date() {
 	echo "$filename" | sed -E 's/^([0-9]{4})-([0-9]{2})-([0-9]{2})-(.*)$/\1-\2-\3/'
 }
 
+# update post index page
 update_index() {
 	log "updating post index"
 
 	# get list of posts
-	posts=''
-	for f in ${POSTSDIR}/*; do
-		case "$f" in
-			${POSTSDIR}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-*)
-				posts="${posts}\\n${f}" ;;
-			*) ;;
-		esac
-	done
+	posts="$(get_post_list)"
 	
 	# this is where we start generating the html
 	html_table="<table class=\"poststable\">"
 
 	# for each post dir in the sorted post dirs...
-	for post in $(echo "$posts" | sort -r); do
+	for post in $posts; do
+
 		post_bname=$(bname "$post")
 		post_date=$(get_md_date "$post_bname")
 		post_title=$(get_md_title "${POSTSDIR}/${post_bname}/${post_bname}.md")
@@ -90,7 +107,7 @@ update_index() {
 	</tr>"
 
 		html_table="${html_table}${html}"
-		
+	
 	done
 
 	# close html table tag
@@ -104,22 +121,51 @@ update_index() {
 	
 }
 
+# generate an rss feed
+generate_rss() {
+	printf '<rss version="2.0" xml:base="%s">\n' "${WWW}/"
+	printf '\t<channel>\n'
+	printf '\t<title>zakaria</title>\n'
+	printf '\t\t<description/>\n'
+	printf '\t\t<link>%s</link>\n' "${WWW}/"
+
+	# get list of posts
+	posts="$(get_post_list)"
+
+	for post in $posts; do
+		post_base=$(bname "$post")
+		md_file="${post}/${post_base}.md"
+		md_title=$(get_md_title "$md_file")
+		md_date=$(get_md_date "$md_file")
+
+	        printf '\t\t<item>\n'
+	        printf '\t\t\t<link>%s</link>\n'       "${WWW}/${post}/"
+	        printf '\t\t\t<title>%s</title>\n'     "$md_title"
+	        printf '\t\t\t<pubDate>%s</pubDate>\n' "$md_date"
+	        printf '\t\t</item>\n'
+
+	done
+
+	printf '\t</channel>\n'
+	printf '</rss>\n'
+}
+
 # make post
 make_post() {
-	mdfile="$1"
-	post_title=$(get_md_title "$mdfile")
-	post_date=$(get_md_date "$mdfile")
-	filename=$(bname "$mdfile")
+	md_file="$1"
+	post_title=$(get_md_title "$md_file")
+	post_date=$(get_md_date "$md_file")
+	filename=$(bname "$md_file")
 	post_dir="${POSTSDIR}/${filename%%.*}"
 
 	log "populating ${post_dir}/"
 	mkdir -p "${post_dir}"
 
 	log "compiling html"
-	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$mdfile" "$POSTM4" > "${post_dir}/post.html"
+	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" "$POSTM4" > "${post_dir}/post.html"
 
 	log "copying plaintext"
-	cp "$mdfile" "${post_dir}/${filename}" || { echo "error"; exit 1; }
+	cp "$md_file" "${post_dir}/${filename}" || { echo "error"; exit 1; }
 }
 
 
@@ -153,10 +199,19 @@ case "$1" in
 
 		# update index
 		update_index
+
+		# update rss
+		log "generating rss feed" "rss"
+		generate_rss > rss.xml
 		;;
 	i|index)
 		# update index
 		update_index
+		;;
+	r|rss)
+		# update rss
+		log "generating rss feed" "rss"
+		generate_rss > rss.xml
 		;;
 	*)
 		echo "unknown command"
