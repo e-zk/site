@@ -59,7 +59,9 @@ li {
 	margin-bottom: 1rem;
 }
 */
-
+.home-links {
+	margin: 2.5rem 0 1.5rem;
+}
 .home-links,
 .home-links a {
 	font-family: var(--hfont);
@@ -143,7 +145,7 @@ table {
 .poststable {
 	font-family: var(--hfont);
 	font-size: inherit;
-	margin: 0 0 1.5rem;
+	margin: 2.5rem 0 1.5rem;
 }
 .poststable td {
 	padding-bottom: 1rem;
