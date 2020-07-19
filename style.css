@@ -143,6 +143,7 @@ table {
 .poststable {
 	font-family: var(--hfont);
 	font-size: inherit;
+	margin: 0 0 1.5rem;
 }
 .poststable td {
 	padding-bottom: 1rem;
