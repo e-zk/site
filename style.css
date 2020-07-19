@@ -93,7 +93,7 @@ nav {
 	margin: 0 auto;
 	max-width: 800px;
 	font-family: var(--hfont);
-	font-size: inherit;
+	font-size: 14px;
 }
 nav p,
 nav a {
@@ -178,14 +178,13 @@ table {
 
 	nav p,
 	nav a {
-		color: #eee;
+		color: #ddd;
 	}
 	
 
 	p code {
 		background: #f0f0f0;
 		color: #b00040;
-		/*border: 1px solid #2f2f2f;*/
 	}
 
 	pre {
@@ -195,6 +194,6 @@ table {
 
 	.info,
 	.info a {
-		color: #aaa;
+		color: #909090;
 	}
 }
