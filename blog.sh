@@ -53,8 +53,12 @@ bname() {
 get_post_list() {
 	posts=''
 	for post in ${POSTSDIR}/*; do
-	        [ "$post" = "posts/index.html" ] && continue
-	        posts="${posts}\\n${post}"
+	        #[ "$post" = "posts/index.html" ] && continue
+		case "$post" in
+			${POSTSDIR}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-*.html)
+		        	posts="${posts}\\n${post}" ;;
+			*) ;;
+		esac
 	done
 
 	# reverse post order
@@ -92,8 +96,8 @@ update_index() {
 	for post in $posts; do
 
 		post_bname=$(bname "$post")
-		post_date=$(get_md_date "$post_bname")
-		post_title=$(get_md_title "${POSTSDIR}/${post_bname}/${post_bname}.md")
+		post_date=$(get_md_date "${post_bname%%.*}.md")
+		post_title=$(get_md_title "${POSTSDIR}/${post_bname%%.*}.md")
 
 		[ -z "$post_title" ] && post_title="untitled"
 
@@ -103,7 +107,7 @@ update_index() {
 		html="
 	<tr>
 		<td>${post_date}</td>
-		<td><a href=\"${post_bname}/\">${post_title}</a></td>
+		<td><a href=\"${post_bname%%.*}\">${post_title}</a></td>
 	</tr>"
 
 		html_table="${html_table}${html}"
@@ -134,12 +138,12 @@ generate_rss() {
 
 	for post in $posts; do
 		post_base=$(bname "$post")
-		md_file="${post}/${post_base}.md"
+		md_file="${post_base%%.*}.md"
 		md_title=$(get_md_title "$md_file")
 		md_date=$(get_md_date "$md_file")
 
 	        printf '\t\t<item>\n'
-	        printf '\t\t\t<link>%s</link>\n'       "${WWW}/${post}/"
+	        printf '\t\t\t<link>%s</link>\n'       "${WWW}/${post}"
 	        printf '\t\t\t<title>%s</title>\n'     "$md_title"
 	        printf '\t\t\t<pubDate>%s</pubDate>\n' "$md_date"
 	        printf '\t\t</item>\n'
@@ -156,16 +160,16 @@ make_post() {
 	post_title=$(get_md_title "$md_file")
 	post_date=$(get_md_date "$md_file")
 	filename=$(bname "$md_file")
-	post_dir="${POSTSDIR}/${filename%%.*}"
+	#post_dir="${POSTSDIR}/${filename%%.*}"
 
-	log "populating ${post_dir}/"
-	mkdir -p "${post_dir}"
+	#log "populating ${post_dir}/"
+	#mkdir -p "${post_dir}"
 
 	log "compiling html"
-	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" "$POSTM4" > "${post_dir}/post.html"
+	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
 
 	log "copying plaintext"
-	cp "$md_file" "${post_dir}/${filename}" || { echo "error"; exit 1; }
+	cp "$md_file" "${POSTSDIR}/${filename}" || { echo "error"; exit 1; }
 }
 
 
