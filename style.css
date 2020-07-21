@@ -147,8 +147,6 @@ table {
 
 /* posts page */
 .poststable {
-	font-family: var(--hfont);
-	font-size: inherit;
 	margin: 2.5rem 0 1.5rem;
 }
 .poststable td {
