@@ -1,13 +1,13 @@
 /* TODO self-host webfonts */
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap');
 
 
 :root {
 	--bfont: "Inconsolata", sans-serif;
-	--hfont: "Inconsolata", "Roboto Mono", monospace;
+	--hfont: "Roboto Mono", monospace;
 
-	--main-txt: 14pt;
-	--small-txt: 12pt;
+	--main-txt: 16px;
+	--small-txt: 0.86rem;
 }
 
 html,
@@ -40,32 +40,17 @@ a:hover {
 	border-bottom: 2px solid rgb(176,0,64);
 }
 
-h1,
-h1::before {
+h1 {
 	color: #000000;
 	font-family: var(--hfont);
 	font-weight: 700;
-	font-size: var(--main-txt);
 	margin: 1.5rem 0 1.5rem;
 }
 h2, h3, h4, h5, h6 {
 	color: #202020;
 	font-family: var(--hfont);
 	font-weight: normal;
-	font-size: var(--main-txt);
 	margin: 2.5rem 0 1.5rem;
-}
-h1::before {
-	content "# ";
-}
-h2::before {
-	content "## ";
-}
-h3::before {
-	content "### ";
-}
-h4::before {
-	content "#### ";
 }
 
 /*
@@ -83,6 +68,7 @@ li {
 .home-links,
 .home-links a {
 	font-family: var(--hfont);
+	font-size: var(--small-txt);
 	border-bottom: none;
 }
 
