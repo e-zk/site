@@ -44,13 +44,13 @@ h1 {
 	color: #000000;
 	font-family: var(--hfont);
 	font-weight: 700;
-	margin: 2.5rem 0 1.5rem;
+	margin: 1.5rem 0 1.5rem;
 }
 h2, h3, h4, h5, h6 {
 	color: #202020;
 	font-family: var(--hfont);
 	font-weight: normal;
-	margin: 2.5rem 0 1.5rem;
+	margin: 2rem 0 1.5rem;
 }
 
 /*
@@ -127,7 +127,8 @@ p code {
 	margin: 0 0.125rem;
 }
 
-pre {
+pre code {
+	display: block;
 	background: #f0f0f0;
 	color: #111;
 	border-radius: 2px;
@@ -171,7 +172,7 @@ table {
 @media (prefers-color-scheme: dark) {
 	html, body {
 		background: #000a0f;
-		color: #fafafa;
+		color: #dfdfdf;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -180,7 +181,7 @@ table {
 
 	nav p,
 	nav a {
-		color: #ddd;
+		color: #afafaf;
 	}
 	
 
@@ -196,6 +197,6 @@ table {
 
 	.info,
 	.info a {
-		color: #909090;
+		color: #afafaf;
 	}
 }
