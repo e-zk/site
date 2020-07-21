@@ -73,7 +73,7 @@ get_post_list() {
 # get first h1 title from markdown file
 get_md_title() {
 	md_file="$1"
-	head -n 1 "$md_file" | sed -e 's/^# //g'
+	head -n 1 "$md_file" | sed -e 's/^#\ //g'
 }
 
 # get post date from markdown filename
