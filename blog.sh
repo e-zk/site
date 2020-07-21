@@ -73,7 +73,7 @@ get_post_list() {
 # get first h1 title from markdown file
 get_md_title() {
 	md_file="$1"
-	head -n 1 "$md_file" | sed -e 's/^#\ //g'
+	head -n 1 "$md_file" | sed -e 's/^#\ \(.*\)$/\1/g'
 }
 
 # get post date from markdown filename
@@ -160,13 +160,12 @@ make_post() {
 	post_title=$(get_md_title "$md_file")
 	post_date=$(get_md_date "$md_file")
 	filename=$(bname "$md_file")
-	#post_dir="${POSTSDIR}/${filename%%.*}"
 
-	#log "populating ${post_dir}/"
-	#mkdir -p "${post_dir}"
+	# from lowdown get article content
+	article_html=$(lowdown -Thtml "${md_file}")
 
 	log "compiling html"
-	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
+	m4 -DATITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" -DCONTENT="$article_html" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
 
 	log "copying plaintext"
 	cp "$md_file" "${POSTSDIR}/${filename}" || { echo "error"; exit 1; }
