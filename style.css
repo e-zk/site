@@ -90,7 +90,7 @@ li {
 	color: #4f4f4f;
 	color: rgba(0,0,0,0.6);
 	font-family: var(--hfont);
-	font-size: small;
+	font-size: var(--small-txt);
 	margin: 0 0 1.5rem;
 	padding: 0;
 	list-style: none;
@@ -111,7 +111,7 @@ nav {
 	margin: 0 auto;
 	max-width: 800px;
 	font-family: var(--hfont);
-	font-size: 14px;
+	font-size: var(--small-txt);
 }
 nav p,
 nav a {
