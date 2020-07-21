@@ -6,11 +6,10 @@ _HEAD(TITLE)
 _NAV
 <main>
 CONTENT
-<ul class="info">
-<li>CREATED</li>
-<li><a href="MDFILE">MDFILE</a></li>
-<li>LAST `MODIFIED': MODIFIED</li>
-</ul>
+<p class="info">
+<a href="MDFILE">MDFILE</a><br/>
+CREATED<br/> / LAST `MODIFIED': MODIFIED</li>
+</p>
 </main>
 </body>
 </html>
