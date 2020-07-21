@@ -1,10 +1,10 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto+Mono:wght@400;500&display=swap');
 /* TODO self-host webfonts */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700;900&display=swap');
+
 
 :root {
-	--bfont: "Open Sans", sans-serif;
-	--hfont: "Roboto Mono", monospace;
+	--bfont: "Inconsolata", sans-serif;
+	--hfont: "Inconsolata", "Roboto Mono", monospace;
 }
 
 html,
@@ -18,7 +18,7 @@ body {
 	/*background: #df3010;*/
 	margin: 0;
 	font-family: var(--bfont);
-	font-size: 16px;
+	font-size: 14px;
 }
 
 body {
@@ -40,7 +40,7 @@ a:hover {
 h1 {
 	color: #000000;
 	font-family: var(--hfont);
-	font-weight: 500;
+	font-weight: normal;
 	margin: 2.5rem 0 1.5rem;
 }
 h2, h3, h4, h5, h6 {
@@ -168,7 +168,7 @@ table {
 
 @media (prefers-color-scheme: dark) {
 	html, body {
-		background: #1f1f1f;
+		background: #000000;
 		color: #fafafa;
 	}
 
@@ -188,7 +188,7 @@ table {
 	}
 
 	pre {
-		background: #101010;
+		background: #1f1f1f;
 		color: #eee;
 	}
 
