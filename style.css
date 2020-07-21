@@ -5,6 +5,9 @@
 :root {
 	--bfont: "Inconsolata", sans-serif;
 	--hfont: "Inconsolata", "Roboto Mono", monospace;
+
+	--main-txt: 14pt;
+	--small-txt: 12pt;
 }
 
 html,
@@ -18,7 +21,7 @@ body {
 	/*background: #df3010;*/
 	margin: 0;
 	font-family: var(--bfont);
-	font-size: 14px;
+	font-size: var(--main-txt);
 }
 
 body {
@@ -37,17 +40,32 @@ a:hover {
 	border-bottom: 2px solid rgb(176,0,64);
 }
 
-h1 {
+h1,
+h1::before {
 	color: #000000;
 	font-family: var(--hfont);
-	font-weight: normal;
-	margin: 2.5rem 0 1.5rem;
+	font-weight: 700;
+	font-size: var(--main-txt);
+	margin: 1.5rem 0 1.5rem;
 }
 h2, h3, h4, h5, h6 {
 	color: #202020;
 	font-family: var(--hfont);
 	font-weight: normal;
+	font-size: var(--main-txt);
 	margin: 2.5rem 0 1.5rem;
+}
+h1::before {
+	content "# ";
+}
+h2::before {
+	content "## ";
+}
+h3::before {
+	content "### ";
+}
+h4::before {
+	content "#### ";
 }
 
 /*
@@ -60,7 +78,7 @@ li {
 }
 */
 .home-links {
-	margin: 2.5rem 0 1.5rem;
+	margin: 1.5rem 0 1.5rem;
 }
 .home-links,
 .home-links a {
@@ -168,7 +186,7 @@ table {
 
 @media (prefers-color-scheme: dark) {
 	html, body {
-		background: #000000;
+		background: #000a0f;
 		color: #fafafa;
 	}
 
