@@ -165,7 +165,7 @@ make_post() {
 	article_html=$(lowdown -Thtml "${md_file}")
 
 	log "compiling html"
-	m4 -DATITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" -DCONTENT="$article_html" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
+	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMDFILE="$md_file" -DCONTENT="$article_html" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
 
 	log "copying plaintext"
 	cp "$md_file" "${POSTSDIR}/${filename}" || { echo "error"; exit 1; }
