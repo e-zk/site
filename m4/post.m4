@@ -8,7 +8,7 @@ _NAV
 CONTENT
 <p class="info">
 <a href="MDFILE">MDFILE</a><br/>
-CREATED<br/> / LAST `MODIFIED': MODIFIED</li>
+created:CREATED / `modified':MODIFIED
 </p>
 </main>
 </body>
