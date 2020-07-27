@@ -202,10 +202,6 @@ case "$1" in
 
 		# update index
 		update_index
-
-		# update rss
-		log "generating rss feed" "rss"
-		generate_rss > rss.xml
 		;;
 	i|index)
 		# update index
