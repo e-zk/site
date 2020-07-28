@@ -1,9 +1,9 @@
 /* TODO self-host webfonts */
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap');
 
 
 :root {
-	--bfont: "Inconsolata", sans-serif;
+	--bfont: "Open Sans", sans-serif;
 	--hfont: "Roboto Mono", monospace;
 
 	--main-txt: 16px;
@@ -62,16 +62,6 @@ li {
 	margin-bottom: 1rem;
 }
 */
-.home-links {
-	margin: 1.5rem 0 1.5rem;
-}
-.home-links,
-.home-links a {
-	font-family: var(--hfont);
-	font-size: var(--small-txt);
-	border-bottom: none;
-}
-
 .info {
 	color: #4f4f4f;
 	color: rgba(0,0,0,0.6);
@@ -112,6 +102,17 @@ nav a:hover {
 main {
 	max-width: 800px;
 	margin: 0 auto;
+	padding: 0 1.5rem;
+	border: 1px solid rgba(0,0,0,.125);
+	box-shadow: 0px 0px 20px rgba(0,0,0,.12);
+	border-radius: 4px;
+}
+
+footer {
+	padding: 1.5rem;
+	display: block;
+	margin: 0 auto;
+	max-width: 800px;
 }
 
 p {
@@ -129,11 +130,13 @@ p code {
 
 pre code {
 	display: block;
-	background: #f0f0f0;
-	color: #111;
-	border-radius: 2px;
+	font-family: "Roboto Mono", monospace;
+	font-size: 13px;
+	background: #000000;
+	color: #ffffff;
 	margin: 0 !important;
-	padding: 1rem;
+	padding: 1.5rem;
+	border-radius: 4px;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
