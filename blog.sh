@@ -28,6 +28,7 @@ usage:  blog.sh [a|add] FILE
 EOF
 }
 
+# log w/ optional label
 log() {
 	message="$1"
 	level="$2"
@@ -43,10 +44,10 @@ log() {
 # get file basename
 # https://github.com/dylanaraps/pure-sh-bible#get-the-base-name-of-a-file-path
 bname() {
-        dir=${1%${1##*[!/]}}
-        dir=${dir##*/}
-        dir=${dir%"$2"}
-        printf '%s\n' "${dir:-/}"
+	dir=${1%${1##*[!/]}}
+	dir=${dir##*/}
+	dir=${dir%"$2"}
+	printf '%s\n' "${dir:-/}"
 }
 
 # get list of posts
@@ -142,11 +143,11 @@ generate_rss() {
 		md_title=$(get_md_title "$md_file")
 		md_date=$(get_md_date "$md_file")
 
-	        printf '\t\t<item>\n'
-	        printf '\t\t\t<link>%s</link>\n'       "${WWW}/${post}"
-	        printf '\t\t\t<title>%s</title>\n'     "$md_title"
-	        printf '\t\t\t<pubDate>%s</pubDate>\n' "$md_date"
-	        printf '\t\t</item>\n'
+		printf '\t\t<item>\n'
+		printf '\t\t\t<link>%s</link>\n'       "${WWW}/${post}"
+		printf '\t\t\t<title>%s</title>\n'     "$md_title"
+		printf '\t\t\t<pubDate>%s</pubDate>\n' "$md_date"
+		printf '\t\t</item>\n'
 
 	done
 
@@ -178,7 +179,7 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-# 
+# main case
 case "$1" in
 	h|help|-h)
 		usage
