@@ -175,7 +175,7 @@ table {
 
 @media (prefers-color-scheme: dark) {
 	html, body {
-		background: #101010;
+		background: #202020;
 		color: #dfdfdf;
 	}
 
@@ -185,7 +185,7 @@ table {
 
 	nav p,
 	nav a {
-		color: #afafaf;
+		color: #dfdfdf;
 	}
 	
 
@@ -194,10 +194,10 @@ table {
 		color: #b00040;
 	}
 
-	pre {
-		background: #1f1f1f;
+	/*pre code {
+		background: #;
 		color: #eee;
-	}
+	}*/
 
 	.info,
 	.info a {
