@@ -24,7 +24,7 @@ body {
 }
 
 body {
-	color: #333;
+	color: #40404f;
 	padding: 1.5rem;
 	line-height: 2;
 }
@@ -42,13 +42,13 @@ a:hover {
 }
 
 h1 {
-	color: #000000;
+	color: #10101f;
 	font-family: var(--hfont);
 	font-weight: 700;
 	margin: 0.5rem 0 0.5rem;
 }
 h2, h3, h4, h5, h6 {
-	color: #202020;
+	color: #20202f;
 	font-family: var(--hfont);
 	font-weight: normal;
 	margin: 1.5rem 0 0.5rem;
@@ -97,7 +97,7 @@ nav {
 }
 nav p,
 nav a {
-	color: #000;
+	color: #10101f;
 	border-bottom: none;
 }
 nav a:hover {
@@ -174,8 +174,7 @@ table {
 }
 
 ::selection {
-	background-color: #b00040;
-	color: #fff;
+	background-color: rgba(176,0,64,0.3);
 }
 
 @media only screen and (max-width: 320px) {
