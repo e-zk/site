@@ -82,7 +82,7 @@ In M4, macros can have arguments that can be placed into the macro&#39;s content
 &#60;&#47;head&#62;
 </code></pre>
 
-<p>The <code></code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#39;s navigation links:</p>
+<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#39;s navigation links:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;,`&#60;head&#62;
 &#60;meta http-equiv="content-type" content="text&#47;html; charset=utf-8"&#62;
