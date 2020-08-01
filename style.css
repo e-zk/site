@@ -143,8 +143,8 @@ pre {
 pre code {
 	display: block;
 	font-family: "Roboto Mono", monospace;
-	font-size: 13px;
-	line-height: 1;
+	font-size: 14px;
+	line-height: 1.4;
 	background: #000000;
 	color: #ffffff;
 	margin: 0 !important;
@@ -152,6 +152,14 @@ pre code {
 	border-radius: 4px;
 	overflow-x: auto;
 	overflow-y: hidden;
+}
+
+blockquote {
+	border-left: 2px solid #60606f;
+	padding-left: 1rem;
+	margin-left: 0.5rem;
+	font-style: italic;
+	color: #60606f;
 }
 
 img {
