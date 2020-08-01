@@ -64,7 +64,7 @@ Wouldn&#39;t that get messy?</p>
 <p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#39;s title and a link to our stylesheet will be printed. There&#39;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;, `&#60;head&#62;
-&#60;title&#62; - My Blog Lol&#60;&#47;title&#62;
+&#60;title&#62;$1 - My Blog Lol&#60;&#47;title&#62;
 &#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
 &#60;&#47;head&#62;&#39;)
 </code></pre>
@@ -73,7 +73,7 @@ Wouldn&#39;t that get messy?</p>
 <p>Well, what changed?</p>
 </blockquote>
 
-<p>See Timmy, on the second line, there is now a <code> -</code> before the rest of the blog title.<br/>
+<p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br/>
 In M4, macros can have arguments that can be placed into the macro&#39;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
 
 <pre><code class="language-HTML">&#60;head&#62;
