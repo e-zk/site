@@ -171,14 +171,12 @@ table {
 }
 
 /* posts page */
-.poststable {
-	margin: 0.5rem 0 0.5rem;
+.postslist {
+	padding-left: 0px;
+	list-style: none;
 }
-.poststable td {
-	padding-bottom: 1rem;
-}
-.poststable td:nth-child(2) {
-	padding-left: 0.5rem;
+.postslist li {
+	padding-bottom: 0.5rem;
 }
 
 ::selection {
