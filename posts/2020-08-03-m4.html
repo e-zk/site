@@ -28,7 +28,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <h2 id="Chapter%20II:%20The%20Quick%20Fix">Chapter II: The Quick Fix</h2>
 
-<p>I turned on tracing in my <code>head.m4</code> by adding <code></code> to the start of the file then I ran the script again. I knew instantly what had gone wrong&#8230; M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.</p>
+<p>I turned on tracing in my <code>head.m4</code> by adding <code>traceon</code> to the start of the file then I ran the script again. I knew instantly what had gone wrong&#8230; M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.</p>
 
 <p>As a quick fix in the post I replaced all occurrences of my actual macros with ones that were slightly different. It worked! &#8230;but then M4 gave another error: </p>
 
@@ -44,7 +44,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 <pre><code>article_html=$(echo "$article_html" |  sed -E -e "s&#47;define\(&#47;\&#39;!define\(!\"&#47;g" -e "s&#47;include\(&#47;\&#39;!include\(!\"&#47;g")
 </code></pre>
 
-<p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too).</p>
+<p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too). Edit: It is not foolproof, M4 tried to evaluate <code>traceon</code> in this post.</p>
 
 <p>I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.</p>
 
