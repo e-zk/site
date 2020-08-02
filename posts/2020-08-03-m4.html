@@ -44,7 +44,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 <pre><code>article_html=$(echo "$article_html" |  sed -E -e "s&#47;define\(&#47;\&#39;!define\(!\"&#47;g" -e "s&#47;include\(&#47;\&#39;!include\(!\"&#47;g")
 </code></pre>
 
-<p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too). Edit: It is not foolproof, M4 tried to evaluate <code>traceon</code> in this post.</p>
+<p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too). Edit: It is not foolproof, M4 tried to evaluate <code>traceon</code> in this post and the formatting of the above 'define' and 'include' is messed up.</p>
 
 <p>I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.</p>
 
