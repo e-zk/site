@@ -91,7 +91,7 @@ update_index() {
 	posts="$(get_post_list)"
 	
 	# this is where we start generating the html
-	html_table="<table class=\"poststable\">"
+	html_table="<ul class=\"postslist\">"
 
 	# for each post dir in the sorted post dirs...
 	for post in $posts; do
@@ -105,21 +105,17 @@ update_index() {
 		log "adding ${post_bname} \"${post_title}\"" "indexing"
 
 		# add a table row to the html
-		html="
-	<tr>
-		<td>${post_date}</td>
-		<td><a href=\"${post_bname%%.*}\">${post_title}</a></td>
-	</tr>"
+		html="<li><a href=\"${post_bname%%.*}\">${post_date} &bull; ${post_title}</a></li>"
 
 		html_table="${html_table}${html}"
 	
 	done
 
 	# close html table tag
-	html_table="${html_table}\\n</table>"
+	html_table="${html_table}</ul>"
 	
 	# add indentation
-	html_table=$(echo "${html_table}" | sed -e 's/^/		/g')
+	#html_table=$(echo "${html_table}" | sed -e 's/^/		/g')
 
 	log "running m4" "indexing"
 	m4 -DTITLE="blog" -DTABLE="$html_table" "$INDEXM4" > "${POSTSDIR}/index.html"
@@ -164,6 +160,9 @@ make_post() {
 
 	# from lowdown get article content
 	article_html=$(lowdown -Thtml "${md_file}")
+
+	# this HAS to be done for any articles containing m4 code; otherwise m4 tries to run the code in the post
+	article_html=$(echo "$article_html" |  sed -E -e "s/define\(/\'!define\(!\"/g" -e "s/include\(/\'!include\(!\"/g")
 
 	log "compiling html"
 	m4 -DTITLE="$post_title" -DCREATED="$post_date" -DMODIFIED="$(date '+%F')" -DMDFILE="$md_file" -DCONTENT="$article_html" "$POSTM4" > "${POSTSDIR}/${filename%%.*}.html"
