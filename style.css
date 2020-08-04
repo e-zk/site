@@ -1,0 +1,26 @@
+/* TODO self-host webfonts; in the meantime, google fonts work */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700;900&display=swap');
+
+body, html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #ffffff;
+	color: #333333;
+
+	font-family: "Inconsolata", monospace;
+	font-weight: 500;
+
+	line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+}
+
+main {
+	max-width: 720px;
+	margin: 0 auto;
+}
