@@ -17,10 +17,38 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+	color: #666666;
 	font-weight: 700;
 }
 
+a {
+	color: #222222;
+	text-decoration: none;
+	border-bottom: 1px dotted rgba(0,0,0,.3);
+	transition: color 0.5s ease, border-bottom 0.3s ease;
+}
+a:focus,
+a:hover {
+	color: #ffffff;
+	background: #000000;
+	border-bottom: 0px solid #000000;
+}
+
+nav p,
+nav a {
+	color: #333333;
+	border-bottom: none;
+}
+nav a:hover {
+	border-bottom: none;
+}
+
 main {
+	max-width: 720px;
+	margin: 0 auto;
+}
+
+nav {
 	max-width: 720px;
 	margin: 0 auto;
 }
