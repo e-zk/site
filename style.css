@@ -13,16 +13,18 @@ body {
 
 	font-family: "Inconsolata", monospace;
 	font-weight: 500;
+	font-size: 16px;
 
 	line-height: 1.6;
 }
 
 /* headings */
 h1, h2, h3, h4, h5, h6 {
-	color: #222222;
+	color: #444444;
 	font-weight: normal;
 }
 h1 {
+	color: #222222;
 	font-weight: 700;
 }
 h2::before, h3::before, h4::before, h5::before, h6::before {
@@ -36,7 +38,6 @@ a {
 	color: #222222;
 	text-decoration: none;
 	border-bottom: 1px solid #666666;
-	transition: color 0.3s ease, background 0.3s ease;
 }
 a:focus,
 a:hover {
@@ -68,7 +69,7 @@ main {
 /* inline code */
 p code {
 	background: #dddddd;
-	color: #333333;
+	color: #222222;
 	padding: 3px;
 	border-radius: 2px;
 }
@@ -86,4 +87,19 @@ pre code {
 
 	overflow-x: auto;
 	overflow-y: hidden;
+}
+
+/* info/footer */
+.info {
+	color: #aaaaaa;
+}
+.info a {
+	color: #aaaaaa;
+	border-color: #aaaaaa;
+}
+.info a:hover,
+.info a:focus {
+	color: #ffffff;
+	background: #000000;
+	border-bottom: 0px solid #000000;
 }
