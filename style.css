@@ -29,7 +29,7 @@ h1 {
 }
 h2::before, h3::before, h4::before, h5::before, h6::before {
 	content: "# ";
-	color: #888888;
+	color: #aaaaaa;
 	font-weight: 700;
 }
 
