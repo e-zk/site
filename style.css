@@ -5,7 +5,6 @@ body, html {
 	margin: 0;
 	padding: 0;
 }
-
 body {
 	padding: 1.5rem;
 
@@ -18,16 +17,25 @@ body {
 	line-height: 1.6;
 }
 
+/* headings */
 h1, h2, h3, h4, h5, h6 {
-	color: #666666;
+	color: #222222;
+}
+h1 {
+	font-weight: 700;
+}
+h2::before, h3::before, h4::before, h5::before, h6::before {
+	content: "# ";
+	color: #888888;
 	font-weight: 700;
 }
 
+/* links */
 a {
 	color: #222222;
 	text-decoration: none;
-	border-bottom: 1px dotted rgba(0,0,0,.3);
-	transition: color 0.5s ease, border-bottom 0.3s ease;
+	border-bottom: 1px solid #666666;
+	transition: color 0.3s ease, background 0.3s ease;
 }
 a:focus,
 a:hover {
@@ -36,6 +44,11 @@ a:hover {
 	border-bottom: 0px solid #000000;
 }
 
+/* nav style */
+nav {
+	max-width: 720px;
+	margin: 0 auto;
+}
 nav p,
 nav a {
 	color: #333333;
@@ -45,12 +58,8 @@ nav a:hover {
 	border-bottom: none;
 }
 
+/* main style */
 main {
-	max-width: 720px;
-	margin: 0 auto;
-}
-
-nav {
 	max-width: 720px;
 	margin: 0 auto;
 }
@@ -60,16 +69,16 @@ p code {
 	background: #dddddd;
 	color: #333333;
 	padding: 3px;
-	border-radius 4px;
+	border-radius: 2px;
 }
 
+/* pre/code blocks */
 pre {
 	line-height: 1.1;
 }
-
 pre code {
 	display: block;
-	padding: 0.5rem;
+	padding: 1rem;
 
 	background: #000000;
 	color: #ffffff;
