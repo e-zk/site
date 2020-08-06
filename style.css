@@ -1,6 +1,3 @@
-/* TODO self-host webfonts; in the meantime, google fonts work */
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700;900&display=swap');
-
 body, html {
 	margin: 0;
 	padding: 0;
@@ -9,25 +6,24 @@ body {
 	padding: 1.5rem;
 
 	background: #ffffff;
-	color: #333333;
+	color: #444444;
 
-	font-family: "Inconsolata", monospace;
-	font-weight: 500;
-	font-size: 16px;
+	/* yes, i 'stole' this list of fonts from github */
+	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: 14px;
 
-	line-height: 1.6;
+	line-height: 1.8;
 }
 
 /* headings */
 h1, h2, h3, h4, h5, h6 {
-	color: #444444;
+	color: #666666;
 	font-weight: normal;
 }
 h1 {
-	color: #222222;
 	font-weight: 700;
 }
-h2::before, h3::before, h4::before, h5::before, h6::before {
+h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
 	content: "# ";
 	color: #aaaaaa;
 	font-weight: 700;
@@ -68,8 +64,9 @@ main {
 
 /* inline code */
 p code {
-	background: #dddddd;
-	color: #222222;
+	font-size: 13px;
+	background: #efefef;
+	color: #000000;
 	padding: 3px;
 	border-radius: 2px;
 }
