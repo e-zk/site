@@ -65,8 +65,8 @@ main {
 /* inline code */
 p code {
 	font-size: 13px;
-	background: #efefef;
-	color: #000000;
+	background: #f5f5f5;
+	color: #333333;
 	padding: 3px;
 	border-radius: 2px;
 }
