@@ -48,9 +48,9 @@ a {
 }
 a:focus,
 a:hover {
-	color: #ffffff;
-	background: var(--accent2);
-	border-bottom: 0px solid #000000;
+	color: var(--accent);
+	border-bottom: 1px solid;
+	border-color: var(--accent2);
 }
 
 /* list */
@@ -86,9 +86,10 @@ main {
 p code {
 	font-size: 13px;
 	background: #f5f5f5;
-	color: #333333;
+	color: var(--txt-light);
 	padding: 2px;
-	border: 1px solid #aaaaaa;
+	border: 1px solid;
+	border-color: var(--txt-light3);
 	border-radius: 2px;
 }
 
@@ -107,6 +108,15 @@ pre code {
 	overflow-y: hidden;
 }
 
+/* post list */
+.postslist {
+	padding: 0;
+	list-style: none;
+}
+.postslist li {
+	padding-bottom: 0.25rem;
+}
+
 /* info/footer */
 .info {
 	color: var(--txt-light3);
@@ -115,9 +125,12 @@ pre code {
 	color: var(--txt-light3);
 	border-color: var(--txt-light3);
 }
+
 .info a:hover,
-.info a:focus {
+.info a:focus, 
+.postslist li a:hover,
+.postslist li a:focus {
 	color: #ffffff;
-	background: #000000;
+	background: var(--accent2);
 	border-bottom: 0px solid #000000;
 }
