@@ -1,3 +1,13 @@
+:root {
+	--bg-light: #ffffff;
+	--txt-light: #333333;
+	--txt-light2: #666666;
+	--txt-light3: #aaaaaa;
+
+	--accent: #3584E4;
+	--accent2: rgba(53,132,228,0.48);
+}
+
 body, html {
 	margin: 0;
 	padding: 0;
@@ -5,8 +15,8 @@ body, html {
 body {
 	padding: 1.5rem;
 
-	background: #ffffff;
-	color: #444444;
+	background: var(--bg-light);
+	color: var(--txt-light);
 
 	/* yes, i 'stole' this list of fonts from github */
 	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
@@ -17,29 +27,39 @@ body {
 
 /* headings */
 h1, h2, h3, h4, h5, h6 {
-	color: #666666;
+	color: var(--txt-light);
 	font-weight: normal;
 }
 h1 {
+	color: var(--txt-light);
 	font-weight: 700;
 }
 h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
 	content: "# ";
-	color: #aaaaaa;
+	color: var(--txt-light3);
 	font-weight: 700;
 }
 
 /* links */
 a {
-	color: #222222;
+	color: inherit;
 	text-decoration: none;
-	border-bottom: 1px solid #666666;
+	border-bottom: 1px solid rgba(48,48,48,0.48);
 }
 a:focus,
 a:hover {
 	color: #ffffff;
-	background: #000000;
+	background: var(--accent2);
 	border-bottom: 0px solid #000000;
+}
+
+/* list */
+ul {
+	padding-left: 1rem;
+}
+
+li {
+	padding: 0 0 0.1rem 0.5rem;
 }
 
 /* nav style */
@@ -49,7 +69,7 @@ nav {
 }
 nav p,
 nav a {
-	color: #333333;
+	color: var(--txt-light);
 	border-bottom: none;
 }
 nav a:hover {
@@ -67,7 +87,8 @@ p code {
 	font-size: 13px;
 	background: #f5f5f5;
 	color: #333333;
-	padding: 3px;
+	padding: 2px;
+	border: 1px solid #aaaaaa;
 	border-radius: 2px;
 }
 
@@ -88,11 +109,11 @@ pre code {
 
 /* info/footer */
 .info {
-	color: #aaaaaa;
+	color: var(--txt-light3);
 }
 .info a {
-	color: #aaaaaa;
-	border-color: #aaaaaa;
+	color: var(--txt-light3);
+	border-color: var(--txt-light3);
 }
 .info a:hover,
 .info a:focus {
