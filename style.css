@@ -130,7 +130,7 @@ pre code {
 .info a:focus, 
 .postslist li a:hover,
 .postslist li a:focus {
-	color: #ffffff;
-	background: var(--accent2);
-	border-bottom: 0px solid #000000;
+	color: var(--accent);;
+	border-bottom: 1px solid;
+	border-color: var(--accent2);
 }
