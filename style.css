@@ -34,13 +34,6 @@ h1 {
 	color: var(--txt-light);
 	font-weight: 700;
 }
-/*
-h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
-	content: "# ";
-	color: var(--txt-light3);
-	font-weight: 700;
-}
-*/
 
 /* links */
 a {
@@ -72,9 +65,9 @@ nav {
 nav p,
 nav a {
 	color: var(--txt-light);
-	border-bottom: none;
 }
-nav a:hover {
+nav a:first-child {
+	font-weight: 700;
 	border-bottom: none;
 }
 
@@ -116,7 +109,7 @@ pre code {
 	list-style: none;
 }
 .postslist li {
-	padding-bottom: 0.25rem;
+	padding-bottom: 0 0 0.25rem 0;
 }
 
 /* info/footer */
