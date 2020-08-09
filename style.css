@@ -65,6 +65,14 @@ main img {
 	box-shadow: 0px 10px 25px rgba(48,48,48,0.48);
 }
 
+/* inline svg icons */
+.svg-inline {
+	position: relative;
+	height: 1rem;
+	width: 1rem;
+	top: 0.125rem;
+}
+
 /* nav style */
 nav {
 	max-width: 720px;
