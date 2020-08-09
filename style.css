@@ -93,6 +93,18 @@ main {
 	margin: 0 auto;
 }
 
+/* blockquote */
+blockquote {
+	color: var(--txt-light2);
+
+	margin-left: 0;
+	padding-left: 40px;
+
+	border-left: 1px solid;
+	border-color var(--txt-light3);
+}
+
+
 /* inline code */
 p code {
 	font-size: 13px;
