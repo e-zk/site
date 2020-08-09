@@ -104,8 +104,8 @@ blockquote {
 	margin-left: 0;
 	padding-left: 40px;
 
-	border-left: 1px solid;
-	border-color var(--txt-light3);
+	border-left: 4px solid;
+	border-color: var(--txt-light3);
 }
 
 
