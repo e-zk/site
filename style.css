@@ -71,6 +71,10 @@ main img {
 	height: 1rem;
 	width: 1rem;
 	top: 0.125rem;
+
+	margin: 0 !important;
+	border-radius: 0px;
+	box-shadow: none !important;
 }
 
 /* nav style */
