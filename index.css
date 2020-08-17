@@ -5,6 +5,7 @@ h1 {
 
 .links {
 	margin: 0;
+	font-family: var(--font3);
 }
 
 .desc {
