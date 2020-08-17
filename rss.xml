@@ -1,7 +1,181 @@
-<rss version="2.0" xml:base="https://zakaria.org/">
-	<channel>
-	<title>zakaria</title>
-		<description/>
-		<link>https://zakaria.org/</link>
-	</channel>
+<rss version="2.0" xml:base="https://zakaria.org">
+<channel>
+<title>zakaria's weblog</title>
+<description/>
+<link>https://zakaria.org</link>
+<item>
+<link>https://zakaria.org/posts/2020-08-03-m4</link>
+<title>M4 Troubles...</title>
+<description>
+<h1 id="M4%20Troubles&amp;#8230;">M4 Troubles&#8230;</h1>
+
+<p>In my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> I wrote about mostly M4 templates.
+Well, it turns out I&#39;ve run into some issues.</p>
+
+<h2 id="Chapter%20I:%20The%20Problem">Chapter I: The Problem</h2>
+
+<p>I ran my blog script to convert my markdown into a nice HTML webpage, but then something happened. Nothing. Nothing happened. The script just sat there, stuck. This was odd because the script usually runs in under a second, so something had to have gone wrong&#8230;</p>
+
+<h2 id="Chapter%20II:%20The%20Quick%20Fix">Chapter II: The Quick Fix</h2>
+
+<p>I turned on tracing in my <code>head.m4</code> by adding <code>traceon</code> to the start of the file then I ran the script again. I knew instantly what had gone wrong&#8230; M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.</p>
+
+<p>As a quick fix in the post I replaced all occurrences of my actual macros with ones that were slightly different. It worked! &#8230;but then M4 gave another error: </p>
+
+<pre><code>m4: unexpected end of input, unclosed parenthesis:
+</code></pre>
+
+<h2 id="Chapter%20III:%20The%20Root%20of%20All%20Evil">Chapter III: The Root of All Evil</h2>
+
+<p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#39;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#39;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
+
+<p>As a crappy bandaid I added a couple of <code>sed</code>s to my script:</p>
+
+<pre><code>article_html=$(echo "$article_html" |  sed -E -e "s&#47;define\(&#47;\&#39;!define\(!\"&#47;g" -e "s&#47;include\(&#47;\&#39;!include\(!\"&#47;g")
+</code></pre>
+
+<p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too).</p>
+
+<p>I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.</p>
+
+<h2 id="Chapter%20IV:%20Going%20Forward">Chapter IV: Going Forward</h2>
+
+<p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
+</description>
+<pubDate>Mon, 03 Aug 00:00:00 +0000</pubDate>
+</item>
+<item>
+<link>https://zakaria.org/posts/2020-08-01-shblog</link>
+<title>The /bin/sh Blog. Part I: Timmy's Templates</title>
+<description>
+<h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#39;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#39;s Templates</h1>
+
+<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#39;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
+Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#39;s another way of running a bunch of commands?</p>
+
+<blockquote>
+<p>Oh! I know!</p>
+</blockquote>
+
+<p>Well, what is it Timmy?</p>
+
+<blockquote>
+<p>Why, shell scripts of course!</p>
+</blockquote>
+
+<p>Woah, thanks Timmy, why that&#39;s correct.</p>
+
+<blockquote>
+<p>But how will you ever manage a website&#39;s HTML layout all in a shell script?
+Wouldn&#39;t that get messy?</p>
+</blockquote>
+
+<p>Why yes Timmy, it would get pretty messy. What we need is some kind of &#8220;template&#8221; which can take some input and output HTML which we can serve&#8230;</p>
+
+<blockquote>
+<p>What about that old M4 thing?</p>
+</blockquote>
+
+<p>&#8220;M4&#8221;, Timmy? What on earth is that?</p>
+
+<blockquote>
+<p>RFTM dude: <a href="https://en.wikipedia.org/wiki/M4_(computer_language)">https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;M4_(computer_language)</a>, <a href="https://man.openbsd.org/m4">https:&#47;&#47;man.openbsd.org&#47;m4</a></p>
+</blockquote>
+
+<p>Okay Timmy, no need to be rude now. We have guests, remember?</p>
+
+<p>Ignoring Timmy&#39;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#39;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
+
+<pre><code>define(`_HTMLHEAD&#39;, `&#60;head&#62;   
+&#60;title&#62;My Blog Lol&#60;&#47;title&#62;
+&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
+&#60;&#47;head&#62;&#39;)
+</code></pre>
+
+<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#39;s title and a link to our stylesheet will be printed. There&#39;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
+
+<pre><code class="language-m4">define(`_HTMLHEAD&#39;, `&#60;head&#62;
+&#60;title&#62;$1 - My Blog Lol&#60;&#47;title&#62;
+&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
+&#60;&#47;head&#62;&#39;)
+</code></pre>
+
+<blockquote>
+<p>Well, what changed?</p>
+</blockquote>
+
+<p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br/>
+In M4, macros can have arguments that can be placed into the macro&#39;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
+
+<pre><code class="language-HTML">&#60;head&#62;
+&#60;title&#62;This is a post - My Blog Lol&#60;&#47;title&#62;
+&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
+&#60;&#47;head&#62;
+</code></pre>
+
+<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#39;s navigation links:</p>
+
+<pre><code class="language-m4">define(`_HTMLHEAD&#39;,`&#60;head&#62;
+&#60;meta http-equiv="content-type" content="text&#47;html; charset=utf-8"&#62;
+&#60;meta name="viewport" content="width=device-width, initial-scale=1"&#62;
+&#60;title&#62;$1 - zakaria.org&#60;&#47;title&#62;
+&#60;link rel="stylesheet" href="&#47;style.css"&#47;&#62;
+&#60;&#47;head&#62;&#39;
+)
+
+define(`_HTMLNAV&#39;, `&#60;nav&#62;
+&#60;p&#62;&#60;a href="&#47;"&#62;zakaria.org&#60;&#47;a&#62;&#60;br&#47;&#62;&#60;a href="&#47;posts&#47;"&#62;blog&#60;&#47;a&#62; &#47; &#60;a href="&#47;rss.xml"&#62;rss&#60;&#47;a&#62; &#47; &#60;a href="https:&#47;&#47;github.com&#47;e-zk&#47;"&#62;gh&#60;&#47;a&#62;&#60;&#47;p&#62; 
+&#60;&#47;nav&#62;&#39;
+)
+</code></pre>
+
+<p>For the sake of neatness, I&#39;ve placed this code in <code>head.m4</code>. 
+For our individual posts, we need to write more M4. Here&#39;s a simple post template, we&#39;ll call it <code>post.m4</code>:</p>
+
+<pre><code class="language-m4">include(m4&#47;head.m4)dnl
+&#60;!DOCTYPE html&#62;
+&#60;html&#62;
+_HTMLHEAD(POSTTILE)
+&#60;body&#62;
+_HTMLNAV
+&#60;main&#62;
+POSTCONTENT
+&#60;&#47;main&#62;
+&#60;&#47;body&#62;
+&#60;&#47;html&#62;
+</code></pre>
+
+<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#39;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
+Moving on-</p>
+
+<blockquote>
+<p>I&#39;m confused</p>
+</blockquote>
+
+<p>About what, Timmy?</p>
+
+<blockquote>
+<p>Those strange upper-case words littered throughout the file: <code>POSTTILE</code> and <code>POSTCONTENT</code>.</p>
+</blockquote>
+
+<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#39;t defined in any of the M4 files we&#39;re using. That&#39;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
+
+<pre><code class="language-console">$ m4 -DPOSTTILE="Hello?" post.m4
+</code></pre>
+
+<p>The <code>-D</code> argument defines a symbol to have some value. In this case <code>POSTTILE</code> now becomes <code>Hello?</code> after M4 is done running. Try running:</p>
+
+<pre><code class="language-console">$ m4 -DPOSTTILE="Test" -DPOSTCONTENT="&#60;h1&#62;Test :P&#60;&#47;h1&#62;" post.m4
+</code></pre>
+
+<p>M4 should output a &#8220;complete&#8221; HTML document, with the title &#8220;Test&#8221; and with a single heading reading &#8220;Test :P&#8221;. </p>
+
+<p>Now that we have a (an?) M4 template set up, instead of <code>echo</code>ing a bunch of <code>&#60;html&#62;</code> in our script, now all we have to do is call <code>m4</code> and pass arguments to it for our content to show up in the resulting HTML.</p>
+
+<p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
+Stay tuned for part II.</p>
+</description>
+<pubDate>Sat, 01 Aug 00:00:00 +0000</pubDate>
+</item>
+</channel>
 </rss>
