@@ -1,9 +1,8 @@
-/* i can self-host these */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Open+Sans:wght@400;700&display=swap');
+@import url('/fonts.css');
 
 :root {
-	--font1: "Open Sans", sans-serif;
-	--font2: "Fira Code", serif;
+	--font1: "Fira Mono", "Open Sans",  sans-serif;
+	--font2: "Fira Mono", serif;
 	/* yes, i 'stole' this list of fonts from github */
 	--font3: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
 	
