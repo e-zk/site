@@ -1,14 +1,15 @@
-h1 {
-	font-weight: 900;
-	margin: 1.5rem 0 0 0;
+nav {
+	max-width: 500px;
+	font-size: 2rem;
 }
-
-.links {
-	margin: 0;
-	font-family: var(--font3);
+nav p {
+	max-width: max-content;
+	margin: 0 auto;
 }
-
-.desc {
-	margin: 1.5rem 0 1.5rem 0;
+nav p a {
+	transition: border 0.1s linear;
+	border-bottom: 0px solid;
 }
-
+nav p a:hover {
+	border-bottom: 0px solid;
+}
