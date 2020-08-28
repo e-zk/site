@@ -1,8 +1,8 @@
 @import url('/fonts.css');
 
 :root {
-	--font1: "Fira Mono", sans-serif;
-	--font2: "Fira Mono", serif;
+	--font1: sans-serif;
+	--font2: "Libre Baskerville", serif;
 	/* yes, i 'stole' this list of fonts from github */
 	--font3: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
 	
@@ -19,9 +19,10 @@
 	--accent2: rgba(53,132,228,0.48);
 }
 
+/*
 @media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #202020;
+		--bg: #121818;
 		--bg2: #2a2a2a;
 		--txt: #eeeeee;
 		--txt2: #bbbbbb;
@@ -34,12 +35,12 @@
 	main img {
 		box-shadow: 0px 4px 8px rgba(0,0,0,0.25) !important;
 	}
-}
+}*/
 
 
 ::selection {
 	color: #000000;
-	background: #ffe000;
+	background: #adeada;
 }
 
 body, html {
@@ -58,12 +59,8 @@ body {
 /* headings */
 h1, h2, h3, h4, h5, h6 {
 	color: var(--txt);
+  	font-family: var(--font2);
 	font-weight: normal;
-  font-family: var(--font2);
-}
-h1 {
-	color: var(--txt);
-	font-weight: bold;
 }
 
 /* links */
@@ -115,14 +112,22 @@ nav {
 	max-width: 720px;
 	margin: 1.5rem auto;
 	padding: 0 1.5rem;
-	font-family: var(--font2);
+	font-family: var(--font1);
 	color: var(--txt3);
 }
-/*nav p {
-	color: var(--txt3);
-}*/
-nav a {
+/* .org */
+nav a:first-child {
 	color: var(--txt);
+	font-family: var(--font2);
+	font-size: 1.5rem;
+}
+nav a:first-child:hover,
+nav a:first-child:focus {
+	color: var(--accent);
+}
+/* links */
+nav a {
+	color: var(--txt2);
 	border-bottom: 0px solid;
 }
 nav a:hover {
@@ -138,6 +143,7 @@ main {
 
 /* blockquote */
 blockquote {
+	max-width: 100%;
 	margin-left: 0;
 	padding-left: 40px;
 
@@ -177,7 +183,7 @@ pre {
 pre code {
 	display: block;
 	padding: 1rem;
-	margin: 2.5rem 0 2.5rem 0;
+	margin: 2.5rem 0;
 
 	background: #000000;
 	color: #ffffff;
