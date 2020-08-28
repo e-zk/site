@@ -1,15 +1,3 @@
-nav {
-	max-width: 500px;
+nav p a:first-child {
 	font-size: 2rem;
-}
-nav p {
-	max-width: max-content;
-	margin: 0 auto;
-}
-nav p a {
-	transition: border 0.1s linear;
-	border-bottom: 0px solid;
-}
-nav p a:hover {
-	border-bottom: 0px solid;
 }
