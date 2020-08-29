@@ -19,11 +19,11 @@
 	--accent2: rgba(53,132,228,0.48);
 }
 
-/*
+/* dark mode */
 @media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #121818;
-		--bg2: #2a2a2a;
+		--bg: #111111;
+		--bg2: #1f1f1f;
 		--txt: #eeeeee;
 		--txt2: #bbbbbb;
 		--txt3: #777777;
@@ -31,12 +31,7 @@
 		--transp1: rgba(180,180,180,0.48);
 		--transp2: rgba(180,180,180,0.28);
 	}
-	pre code,
-	main img {
-		box-shadow: 0px 4px 8px rgba(0,0,0,0.25) !important;
-	}
-}*/
-
+}
 
 ::selection {
 	color: #000000;
@@ -54,6 +49,13 @@ body {
 	font-family: var(--font1);
 
 	line-height: 1.8;
+}
+
+/* rounded images + shadow */
+pre code,
+main img {
+	border-radius: 4px;
+	box-shadow: 0px 4px 8px rgba(0,0,0,0.25) !important;
 }
 
 /* headings */
@@ -90,9 +92,7 @@ li {
 /* images */
 main img {
 	max-width: 100%;
-	margin: 2.5rem auto;
-	border-radius: 4px;
-	box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
+	margin: 1.5rem auto;
 }
 
 /* inline svg icons */
@@ -183,14 +183,12 @@ pre {
 pre code {
 	display: block;
 	padding: 1rem;
-	margin: 2.5rem 0;
+	margin: 1.5rem 0;
 
 	background: #000000;
 	color: #ffffff;
 
 	border: 0px solid;
-	border-radius: 2px;
-	/*box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);*/
 
 	overflow-x: auto;
 	overflow-y: hidden;
