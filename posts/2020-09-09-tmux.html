@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/style.css"/>
+<title>Quick setup script with `tmux` - zakaria's weblog</title></head>
+<body>
+<nav>
+<p>
+<a href="/">zakaria.org</a>
+<br/><a href="/posts/">blog</a> | <a href="/about">about</a> | <a href="https://github.com/e-zk/">code</a>
+</p>
+</nav>
+<main>
+<h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
+
+<p>In my network security class we ssh into a handful of VMs pretty often.<br/>
+Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&#39;d load up my Kali Linux VM:</p>
+
+<pre><code>tmux
+C-b c
+ssh bastion
+C-b c
+ssh proxyserver
+C-b c
+ssh edgerouter
+</code></pre>
+
+<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#39;s what I came up with:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+tmux new-session -d
+tmux new-window -n "bastion" ssh bastion
+tmux new-window -n "proxyserver" ssh proxyserver
+tmux new-window -n "appserver" ssh appserver
+tmux new-window -n "edgerouter" ssh edgerouter
+tmux selectw -t 0
+
+tmux attach-session -d
+</code></pre>
+
+<p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
+
+<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
+<p class="info">
+<a href="2020-09-09-tmux.md">plaintext</a><br/>
+created:2020-09-09 modified:2020-09-09
+</p>
+</main>
+</body>
+</html>
