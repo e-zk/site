@@ -17,6 +17,9 @@
 
 	--accent: #3584E4;
 	--accent2: rgba(53,132,228,0.48);
+
+	--selfg: #000000;
+	--selbg: #adeada;
 }
 
 /* dark mode */
@@ -30,12 +33,15 @@
 
 		--transp1: rgba(180,180,180,0.48);
 		--transp2: rgba(180,180,180,0.28);
+
+		--selfg: #ffffff;
+		--selbg: #5f8f83;
 	}
 }
 
 ::selection {
-	color: #000000;
-	background: #adeada;
+	color: var(--selfg);
+	background: var(--selbg);
 }
 
 body, html {
