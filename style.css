@@ -206,6 +206,7 @@ pre code {
 /* info/footer */
 .info {
 	color: var(--txt3);
+	font-family: var(--font3);
 }
 .info a {
 	color: var(--txt3);
