@@ -1,6 +1,8 @@
 @import url('/fonts.css');
 
 :root {
+	--page-width: 820px;
+
 	--font1: sans-serif;
 	--font2: "Libre Baskerville", serif;
 	/* yes, i 'stole' this list of fonts from github */
@@ -12,32 +14,34 @@
 	--txt2: #666666;
 	--txt3: #aaaaaa;
 
-	--transp1: rgba(48,48,48,0.48);
-	--transp2: rgba(48,48,48,0.2);
-
-	--accent: #3584E4;
-	--accent2: rgba(53,132,228,0.48);
+	--link: blue;
+	--link-visited: mediumblue;
 
 	--selfg: #000000;
 	--selbg: #adeada;
+
+	--codebc: #eaeaea;
 }
 
 /* dark mode */
 @media (prefers-color-scheme: dark) {
 	:root {
 		--bg: #111111;
-		--bg2: #1f1f1f;
-		--txt: #eeeeee;
-		--txt2: #bbbbbb;
-		--txt3: #777777;
+		--bg2: var(--bg);
+		--txt: #aaaaaf;
+		--txt2: #99959a;
+		--txt3: #707077;
 
-		--transp1: rgba(180,180,180,0.48);
-		--transp2: rgba(180,180,180,0.28);
+		--link: steelblue;
+		--link-visited: #3969B4;
 
 		--selfg: #ffffff;
-		--selbg: #5f8f83;
+		--selbg: #88858a;
+
+		--codebc: #2f2f2f;
 	}
 }
+
 
 ::selection {
 	color: var(--selfg);
@@ -45,23 +49,25 @@
 }
 
 body, html {
+	background: var(--bg);
+	color: var(--txt);
+
 	margin: 0;
 	padding: 0;
 }
 body {
-	background: var(--bg);
-	color: var(--txt);
-
+	max-width: var(--page-width);
 	font-family: var(--font1);
+	font-size: 18px;
 
 	line-height: 1.8;
+	margin: 0 auto;
 }
 
-/* rounded images + shadow */
+/* rounded stuffs */
 pre code,
 main img {
 	border-radius: 4px;
-	box-shadow: 0px 4px 8px rgba(0,0,0,0.25) !important;
 }
 
 /* headings */
@@ -73,17 +79,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* links */
 a {
-	color: inherit;
-	text-decoration: none;
-	border-bottom: 1px solid;
-	border-color: var(--transp1);
-	transition: color 0.1s linear, border-color 0.2s linear;
+	color: var(--link);
 }
-a:focus,
-a:hover {
-	color: var(--accent);
-	border-bottom: 1px solid;
-	border-color: var(--accent2);
+a:visited {
+	color: var(--link-visited);
 }
 
 /* list */
@@ -115,35 +114,19 @@ main img {
 
 /* nav style */
 nav {
-	max-width: 720px;
-	margin: 1.5rem auto;
+	max-width: 100%;
+	margin: 1.5rem 0;
 	padding: 0 1.5rem;
-	font-family: var(--font1);
-	color: var(--txt3);
-}
-/* .org */
-nav a:first-child {
-	color: var(--txt);
-	font-family: var(--font2);
-	font-size: 1.5rem;
-}
-nav a:first-child:hover,
-nav a:first-child:focus {
-	color: var(--accent);
 }
 /* links */
-nav a {
-	color: var(--txt2);
-	border-bottom: 0px solid;
-}
-nav a:hover {
-	border-bottom: 0px solid;
+nav p span {
+	float: right;
+	text-align: right;
 }
 
 /* main style */
 main {
-	max-width: 720px;
-	margin: 0 auto;
+	max-width: 100%;
 	padding: 0 1.5rem;
 }
 
@@ -167,8 +150,9 @@ code {
 	background: var(--bg2);
 	color: var(--txt);
 	padding: 3px;
+
 	border: 1px solid;
-	border-color: var(--bg2);
+	border-color: var(--codebc);
 	border-radius: 2px;
 }
 
@@ -191,10 +175,11 @@ pre code {
 	padding: 1rem;
 	margin: 1.5rem 0;
 
-	background: #000000;
-	color: #ffffff;
+	background: var(--bg2);
+	color: var(--txt);
 
-	border: 0px solid;
+	border: 1px solid;
+	border-color: var(--codebc);
 
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -210,20 +195,10 @@ pre code {
 }
 
 /* info/footer */
-.info {
+footer {
 	color: var(--txt3);
-	font-family: var(--font3);
-}
-.info a {
-	color: var(--txt3);
-	border-color: var(--transp2);
-}
+	font-size: 85%;
+	text-align: center;
 
-.info a:hover,
-.info a:focus, 
-.postslist li a:hover,
-.postslist li a:focus {
-	color: var(--accent);;
-	border-bottom: 1px solid;
-	border-color: var(--accent2);
+	padding: 0 1.5rem;
 }
