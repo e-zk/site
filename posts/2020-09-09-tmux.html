@@ -9,7 +9,10 @@
 <nav>
 <p>
 <a href="/">zakaria.org</a>
-<br/><a href="/posts/">blog</a> | <a href="/about">about</a> | <a href="https://github.com/e-zk/">code</a>
+<span>
+	<a href="/posts/">blog</a>
+	<a href="/about">about</a>
+</span>
 </p>
 </nav>
 <main>
@@ -44,10 +47,12 @@ tmux attach-session -d
 <p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
 
 <p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
-<p class="info">
-<a href="2020-09-09-tmux.md">plaintext</a><br/>
-created:2020-09-09 modified:2020-09-09
-</p>
 </main>
+<footer>
+<p>
+<a href="2020-09-09-tmux.md">view plaintext</a><br/>
+created:2020-09-09 modified:2020-10-01<br/>
+generated using <a href="https://github.com/e-zk/shlog">shlog</a></p>
+</footer>
 </body>
 </html>
