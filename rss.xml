@@ -4,6 +4,44 @@
 <description/>
 <link>https://zakaria.org</link>
 <item>
+<link>https://zakaria.org/posts/2020-09-09-tmux</link>
+<title>Quick setup script with `tmux`</title>
+<description>
+<h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
+
+<p>In my network security class we ssh into a handful of VMs pretty often.<br/>
+Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&#39;d load up my Kali Linux VM:</p>
+
+<pre><code>tmux
+C-b c
+ssh bastion
+C-b c
+ssh proxyserver
+C-b c
+ssh edgerouter
+</code></pre>
+
+<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#39;s what I came up with:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+tmux new-session -d
+tmux new-window -n "bastion" ssh bastion
+tmux new-window -n "proxyserver" ssh proxyserver
+tmux new-window -n "appserver" ssh appserver
+tmux new-window -n "edgerouter" ssh edgerouter
+tmux selectw -t 0
+
+tmux attach-session -d
+</code></pre>
+
+<p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
+
+<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
+</description>
+<pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
+</item>
+<item>
 <link>https://zakaria.org/posts/2020-08-03-m4</link>
 <title>M4 Troubles...</title>
 <description>
@@ -42,7 +80,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
 </description>
-<pubDate>Mon, 03 Aug 00:00:00 +0000</pubDate>
+<pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
 <link>https://zakaria.org/posts/2020-08-01-shblog</link>
@@ -175,7 +213,7 @@ Moving on-</p>
 <p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
 Stay tuned for part II.</p>
 </description>
-<pubDate>Sat, 01 Aug 00:00:00 +0000</pubDate>
+<pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 </channel>
 </rss>
