@@ -10,9 +10,9 @@
 	
 	--bg: #ffffff;
 	--bg2: #f5f5f5;
+	--txt0: #000000;
 	--txt: #333333;
 	--txt2: #666666;
-	--txt3: #aaaaaa;
 
 	--link: blue;
 	--link-visited: mediumblue;
@@ -28,9 +28,9 @@
 	:root {
 		--bg: #111111;
 		--bg2: var(--bg);
+		--txt0: #aaaaaf;
 		--txt: #aaaaaf;
 		--txt2: #99959a;
-		--txt3: #707077;
 
 		--link: steelblue;
 		--link-visited: #3969B4;
@@ -72,7 +72,7 @@ main img {
 
 /* headings */
 h1, h2, h3, h4, h5, h6 {
-	color: var(--txt);
+	color: var(--txt0);
   	font-family: var(--font2);
 	font-weight: normal;
 }
@@ -80,6 +80,10 @@ h1, h2, h3, h4, h5, h6 {
 /* links */
 a {
 	color: var(--link);
+}
+a:hover, 
+a:focus {
+	text-decoration: underline;
 }
 a:visited {
 	color: var(--link-visited);
@@ -123,6 +127,9 @@ nav p span {
 	float: right;
 	text-align: right;
 }
+nav a {
+	text-decoration: none;
+}
 
 /* main style */
 main {
@@ -139,7 +146,7 @@ blockquote {
 	color: var(--txt2);
 
 	border-left: 4px solid;
-	border-color: var(--txt3);
+	border-color: var(--codebc);
 }
 
 /* code */
@@ -196,9 +203,10 @@ pre code {
 
 /* info/footer */
 footer {
-	color: var(--txt3);
+	color: var(--txt);
 	font-size: 85%;
-	text-align: center;
+	text-align: right;
 
 	padding: 0 1.5rem;
+	opacity: 0.96;
 }
