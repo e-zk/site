@@ -1,212 +1,168 @@
-@import url('/fonts.css');
-
-:root {
-	--page-width: 820px;
-
-	--font1: sans-serif;
-	--font2: "Libre Baskerville", serif;
-	/* yes, i 'stole' this list of fonts from github */
-	--font3: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", monospace;
-	
-	--bg: #ffffff;
-	--bg2: #f5f5f5;
-	--txt0: #000000;
-	--txt: #333333;
-	--txt2: #666666;
-
-	--link: blue;
-	--link-visited: mediumblue;
-
-	--selfg: #000000;
-	--selbg: #adeada;
-
-	--codebc: #eaeaea;
-}
-
-/* dark mode */
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: #111111;
-		--bg2: var(--bg);
-		--txt0: #aaaaaf;
-		--txt: #aaaaaf;
-		--txt2: #99959a;
-
-		--link: steelblue;
-		--link-visited: #3969B4;
-
-		--selfg: #ffffff;
-		--selbg: #88858a;
-
-		--codebc: #2f2f2f;
-	}
-}
-
+@import url("/fonts.css");
 
 ::selection {
-	color: var(--selfg);
-	background: var(--selbg);
+	background: steelblue;
+	color: #fff;
 }
 
-body, html {
-	background: var(--bg);
-	color: var(--txt);
-
+html, body {
 	margin: 0;
 	padding: 0;
-}
-body {
-	max-width: var(--page-width);
-	font-family: var(--font1);
-	font-size: 18px;
-
+	font-family: "Libre Baskerville", serif;
+	color: #333;
 	line-height: 1.8;
+}
+
+nav, main, footer {
+	max-width: 740px;
 	margin: 0 auto;
+	padding: 0 1.5rem;
 }
 
-/* rounded stuffs */
-pre code,
-main img {
-	border-radius: 4px;
+header {
+	padding: 1rem 0;
+	margin-bottom: 0.5rem;
+	background: #fff;
 }
-
-/* headings */
-h1, h2, h3, h4, h5, h6 {
-	color: var(--txt0);
-  	font-family: var(--font2);
-	font-weight: normal;
+nav {
+	font-family: Menlo, Monaco, Consolas, monospace;
+	text-transform: uppercase;
+	font-size: 14px;
 }
-
-/* links */
-a {
-	color: var(--link);
+nav aside {
+	float: right;
 }
-a:hover, 
-a:focus {
+nav a,
+nav a:visited {
+	text-decoration: none;
+	color: inherit;
+}
+nav a:hover,
+nav a:focus {
 	text-decoration: underline;
+	color: inherit;
+}
+nav > a:first-child {
+	color: #111;
+}
+
+h1, h2, h3, h4 {
+	font-size: 16px;
+	font-weight: normal;
+	text-transform: uppercase;
+	color: #111;
+}
+
+a {
+	color: steelblue;
 }
 a:visited {
-	color: var(--link-visited);
+	color: #5672A4;
+}
+a:hover,
+a:focus {
+	color: slategray;
 }
 
-/* list */
-ul {
-	padding-left: 1rem;
+footer {
+	color: #666;
+	font-size: 14px;
+	font-family: Menlo, Monaco, Consolas, monospace;
+	padding-bottom: 1.5rem;
 }
 
-li {
-	padding: 0 0 0.1rem 0.5rem;
-}
-
-/* images */
-main img {
-	max-width: 100%;
-	margin: 1.5rem auto;
-}
-
-/* inline svg icons */
-.svg-inline {
-	position: relative;
-	top: 0.125rem;
-	height: 1rem;
-	width: 1rem;
-	margin: 0;
-
-	border-radius: 0px;
-	box-shadow: none;
-}
-
-/* nav style */
-nav {
-	max-width: 100%;
-	margin: 1.5rem 0;
-	padding: 0 1.5rem;
-}
-/* links */
-nav p span {
-	float: right;
-	text-align: right;
-}
-nav a {
-	text-decoration: none;
-}
-
-/* main style */
-main {
-	max-width: 100%;
-	padding: 0 1.5rem;
-}
-
-/* blockquote */
-blockquote {
-	max-width: 100%;
-	margin-left: 0;
-	padding-left: 40px;
-
-	color: var(--txt2);
-
-	border-left: 4px solid;
-	border-color: var(--codebc);
-}
-
-/* code */
 code {
-	font-family: var(--font3);
-	font-size: 85%;
-
-	background: var(--bg2);
-	color: var(--txt);
 	padding: 3px;
-
 	border: 1px solid;
-	border-color: var(--codebc);
-	border-radius: 2px;
-}
+	border-radius: 4px;
+	
+	text-transform: none;
+	font-family: Menlo, Monaco, Consolas, monospace;
+	font-size: 80%;
 
-/* code links */
-a code {
-	border-color: var(--accent2);
-	transition: color 0.1s linear, border-color 0.2s linear;
-}
-a:hover code,
-a:focus code {
-	color: var(--accent) !important;
-}
+	background: #fff;
+	color: #b00050;
+	border-color: #eee;
 
-/* pre/code blocks */
+}
 pre {
-	line-height: 1.45;
+	line-height: 1.2;
 }
 pre code {
 	display: block;
-	padding: 1rem;
-	margin: 1.5rem 0;
-
-	background: var(--bg2);
-	color: var(--txt);
-
 	border: 1px solid;
-	border-color: var(--codebc);
-
+	padding: 1rem;
+	
+	color: #111;
+	border-color: #eee;
+	
 	overflow-x: auto;
 	overflow-y: hidden;
 }
 
-/* post list */
+blockquote {
+	padding-left: 20px;
+	margin-left: 0;
+	border-left: 2px solid;
+
+	border-color: #555;
+	color: #555;
+}
+
 .postslist {
 	padding: 0;
 	list-style: none;
 }
-.postslist li {
-	padding: 0 0 0.25rem 0;
+.postslist aside {
+	float: right;
+	font-family: Menlo, Monaco, monospace;
+	color: #333;
 }
 
-/* info/footer */
-footer {
-	color: var(--txt);
-	font-size: 85%;
-	text-align: right;
-
-	padding: 0 1.5rem;
-	opacity: 0.96;
+@media (min-width: 700px) {
+	header {
+		padding: 2rem 0;
+	}
+	main {
+		margin-top: 2em;
+	}
 }
+
+@media (prefers-color-scheme: dark) {
+	body, html {
+		background: #111;
+		color: #ddd;
+	}
+	header {
+		background: #151515;
+  	}
+	nav a,
+	nav a:visited{
+		color: #ddd;
+	}
+	nav > a:first-child {
+		color: #fff;
+	}
+  	h1, h2, h3, h4 {
+		color: #fff;
+  	}
+	blockquote {
+		color: #aaa;
+	}
+	.postslist aside {
+		color: #ddd;
+	}
+	code {
+		background: #151515;
+		border-color: #151515;
+	}
+	pre code {
+		background: #111;
+		color: #ddd;
+		border-color: #222;
+	}
+	footer {
+		color: #555;
+	}
+}
+
