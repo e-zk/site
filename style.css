@@ -135,6 +135,8 @@ blockquote {
 	}
 }
 
+/** dark mode - if you're into that **/
+/*
 @media (prefers-color-scheme: dark) {
 	body, html {
 		background: #111;
@@ -172,4 +174,4 @@ blockquote {
 		color: #555;
 	}
 }
-
+*/
