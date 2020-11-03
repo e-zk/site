@@ -157,7 +157,7 @@ blockquote {
 }
 .postslist aside {
 	float: right;
-	font-family: Menlo, Monaco, monospace;
+	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 14px;
 	color: #333;
 }
