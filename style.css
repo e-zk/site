@@ -1,3 +1,5 @@
+/* --- START fonts --- */
+
 /* frank-ruhl-libre-regular - latin */
 @font-face {
   font-family: 'Frank Ruhl Libre';
@@ -81,18 +83,21 @@ h1, h2, h3, h4 {
 	font-size: 16px;
 	font-weight: normal;
 	text-transform: uppercase;
+
 	color: #111;
 }
 
 a {
 	color: steelblue;
+	text-decoration: none;
 }
 a:visited {
 	color: #5672A4;
 }
 a:hover,
 a:focus {
-	color: slategray;
+	/*color: slategray;*/
+	text-decoration: underline;
 }
 
 main img {
@@ -100,8 +105,9 @@ main img {
 }
 
 footer {
-	color: #666;
+	color: #aaa;
 	font-size: 14px;
+	line-height: 1.4;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	padding-bottom: 1.5rem;
 }
@@ -121,7 +127,7 @@ code {
 
 }
 pre {
-	line-height: 1.2;
+	line-height: 1.4;
 }
 pre code {
 	display: block;
@@ -152,6 +158,7 @@ blockquote {
 .postslist aside {
 	float: right;
 	font-family: Menlo, Monaco, monospace;
+	font-size: 14px;
 	color: #333;
 }
 
