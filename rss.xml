@@ -1,11 +1,44 @@
 <rss version="2.0" xml:base="https://zakaria.org">
 <channel>
-<title>zakaria's weblog</title>
+<title>zakaria's web log</title>
 <description/>
 <link>https://zakaria.org</link>
 <item>
+<link>https://zakaria.org/posts/2020-11-07-malthusian-belt</link>
+<title>Malthusian Belt</title>
+<description>
+<h1 id="Malthusian%20Belt">Malthusian Belt</h1>
+
+<p>I&#39;m reading Aldous Huxtley&#39;s Brave New World and as with most books I read I&#39;ve come accross many words and phrases that I don&#39;t understand. One of which was Lenina&#39;s &#8220;Malthusian belt&#8221;. At first I thought &#8220;Malthusian&#8221; refered to the belt&#39;s geographical origin (Malta? No, that would be <em>Maltese</em>), but the word didn&#39;t fit any place I knew of so naturally I looked it up.  </p>
+
+<p>I was surprised to find this<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> Wikipedia article on <em>Malthusianism</em>:  </p>
+
+<blockquote>
+<p>Malthusianism is the ideals has population growth is potentially exponential while the growth of the food supply or other resources is linear. </p>
+</blockquote>
+
+<p>Since everyone in the brave new world is born from artificial embryos, suppression of normal human conception is clearly important. The Malthusian belt must actually be some sort of birth control device that women generally wear.</p>
+
+<p>It&#39;s a very interesting conceptual device and it makes me wonder about how on Earth Huxley came up with this idea. </p>
+
+<p>While this may have been obvious to some from the name of it, or perhaps even the context in the book, it wasn&#39;t obvious to me. Not understanding the phrase prompted me to look it up. And hey, now I have a lot about Malthusiamism to read about. </p>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p><a href="https://en.wikipedia.org/wiki/Malthusianism">https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Malthusianism</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</description>
+<pubDate>Sat, 07 Nov 2020 00:00:00 +0000</pubDate>
+</item>
+<item>
 <link>https://zakaria.org/posts/2020-09-09-tmux</link>
-<title>Quick setup script with `tmux`</title>
+<title>Quick setup script with tmux</title>
 <description>
 <h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
 
