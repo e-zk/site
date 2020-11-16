@@ -59,7 +59,7 @@ header {
 }
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
-	text-transform: uppercase;
+	text-transform: lowercase;
 	font-size: 14px;
 }
 nav aside {
@@ -194,10 +194,10 @@ hr {
 /* extra padding for desktop/wider displays */
 @media (min-width: 700px) {
 	header {
-		padding: 2rem 0;
+		padding: 1.5rem 0;
 	}
 	main {
-		margin-top: 2em;
+		margin-top: 1.5em;
 	}
 }
 
