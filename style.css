@@ -202,14 +202,13 @@ hr {
 }
 
 /** dark mode - if you're into that **/
-/*
 @media (prefers-color-scheme: dark) {
 	body, html {
-		background: #111;
+		background: #000;
 		color: #ddd;
 	}
 	header {
-		background: #151515;
+		background: #030608;
   	}
 	nav a,
 	nav a:visited{
@@ -218,26 +217,29 @@ hr {
 	nav > a:first-child {
 		color: #fff;
 	}
-  	h1, h2, h3, h4 {
+	h1, h2, h3, h4 {
 		color: #fff;
-  	}
+	}
 	blockquote {
 		color: #aaa;
 	}
+	hr, blockquote {
+		border-color: #444;
+	}
 	.postslist aside {
-		color: #ddd;
+		color: #aaa;
 	}
 	code {
-		background: #151515;
-		border-color: #151515;
+		background: #111;
+		border-color: #111;
 	}
 	pre code {
-		background: #111;
+		background: #000;
 		color: #ddd;
-		border-color: #222;
+		border-color: #111;
 	}
 	footer {
-		color: #555;
+		color: #444;
 	}
 }
-*/
+
