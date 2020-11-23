@@ -59,6 +59,7 @@ header {
 }
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
+	font-weight: bold;
 	text-transform: lowercase;
 	font-size: 14px;
 }
