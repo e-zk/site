@@ -146,6 +146,10 @@ blockquote {
 	color: #555;
 }
 
+details summary > * {
+	display: inline;
+}
+
 /* list + summary */
 summary::marker,
 li::marker {
@@ -208,8 +212,8 @@ hr {
 		color: #ddd;
 	}
 	header {
-		background: #030608;
-  	}
+		background: #111;
+	}
 	nav a,
 	nav a:visited{
 		color: #ddd;
@@ -226,12 +230,19 @@ hr {
 	hr, blockquote {
 		border-color: #444;
 	}
+	summary::marker,
+	li::marker {
+		color: #444;
+	}
+	summary::-webkit-details-marker {
+		color: #444;
+	}
 	.postslist aside {
 		color: #aaa;
 	}
 	code {
-		background: #030608;
-		border-color: #030608;
+		background: #111;
+		border-color: #111;
 	}
 	pre code {
 		background: #000;
@@ -242,4 +253,3 @@ hr {
 		color: #444;
 	}
 }
-
