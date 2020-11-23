@@ -1,5 +1,5 @@
 # Listening list
-Music reccommendations in no particular order. Much less structured than my [reading list](/lists/reading.html).
+Music rccommendations in no particular order. Much less structured than my [reading list](/lists/reading.html).
 
 * [Boards of Canada - Geogaddi](https://www.youtube.com/playlist?list=PL4ETOSQC0coJld1OxCLhN_rccDygSJ-hj) (2002) [Album - YouTube]
 * [Nylo - Someone like you](https://www.youtube.com/watch?v=dRee4Q4gM9Y) (2013) \[Track - YouTube\]

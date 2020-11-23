@@ -11,6 +11,12 @@ Some link to a footnote where I give a short sentence or two (more accurately, a
 * _Chocky_, by John Wyndham (1968) [^chocky]
 * _Brave New World_ by Aldous Huxley (1932)
 
+## 2019
+* _Do Androids Dream of Electric Sheep_, by Philip K. Dick (1968)
+* _Trainspotting_, by Irvine Welsh (1993)
+* _Balzac and the Little Chinese Seamstress_, by Dai Sijie (2000/2001)
+* _Sputnik Sweetheart_, by Haruki Murakami (1999/2001)
+* _The Poisonwood Bible_, by Barbara Kingsolver (1998)
 
 Articles + Blog posts:
 
