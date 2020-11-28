@@ -16,3 +16,4 @@ People and blogs I follow online in no particular order. I recommend you check t
 * nerdypepper's μsings - https://peppe.rs/
 * Rubenerd - https://rubenerd.com/
 * Vegard Stikbakke - https://www.vegardstikbakke.com/
+* Jon Bo - https://jon.bo/
