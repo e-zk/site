@@ -209,7 +209,7 @@ hr {
 /** dark mode - if you're into that **/
 @media (prefers-color-scheme: dark) {
 	body, html {
-		background: #000;
+		background: #111;
 		color: #ddd;
 	}
 	header {
