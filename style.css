@@ -1,31 +1,25 @@
 /* --- START fonts --- */
 
-/* frank-ruhl-libre-regular - latin */
 @font-face {
-  font-family: 'Frank Ruhl Libre';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/frank-ruhl-libre-v6-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local('Frank Ruhl Libre Regular'), local('FrankRuhlLibre-Regular'),
-       url('/fonts/frank-ruhl-libre-v6-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('/fonts/frank-ruhl-libre-v6-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-       url('/fonts/frank-ruhl-libre-v6-latin-regular.woff') format('woff'), /* Modern Browsers */
-       url('/fonts/frank-ruhl-libre-v6-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('/fonts/frank-ruhl-libre-v6-latin-regular.svg#FrankRuhlLibre') format('svg'); /* Legacy iOS */
+	font-family: 'Charter Regular';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Charter Regular'),          local('Charter-Regular'),
+	     url('/fonts/charter_regular.woff') format('woff'),     /* Modern Browsers */
+	     url('/fonts/charter_regular.ttf')  format('truetype'); /* Safari, Android, iOS */
 }
-/* frank-ruhl-libre-700 - latin */
+
 @font-face {
-  font-family: 'Frank Ruhl Libre';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/frank-ruhl-libre-v6-latin-700.eot'); /* IE9 Compat Modes */
-  src: local('Frank Ruhl Libre Bold'), local('FrankRuhlLibre-Bold'),
-       url('/fonts/frank-ruhl-libre-v6-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('/fonts/frank-ruhl-libre-v6-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
-       url('/fonts/frank-ruhl-libre-v6-latin-700.woff') format('woff'), /* Modern Browsers */
-       url('/fonts/frank-ruhl-libre-v6-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('/fonts/frank-ruhl-libre-v6-latin-700.svg#FrankRuhlLibre') format('svg'); /* Legacy iOS */
+	font-family: 'Charter Regular';
+	font-style: normal;
+	font-weight: bold;
+	font-display: swap;
+	src: local('Charter Bold'),          local('Charter-Bold'),
+	     url('/fonts/charter_bold.woff') format('woff'),     /* Modern Browsers */
+	     url('/fonts/charter_bold.ttf')  format('truetype'); /* Safari, Android, iOS */
+	     
 }
+
 
 /* ---- END fonts ---- */
 
@@ -33,15 +27,15 @@
 /* --- START style --- */
 
 ::selection {
-	background: steelblue;
+	background: #123;
 	color: #fff;
 }
 
 html, body {
 	margin: 0;
 	padding: 0;
-	font-family: "Frank Ruhl Libre", serif;
-	color: #333;
+	font-family: "Charter Regular", serif;
+	color: #234;
 	line-height: 1.8;
 	word-wrap: break-word; 
 }
@@ -77,15 +71,13 @@ nav a:focus {
 	color: inherit;
 }
 nav > a:first-child {
-	color: #111;
+	color: #123;
 }
 
 h1, h2, h3, h4 {
-	font-size: 16px;
-	font-weight: normal;
-	text-transform: uppercase;
-
-	color: #111;
+	font-family: Menlo, Monaco, Consolas, monospace;
+	color: #123;
+	line-height: 1.2;
 }
 
 a {
@@ -246,7 +238,7 @@ hr {
 		border-color: #111;
 	}
 	pre code {
-		background: #000;
+		background: #111;
 		color: #ddd;
 		border-color: #222;
 	}
