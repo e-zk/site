@@ -87,7 +87,7 @@ h1, h2, h3, h4 {
 	line-height: 1.2;
 }
 h1::after {
-	content: '  \2055';
+	content: '  \2022';
 }
 
 a {
