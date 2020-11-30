@@ -4,6 +4,7 @@
 	font-family: 'Charter Regular';
 	font-style: normal;
 	font-weight: normal;
+	font-display: swap;
 	src: local('Charter Regular'),          local('Charter-Regular'),
 	     url('/fonts/charter_regular.woff') format('woff'),     /* Modern Browsers */
 	     url('/fonts/charter_regular.ttf')  format('truetype'); /* Safari, Android, iOS */
@@ -71,13 +72,22 @@ nav a:focus {
 	color: inherit;
 }
 nav > a:first-child {
-	color: #123;
+	color: #fff;
+	background: #123;
+	padding: 4px;
+	border-radius: 2px;
+}
+nav > a:first-child::after {
+	content: '  \2022';
 }
 
 h1, h2, h3, h4 {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	color: #123;
 	line-height: 1.2;
+}
+h1::after {
+	content: '  \2055';
 }
 
 a {
@@ -103,7 +113,7 @@ main img {
 code {
 	padding: 3px;
 	border: 1px solid;
-	border-radius: 4px;
+	border-radius: 2px;
 	
 	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
@@ -137,6 +147,7 @@ blockquote {
 
 	border-color: #aaa;
 	color: #555;
+	font-style: italic;
 }
 
 details summary > * {
@@ -212,7 +223,8 @@ hr {
 		color: #ddd;
 	}
 	nav > a:first-child {
-		color: #fff;
+		background: #fff;
+		color: #123;
 	}
 	h1, h2, h3, h4 {
 		color: #fff;
@@ -235,7 +247,7 @@ hr {
 	}
 	code {
 		background: #111;
-		border-color: #111;
+		border-color: #222;
 	}
 	pre code {
 		background: #111;
