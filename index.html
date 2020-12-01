@@ -6,26 +6,26 @@
 <meta name="theme-color" content="#123"/>
 <style>
 /* load all fonts inline */
-@font-face { 
-	font-family: 'Charter Regular'; 
-	font-style: normal; 
-	font-weight: normal; 
-	font-display: swap; 
+@font-face {
+	font-family: 'Charter Regular';
+	font-style: normal;
+	font-weight: normal;
+	font-display: fallback;
 	src: local('Charter Regular'),          local('Charter-Regular'),
 	     url('/fonts/charter_regular.woff') format('woff'),     /* Modern Browsers */
 	     url('/fonts/charter_regular.ttf')  format('truetype'); /* Safari, Android, iOS */
 	font-display: swap;
-} 
+}
 
-@font-face { 
-	font-family: 'Charter Regular'; 
-	font-style: normal; 
-	font-weight: bold; 
-	font-display: swap; 
+@font-face {
+	font-family: 'Charter Regular';
+	font-style: normal;
+	font-weight: bold;
+	font-display: fallback;
 	src: local('Charter Bold'),          local('Charter-Bold'),
 	     url('/fonts/charter_bold.woff') format('woff'),     /* Modern Browsers */
 	     url('/fonts/charter_bold.ttf')  format('truetype'); /* Safari, Android, iOS */
-} 
+}
 </style>
 <link rel="stylesheet" href="/style.css"/>
 <title>welcome - zakaria's web log</title>
@@ -60,5 +60,9 @@
 
 <p>I host my code on <a href="https://github.com/e-zk/">GitHub</a>. I am <a href="https://lobste.rs/u/zk">&#47;u&#47;zk</a> on <a href="https://lobste.rs/">Lobste.rs</a>. <a href="/friends.html">Here</a> is a list of people I follow around the web. Also be sure to check out my recommendation lists for music, books, etc <a href="/lists/">here</a>.</p>
 </main>
+<footer>
+View this page in <a href="index.md">plaintext.</a>
+<br>Content for this site is <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>. Generated using <a href="https://github.com/e-zk/shlog">shlog</a>.
+</footer>
 </body>
 </html>
