@@ -1,31 +1,14 @@
-/* --- START fonts --- */
-
-@font-face {
-	font-family: 'Charter Regular';
-	font-style: normal;
-	font-weight: normal;
-	font-display: swap;
-	src: local('Charter Regular'),          local('Charter-Regular'),
-	     url('/fonts/charter_regular.woff') format('woff'),     /* Modern Browsers */
-	     url('/fonts/charter_regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+@keyframes blink {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
 }
-
-@font-face {
-	font-family: 'Charter Regular';
-	font-style: normal;
-	font-weight: bold;
-	font-display: swap;
-	src: local('Charter Bold'),          local('Charter-Bold'),
-	     url('/fonts/charter_bold.woff') format('woff'),     /* Modern Browsers */
-	     url('/fonts/charter_bold.ttf')  format('truetype'); /* Safari, Android, iOS */
-	     
-}
-
-
-/* ---- END fonts ---- */
-
-
-/* --- START style --- */
 
 ::selection {
 	background: #123;
@@ -35,7 +18,7 @@
 html, body {
 	margin: 0;
 	padding: 0;
-	font-family: "Charter Regular", serif;
+	font-family: "Charter Regular", "Times New Roman", serif;
 	color: #234;
 	line-height: 1.8;
 	word-wrap: break-word; 
@@ -77,14 +60,19 @@ nav > a:first-child {
 	padding: 4px;
 	border-radius: 2px;
 }
+
 nav > a:first-child::after {
-	content: '  \2022';
+	content: '   \2588 ';
+	animation: blink 1.2s infinite;
 }
 
 h1, h2, h3, h4 {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	color: #123;
 	line-height: 1.2;
+}
+h1 {
+	margin-bottom: 0.5rem;
 }
 h1::after {
 	content: '  \2022';
@@ -99,7 +87,7 @@ a:visited {
 }
 a:hover,
 a:focus {
-	/*color: slategray;*/
+	color: #b97d4b;
 	text-decoration: underline;
 }
 
@@ -121,11 +109,11 @@ code {
 
 	background: #fff;
 	color: #b00050;
-	border-color: #eee;
+	border-color: #e0eaef;
 
 }
 pre {
-	line-height: 1.4;
+	line-height: 1.5;
 }
 pre code {
 	display: block;
@@ -133,7 +121,7 @@ pre code {
 	padding: 1rem;
 	
 	color: #111;
-	border-color: #eee;
+	border-color: #e0eaef;
 	
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -145,8 +133,8 @@ blockquote {
 	margin-left: 0;
 	border-left: 2px solid;
 
-	border-color: #aaa;
-	color: #555;
+	border-color: #9ab;
+	color: #456;
 	font-style: italic;
 }
 
@@ -157,11 +145,11 @@ details summary > * {
 /* list + summary */
 summary::marker,
 li::marker {
-	color: #555;
+	color: #456;
 }
 /* for chrome */
 summary::-webkit-details-marker {
-	color: #555;
+	color: #456;
 }
 
 /* list style */
@@ -181,22 +169,29 @@ li {
 	float: right;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 14px;
-	color: #333;
+	color: #456;
 }
 
+
 /* footer */
-footer {
-	color: #aaa;
+footer, .info {
+	color: #9ab;
 	font-size: 80%;
 	line-height: 1.4;
 	font-family: Menlo, Monaco, Consolas, monospace;
+}
+.info {
+	margin-top: 0;
+}
+footer {
+	text-align: center;
 	padding-bottom: 1.5rem;
 }
 
 /* hr */
 hr {
 	border: 0px;
-	border-top: 2px solid #aaa;
+	border-top: 2px solid #9ab;
 }
 
 /* extra padding for desktop/wider displays */
@@ -211,9 +206,13 @@ hr {
 
 /** dark mode - if you're into that **/
 @media (prefers-color-scheme: dark) {
+	::selection {
+		background: #fff;
+		color: #123;
+	}
 	body, html {
 		background: #111;
-		color: #ddd;
+		color: #eee;
 	}
 	header {
 		background: #111;
@@ -251,10 +250,10 @@ hr {
 	}
 	pre code {
 		background: #111;
-		color: #ddd;
+		color: #fff;
 		border-color: #222;
 	}
-	footer {
+	footer, .info {
 		color: #444;
 	}
 }
