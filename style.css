@@ -19,6 +19,7 @@ html, body {
 	margin: 0;
 	padding: 0;
 	color: #234;
+	font-family: sans-serif;
 	line-height: 1.8;
 	word-wrap: break-word; 
 }
@@ -162,6 +163,7 @@ blockquote {
 
 	border-color: #9ab;
 	color: #456;
+	font-family: serif;
 	font-style: italic;
 }
 
