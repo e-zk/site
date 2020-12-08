@@ -1,6 +1,6 @@
 # OpenBSD notes
 
-Miscellaneous notes on running OpenBSD (some notes may only be useful for a laptop install). Updated frequently.
+Miscellaneous notes on running [OpenBSD](https://openbsd.org/) (some notes may only be useful for a laptop install). Updated frequently.
 
 ## Hibernate on low battery
 
