@@ -15,6 +15,7 @@ Articles + Blog posts:
 
 * [Everyone Talks About Insecure Randomness, But Nobody Does Anything About It](https://www.airza.net/2020/11/09/everyone-talks-about-insecure-randomness-but-nobody-does-anything-about-it.html), by [John Labelle](https://www.airza.net) (2020)
 * [Notes from a Gibsonian novel](http://boston.conman.org/2004/09/19), by Sean Conner (2004)
+* [This is Real. That's Not.](https://streetlifesolutions.blogspot.com/2020/12/this-is-real-thats-not.html), by [Street Life Solutions / Doreen Traylor](https://streetlifesolutions.blogspot.com) (2020)
 
 ## 2019
 * _Do Androids Dream of Electric Sheep_, by Philip K. Dick (1968)

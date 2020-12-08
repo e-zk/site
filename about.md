@@ -9,10 +9,4 @@ The content of this site is generated using a shell script I wrote, [shlog](http
 
 ## Contact
 
-```console
-cat <<EOF | uudecode -o /dev/stdout
-begin-base64 644 -
-emFrYXJpYWtAdHV0YS5pbwo=
-====
-EOF
-```
+[RSS feed](/rss.xml) &bullet; [Lobste.rs](https://lobste.rs/u/zk) &bullet; [Github](https://github.com/e-zk)
