@@ -1,6 +1,6 @@
 # OpenBSD notes
 
-Miscellaneous notes on running OpenBSD (some notes may only be usefull for a laptop install). Updated frequently.
+Miscellaneous notes on running OpenBSD (some notes may only be useful for a laptop install). Updated frequently.
 
 ## Hibernate on low battery
 
@@ -21,7 +21,7 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 ```
 
-## Manual pages as beautifully typset PDFs
+## Manual pages as beautifully typeset PDFs
 
 ```console
 $ MANPAGER=zathura man -T pdf style
@@ -87,7 +87,7 @@ xlogin.Login.promptFace:       Dina-11
 
 ### Changing location of ~/.xsession (xenodm)
 
-Change the location in `/etc/X11/xenodm/Xsession`:
+Change the location through these vars in `/etc/X11/xenodm/Xsession`:
 
 ```bash
 startup=$HOME/.xsession
@@ -102,3 +102,53 @@ xrdb -load $HOME/x/xresources
 
 # where ssh-agent is called below...
 ```
+
+## PF
+
+Packet Filter (firewall). General stuff to remember:
+
+* last rule 'wins'\*
+* `egress` = interface(s) that hold the default route(s)
+
+### Standard preamble
+
+```
+# options 
+set block-policy drop
+set skip on lo
+
+# default deny
+block return
+block all 
+
+# antispoofing
+antispoof for egress
+antispoof for $vm_int
+```
+
+### VMs
+
+Don't forget to `sysctl net.inet.ip.forwarding=1`!
+
+```
+# where:
+# vm_int        = vm interface (vether[0-9])
+# vm_dns_server = dns server to be used by vms
+
+# allow ssh traffic to vm
+pass out on $vm_int proto tcp to $vm_int:network port 22
+
+# vm nat
+match out on egress from $vm_int:network to any nat-to (egress)
+pass in proto { tcp udp } from $vm_int:network to any port domain \
+        rdr-to $vm_dns_server port domain
+
+# allow icmp + web from vms
+pass in on $vm_int proto icmp
+pass in on $vm_int proto tcp to port { www, https }
+
+# only allow X11 forwarding on the vm interface
+pass in on $vm_int proto tcp to port 6000:6010
+```
+
+

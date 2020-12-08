@@ -23,10 +23,10 @@
 <h1 id="OpenBSD%20notes">OpenBSD notes</h1>
 <p class="info">
 Posted: 2020-12-08<br>
-Modified: 2020-12-08<br>
+Modified: 2020-12-09<br>
 </p>
 
-<p>Miscellaneous notes on running OpenBSD (some notes may only be usefull for a laptop install). Updated frequently.</p>
+<p>Miscellaneous notes on running OpenBSD (some notes may only be useful for a laptop install). Updated frequently.</p>
 
 <h2 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h2>
 
@@ -45,7 +45,7 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Manual%20pages%20as%20beautifully%20typset%20PDFs">Manual pages as beautifully typset PDFs</h2>
+<h2 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h2>
 
 <pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
 </code></pre>
@@ -108,7 +108,7 @@ xlogin.Login.promptFace:       Dina-11
 
 <h3 id="Changing%20location%20of%20%7E&amp;#47;.xsession%20(xenodm)">Changing location of ~&#47;.xsession (xenodm)</h3>
 
-<p>Change the location in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
+<p>Change the location through these vars in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
 
 <pre><code class="language-bash">startup=$HOME&#47;.xsession
 resources=$HOME&#47;.Xresources
@@ -120,6 +120,54 @@ resources=$HOME&#47;.Xresources
 xrdb -load $HOME&#47;x&#47;xresources
 
 # where ssh-agent is called below...
+</code></pre>
+
+<h2 id="PF">PF</h2>
+
+<p>Packet Filter (firewall). General stuff to remember:</p>
+
+<ul>
+<li>last rule &#8216;wins&#8217;*</li>
+<li><code>egress</code> = interface(s) that hold the default route(s)</li>
+</ul>
+
+<h3 id="Standard%20preamble">Standard preamble</h3>
+
+<pre><code># options 
+set block-policy drop
+set skip on lo
+
+# default deny
+block return
+block all 
+
+# antispoofing
+antispoof for egress
+antispoof for $vm_int
+</code></pre>
+
+<h3 id="VMs">VMs</h3>
+
+<p>Don&#39;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
+
+<pre><code># where:
+# vm_int        = vm interface (vether[0-9])
+# vm_dns_server = dns server to be used by vms
+
+# allow ssh traffic to vm
+pass out on $vm_int proto tcp to $vm_int:network port 22
+
+# vm nat
+match out on egress from $vm_int:network to any nat-to (egress)
+pass in proto { tcp udp } from $vm_int:network to any port domain \
+        rdr-to $vm_dns_server port domain
+
+# allow icmp + web from vms
+pass in on $vm_int proto icmp
+pass in on $vm_int proto tcp to port { www, https }
+
+# only allow X11 forwarding on the vm interface
+pass in on $vm_int proto tcp to port 6000:6010
 </code></pre>
 </main>
 <footer>
