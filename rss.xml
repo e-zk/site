@@ -4,6 +4,110 @@
 <description/>
 <link>https://zakaria.org</link>
 <item>
+<link>https://zakaria.org/posts/2020-12-08-openbsd-notes</link>
+<title>OpenBSD notes</title>
+<description>
+<h1 id="OpenBSD%20notes">OpenBSD notes</h1>
+
+<p>Miscellaneous notes on running OpenBSD (some notes may only be usefull for a laptop install). Updated frequently.</p>
+
+<h2 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h2>
+
+<p>To hibernate at 5% remaining battery add in <code>&#47;etc&#47;rc.conf.local</code>:</p>
+
+<pre><code class="language-bash">apmd_flags=-A -Z 5
+</code></pre>
+
+<h2 id="Non-root%20power%20control">Non-root power control</h2>
+
+<p><code>&#47;etc&#47;doas.conf</code>:</p>
+
+<pre><code>permit nopass :staff as root cmd zzz
+permit nopass :staff as root cmd ZZZ
+permit nopass :staff as root cmd reboot args
+permit nopass :staff as root cmd shutdown args -p now
+</code></pre>
+
+<h2 id="Manual%20pages%20as%20beautifully%20typset%20PDFs">Manual pages as beautifully typset PDFs</h2>
+
+<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
+</code></pre>
+
+<h2 id="X">X</h2>
+
+<p>Xorg settings, xenodm theming. </p>
+
+<h3 id="Run%20programs%20on%20xenodm%20login%20screen">Run programs on xenodm login screen</h3>
+
+<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0</code>:</p>
+
+<pre><code class="language-bash"># comment out xconsole
+
+xsetroot -solid \#202a2b
+</code></pre>
+
+<h3 id="Main%20xenodm%20login%20theme">Main xenodm login theme</h3>
+
+<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources</code>:</p>
+
+<pre><code>xlogin*login.translations: #override \
+        Ctrl&#60;Key&#62;R: abort-display()\n\
+        &#60;Key&#62;F1: set-session-argument(failsafe) finish-field()\n\
+        &#60;Key&#62;Left: move-backward-character()\n\
+        &#60;Key&#62;Right: move-forward-character()\n\
+        &#60;Key&#62;Home: move-to-begining()\n\
+        &#60;Key&#62;End: move-to-end()\n\
+        Ctrl&#60;Key&#62;KP_Enter: set-session-argument(failsafe) finish-field()\n\
+        &#60;Key&#62;KP_Enter: set-session-argument() finish-field()\n\
+        Ctrl&#60;Key&#62;Return: set-session-argument(failsafe) finish-field()\n\
+        &#60;Key&#62;Return: set-session-argument() finish-field()
+
+
+xlogin.Login.echoPasswd:       true
+xlogin.Login.fail:             Access Denied
+xlogin.Login.greeting:
+xlogin.Login.namePrompt:       \040\040login\040
+xlogin.Login.passwdPrompt:     \040passwd\040
+
+xlogin.Login.height:           200
+xlogin.Login.width:            400
+xlogin.Login.y:                320
+xlogin.Login.frameWidth:       10
+xlogin.Login.innerFramesWidth: 0
+
+xlogin.Login.background:        #000000
+xlogin.Login.foreground:        #afafaf
+xlogin.Login.failColor:         red
+xlogin.Login.inpColor:          #1a1f1f
+xlogin.Login.promptColor:       #afafaf
+xlogin.Login.hiColor:           #000000
+xlogin.Login.shdColor:          #000000
+
+! font face
+xlogin.Login.face:             Dina-11
+xlogin.Login.failFace:         Dina-11
+xlogin.Login.promptFace:       Dina-11
+</code></pre>
+
+<h3 id="Changing%20location%20of%20%7E&amp;#47;.xsession%20(xenodm)">Changing location of ~&#47;.xsession (xenodm)</h3>
+
+<p>Change the location in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
+
+<pre><code class="language-bash">startup=$HOME&#47;.xsession
+resources=$HOME&#47;.Xresources
+</code></pre>
+
+<p>May also be wise to load Xresources before <code>ssh-agent</code> if <code>ssh-askpass</code> is themed:</p>
+
+<pre><code class="language-bash"># load xresources
+xrdb -load $HOME&#47;x&#47;xresources
+
+# where ssh-agent is called below...
+</code></pre>
+</description>
+<pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
+</item>
+<item>
 <link>https://zakaria.org/posts/2020-12-05-fonts</link>
 <title>How I (almost) fixed my fonts</title>
 <description>
@@ -11,7 +115,7 @@
 
 <p>This site goes through CSS changes daily. Yes, daily. I can&#39;t stop changing the CSS. It&#39;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it. </p>
 
-<p>I like web fonts. But I also like simplicity and straightforwardness. Sadly, webfonts and CSS work together flawlessly is no simple task. </p>
+<p>I like web fonts. But I also like simplicity and straightforwardness. Sadly, getting webfonts and CSS to work together flawlessly is no simple task. </p>
 
 <h2 id="Google%20Fonts">Google Fonts</h2>
 
@@ -69,7 +173,7 @@ html, body {
 <p>Chances are whenever you&#39;re reading this the site has already been changed to reflect this change.<br/>
 Sans-serif looks better for this site anyways :P  </p>
 </description>
-<pubDate>a, 05 Dec 2020 00:00:00 +0000</pubDate>
+<pubDate>Sat, 05 Dec 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
 <link>https://zakaria.org/posts/2020-11-07-malthusian-belt</link>
@@ -102,7 +206,7 @@ Sans-serif looks better for this site anyways :P  </p>
 </ol>
 </div>
 </description>
-<pubDate>a, 07 Nov 2020 00:00:00 +0000</pubDate>
+<pubDate>Sat, 07 Nov 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
 <link>https://zakaria.org/posts/2020-09-09-tmux</link>
@@ -140,7 +244,7 @@ tmux attach-session -d
 
 <p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
 </description>
-<pubDate>a, 09 Sep 2020 00:00:00 +0000</pubDate>
+<pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
 <link>https://zakaria.org/posts/2020-08-03-m4</link>
@@ -181,7 +285,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
 </description>
-<pubDate>a, 03 Aug 2020 00:00:00 +0000</pubDate>
+<pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
 <link>https://zakaria.org/posts/2020-08-01-shblog</link>
@@ -314,7 +418,7 @@ Moving on-</p>
 <p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
 Stay tuned for part II.</p>
 </description>
-<pubDate>a, 01 Aug 2020 00:00:00 +0000</pubDate>
+<pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 </channel>
 </rss>
