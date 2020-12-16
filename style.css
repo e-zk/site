@@ -62,7 +62,7 @@ nav > a:first-child {
 	color: #fff;
 	background: #123;
 	padding: 4px;
-	border-radius: 2px;
+	border-radius: 4px;
 }
 nav > a:first-child::after {
 	content: '   \2588 ';
@@ -91,29 +91,26 @@ footer {
 
 /* headings */
 h1, h2, h3, h4 {
-	font-family: Menlo, Monaco, Consolas, monospace;
-	color: #123;
 	line-height: 1.2;
-	font-weight: normal;
+	color: #123;
 }
 h1 {
+	font-weight: 800;
 	margin-bottom: 0.5rem;
-}
-h1::after {
-	content: '  \2022';
 }
 
 /* links */
 a {
 	color: steelblue;
-	text-decoration: none;
+	text-decoration: underline;
 }
 a:visited {
-	color: #5672A4;
+	/*color: #5672A4;*/
+	color: slategrey;
 }
 a:hover,
 a:focus {
-	color: #b97d4b;
+	color: royalblue;
 	text-decoration: underline;
 }
 
@@ -126,17 +123,17 @@ main img {
 
 /* code styles */
 code {
-	padding: 3px;
+	padding: 4px;
 	border: 1px solid;
-	border-radius: 2px;
+	border-radius: 4px;
 	
 	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 80%;
 
-	background: #fff;
-	color: #b00050;
-	border-color: #e0eaef;
+	background: #f4f9ff;
+	color: steelblue;
+	border-color: steelblue;
 
 }
 pre {
@@ -146,9 +143,6 @@ pre code {
 	display: block;
 	border: 1px solid;
 	padding: 1rem;
-	
-	color: #111;
-	border-color: #e0eaef;
 	
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -220,15 +214,15 @@ hr {
 /* dark mode */
 @media (prefers-color-scheme: dark) {
 	::selection {
-		background: #fff;
-		color: #123;
+		background: #b00050;
+		color: #fff;
 	}
 	body, html {
-		background: #101a1f;
+		background: #000;
 		color: #eee;
 	}
 	header {
-		background: #101a1f;
+		background: #0b0b0b;
 	}
 	nav a,
 	nav a:visited{
@@ -236,37 +230,46 @@ hr {
 	}
 	nav > a:first-child {
 		background: #fff;
-		color: #123;
+		color: #222;
+	}
+	a {
+		color: dodgerblue;
+	}
+	a:visited {
+		color: royalblue;
+	}
+	a:hover,
+	a:focus {
+		color: steelblue;
 	}
 	h1, h2, h3, h4 {
 		color: #fff;
 	}
 	blockquote {
-		color: #abc;
+		color: #bbb;
 	}
 	hr, blockquote {
-		border-color: #345;
+		border-color: #444;
 	}
 	summary::marker,
 	li::marker {
-		color: #345;
+		color: #444;
 	}
 	summary::-webkit-details-marker {
-		color: #345;
+		color: #444;
 	}
 	.postslist aside {
-		color: #567;
+		color: #666;
 	}
 	code {
-		background: #123;
-		border-color: #234;
+		background: #0b0b0b;
+		color: mintcream;
+		border-color: #222;
 	}
 	pre code {
-		background: #101a1f;
-		color: #fff;
-		border-color: #234;
+		border-color: #222;
 	}
 	footer, .info {
-		color: #345;
+		color: #444;
 	}
 }
