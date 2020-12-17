@@ -1,17 +1,5 @@
-@keyframes blink {
-	0% {
-		opacity: 0;
-	}
-	50% {
-		opacity: 1;
-	}
-	to {
-		opacity: 0;
-	}
-}
-
 ::selection {
-	background: #123;
+	background: #b00050;
 	color: #fff;
 }
 
@@ -43,6 +31,7 @@ nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	text-transform: lowercase;
 	font-size: 14px;
+	font-weight: bold;
 }
 nav aside {
 	float: right;
@@ -56,17 +45,6 @@ nav a:hover,
 nav a:focus {
 	text-decoration: underline;
 	color: inherit;
-}
-nav > a:first-child {
-	font-weight: bold;
-	color: #fff;
-	background: #123;
-	padding: 4px;
-	border-radius: 4px;
-}
-nav > a:first-child::after {
-	content: '   \2588 ';
-	animation: blink 1.2s infinite;
 }
 
 /* main */
@@ -213,10 +191,6 @@ hr {
 
 /* dark mode */
 @media (prefers-color-scheme: dark) {
-	::selection {
-		background: #b00050;
-		color: #fff;
-	}
 	body, html {
 		background: #000;
 		color: #eee;
@@ -226,11 +200,7 @@ hr {
 	}
 	nav a,
 	nav a:visited{
-		color: #ddd;
-	}
-	nav > a:first-child {
-		background: #fff;
-		color: #222;
+		color: #fff;
 	}
 	a {
 		color: dodgerblue;
@@ -270,6 +240,6 @@ hr {
 		border-color: #222;
 	}
 	footer, .info {
-		color: #444;
+		color: #aaa;
 	}
 }
