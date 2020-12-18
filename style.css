@@ -30,22 +30,21 @@ header {
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	text-transform: lowercase;
-	font-size: 14px;
-	font-weight: bold;
+	font-size: 80%;
 }
 nav aside {
 	float: right;
 }
 nav a,
 nav a:visited {
+	color: #123;
 	text-decoration: none;
-	color: inherit;
-}
+}/*
 nav a:hover,
 nav a:focus {
 	text-decoration: underline;
 	color: inherit;
-}
+}*/
 
 /* main */
 main {
@@ -196,7 +195,7 @@ hr {
 		color: #eee;
 	}
 	header {
-		background: #0b0b0b;
+		background: #000b;
 	}
 	nav a,
 	nav a:visited{
@@ -229,7 +228,7 @@ hr {
 		color: #444;
 	}
 	.postslist aside {
-		color: #666;
+		color: #aaa;
 	}
 	code {
 		background: #0b0b0b;
