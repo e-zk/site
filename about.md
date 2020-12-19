@@ -9,4 +9,4 @@ The content of this site is generated using a shell script I wrote, [shlog](http
 
 ## Contact
 
-[RSS feed](/rss.xml) &bullet; [Lobste.rs](https://lobste.rs/u/zk) &bullet; [Github](https://github.com/e-zk)
+[Fediverse](https://qoto.org/@zzz) &bullet; [RSS feed](/rss.xml) &bullet; [Lobste.rs](https://lobste.rs/u/zk) &bullet; [Github](https://github.com/e-zk)
