@@ -1,6 +1,6 @@
 ::selection {
-	background: #b00050;
-	color: #fff;
+	background: #ffff00;
+	color: #000;
 }
 
 html, body {
@@ -190,6 +190,10 @@ hr {
 
 /* dark mode */
 @media (prefers-color-scheme: dark) {
+	::selection {
+		background: #b00050;
+		color: #fff;
+	}
 	body, html {
 		background: #000;
 		color: #eee;
