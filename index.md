@@ -15,7 +15,9 @@ Welcome to my personal spot in cyberspace and enjoy your stay!
 ## Links
 
 I am [e-zk](https://github.com/e-zk/) on GitHub, where I host my code.  
-I am [@zzz](https://qoto.org/@zzz) on the Fediverse.  
+I am
+<a rel="me" href="https://qoto.org/@zzz">@zzz</a>
+on the Fediverse.  
 I am [/u/zk](https://lobste.rs/u/zk) on [Lobste.rs](https://lobste.rs/).  
 [Here](/friends.html) is a list of people and blogs I follow around the web.  
 Be sure to check out my recommendation lists for music, books, etc [here](/lists/).
