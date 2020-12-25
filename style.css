@@ -39,12 +39,12 @@ nav a,
 nav a:visited {
 	color: #123;
 	text-decoration: none;
-}/*
+}
 nav a:hover,
 nav a:focus {
 	text-decoration: underline;
 	color: inherit;
-}*/
+}
 
 /* main */
 main {
@@ -190,10 +190,6 @@ hr {
 
 /* dark mode */
 @media (prefers-color-scheme: dark) {
-	::selection {
-		background: #b00050;
-		color: #fff;
-	}
 	body, html {
 		background: #000;
 		color: #eee;
