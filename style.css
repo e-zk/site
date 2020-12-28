@@ -2,7 +2,6 @@
 	background: #ffff00;
 	color: #000;
 }
-
 html, body {
 	margin: 0;
 	padding: 0;
@@ -11,21 +10,18 @@ html, body {
 	line-height: 1.8;
 	word-wrap: break-word; 
 }
-
 /* 2nd-level */
 nav, main, footer {
 	max-width: 740px;
 	margin: 0 auto;
 	padding: 0 1.5rem;
 }
-
 /* header */
 header {
 	padding: 1rem 0;
 	margin-bottom: 0.5rem;
 	background: #fff;
 }
-
 /* navigation */
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
@@ -38,19 +34,17 @@ nav aside {
 nav a,
 nav a:visited {
 	color: #123;
-	text-decoration: none;
+	text-decoration: underline;
 }
 nav a:hover,
 nav a:focus {
 	text-decoration: underline;
-	color: inherit;
+	color: #456;
 }
-
 /* main */
 main {
 	padding-bottom: 1.5rem;
 }
-
 /* footer; info */
 footer, .info {
 	color: #9ab;
@@ -65,9 +59,9 @@ footer {
 	text-align: center;
 	padding: 1.5rem;
 }
-
 /* headings */
 h1, h2, h3, h4 {
+	font-size: 100%;
 	line-height: 1.2;
 	color: #123;
 }
@@ -75,29 +69,24 @@ h1 {
 	font-weight: 800;
 	margin-bottom: 0.5rem;
 }
-
 /* links */
 a {
-	color: steelblue;
+	color: #000;
 	text-decoration: underline;
 }
 a:visited {
-	/*color: #5672A4;*/
-	color: slategrey;
+	color: #789;
 }
 a:hover,
 a:focus {
-	color: royalblue;
+	color: #456;
 	text-decoration: underline;
 }
-
 /* images */
 main img {
-	max-width: 100%;
 	max-width: 740px;
 	border-radius: 4px;
 }
-
 /* code styles */
 code {
 	padding: 4px;
@@ -107,11 +96,9 @@ code {
 	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 80%;
-
-	background: #f4f9ff;
-	color: steelblue;
-	border-color: steelblue;
-
+	background: transparent;
+	color: #123;
+	border-color: #9ab;
 }
 pre {
 	line-height: 1.5;
@@ -119,29 +106,23 @@ pre {
 pre code {
 	display: block;
 	border: 1px solid;
+	border-color: #9ab;
 	padding: 1rem;
 	
 	overflow-x: auto;
 	overflow-y: hidden;
 }
-
 /* quotes */
 blockquote {
 	max-width: 740px;
 	padding-left: 20px;
 	margin-left: 0;
 	border-left: 2px solid;
-
 	border-color: #9ab;
 	color: #456;
 	font-family: serif;
 	font-style: italic;
 }
-
-details summary > * {
-	display: inline;
-}
-
 /* list + summary */
 summary::marker,
 li::marker {
@@ -151,7 +132,6 @@ li::marker {
 summary::-webkit-details-marker {
 	color: #456;
 }
-
 /* list style */
 ul, ol {
 	padding-left: 1.5rem;
@@ -159,7 +139,6 @@ ul, ol {
 li {
 	padding-left: 0.2rem;
 }
-
 /* post list */
 .postslist {
 	padding: 0;
@@ -171,13 +150,11 @@ li {
 	font-size: 14px;
 	color: #456;
 }
-
 /* hr */
 hr {
 	border: 0px;
 	border-top: 2px solid #9ab;
 }
-
 /* extra padding for desktop/wider displays */
 @media (min-width: 700px) {
 	header {
@@ -187,35 +164,38 @@ hr {
 		margin-top: 1.5em;
 	}
 }
-
 /* dark mode */
 @media (prefers-color-scheme: dark) {
 	body, html {
-		background: #000;
+		background: #111;
 		color: #eee;
 	}
 	header {
-		background: #000b;
+		background: #111;
 	}
 	nav a,
 	nav a:visited{
-		color: #fff;
+		color: #eee;
+	}
+	nav a:hover,
+	nav a:focus {
+		color: #ddd;
 	}
 	a {
-		color: dodgerblue;
+		color: #ddd;
 	}
 	a:visited {
-		color: royalblue;
+		color: #aaa;
 	}
 	a:hover,
 	a:focus {
-		color: steelblue;
+		color: #eee;
 	}
 	h1, h2, h3, h4 {
 		color: #fff;
 	}
 	blockquote {
-		color: #bbb;
+		color: #aaa;
 	}
 	hr, blockquote {
 		border-color: #444;
@@ -231,8 +211,8 @@ hr {
 		color: #aaa;
 	}
 	code {
-		background: #0b0b0b;
-		color: mintcream;
+		background: #111;
+		color: #fff;
 		border-color: #222;
 	}
 	pre code {
