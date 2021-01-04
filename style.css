@@ -10,19 +10,19 @@ html, body {
 	line-height: 1.8;
 	word-wrap: break-word; 
 }
-/* 2nd-level */
+
 nav, main, footer {
 	max-width: 740px;
 	margin: 0 auto;
 	padding: 0 1.5rem;
 }
-/* header */
+
 header {
 	padding: 1rem 0;
 	margin-bottom: 0.5rem;
 	background: #fff;
 }
-/* navigation */
+
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	text-transform: lowercase;
@@ -41,35 +41,36 @@ nav a:focus {
 	text-decoration: underline;
 	color: #456;
 }
-/* main */
+
 main {
 	padding-bottom: 1.5rem;
 }
-/* footer; info */
 footer, .info {
 	color: #9ab;
 	font-size: 80%;
 	line-height: 1.4;
 	font-family: Menlo, Monaco, Consolas, monospace;
 }
-.info {
-	margin-top: 0;
-}
 footer {
 	text-align: center;
-	padding: 1.5rem;
+	padding: 1.5rem 1.5rem 2.5rem 1.5rem;
 }
-/* headings */
+
 h1, h2, h3, h4 {
-	font-size: 100%;
+	font-size: 1.5rem;
 	line-height: 1.2;
 	color: #123;
 }
 h1 {
 	font-weight: 800;
-	margin-bottom: 0.5rem;
+	font-size: 2.5rem;
+	margin-bottom: 2.5rem;
 }
-/* links */
+
+.info {
+	margin-top: 0;
+}
+
 a {
 	color: #000;
 	text-decoration: underline;
@@ -84,7 +85,7 @@ a:focus {
 }
 /* images */
 main img {
-	max-width: 740px;
+	max-width: 100%;
 	border-radius: 4px;
 }
 /* code styles */
@@ -114,7 +115,7 @@ pre code {
 }
 /* quotes */
 blockquote {
-	max-width: 740px;
+	max-width: 100%;
 	padding-left: 20px;
 	margin-left: 0;
 	border-left: 2px solid;
