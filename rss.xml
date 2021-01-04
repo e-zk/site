@@ -4,12 +4,178 @@
 <description/>
 <link>https://zakaria.org</link>
 <item>
+<link>https://zakaria.org/posts/2021-01-04-xenodm</link>
+<title>My xenodm setup</title>
+<description>
+<h1 id="My%20xenodm%20setup">My xenodm setup</h1>
+
+<p>OpenBSD uses the <a href="https://man.openbsd.org/xenodm"><code>xenodm(1)</code></a> display manager, which is a fork of xdm.<br/>
+Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> articles<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> on themeing xenodm I&#39;ve come up with my own setup.</p>
+
+<p>Before we get into the configs, here&#39;s what it actually looks like:</p>
+
+<p><a href="/static/img/xenodm.png"><img src="/static/img/xenodm.png" alt="themed xenodm" /></a></p>
+
+<p><em>(The text might be small, click to view the image file)</em></p>
+
+<p>Clean and simple. Now that you&#39;ve seen what it looks like you can close this tab if that&#39;s all you came here to see. If you want to see how this is accomplished then continue reading.</p>
+
+<h2 id="Files">Files</h2>
+
+<p>xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll had to deal with are:</p>
+
+<pre><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources
+&#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0
+&#47;etc&#47;X11&#47;xenodm&#47;Xsession
+</code></pre>
+
+<p>The last one is for an optional non-cosmetic change that I&#39;ll cover later. All these files require root access, so it&#39;d be wise to <code>doas -s</code> before continuing on.</p>
+
+<h2 id="Xresources">Xresources</h2>
+
+<p>If you&#39;ve ever dabbled in trying to rice your Unix-like operating system there&#39;s a good change you&#39;ve come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &#8220;resource database&#8221; as a &#8216;unified&#8217; way to store configuration data.</p>
+
+<p>xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.</p>
+
+<p>First off, I&#39;d like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
+
+<pre><code>xlogin.Login.echoPasswd: true
+</code></pre>
+
+<p>Next I don&#39;t want to be &#8216;greeted&#8217;, and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
+
+<pre><code>xlogin.Login.fail: ya dun goofed
+xlogin.Login.greeting:
+</code></pre>
+
+<p>Now I&#39;ll configure the dimensions and positioning of the login box:</p>
+
+<pre><code>xlogin.Login.height:            200
+xlogin.Login.width:             400
+xlogin.Login.y:                 320
+xlogin.Login.frameWidth:        10
+xlogin.Login.innerFramesWidth:  0
+</code></pre>
+
+<p>Add some colour (or lack thereof):</p>
+
+<pre><code>xlogin.Login.background:        #000000
+xlogin.Login.foreground:        #eeeeee
+xlogin.Login.failColor:         #b00035
+xlogin.Login.inpColor:          #000000
+xlogin.Login.promptColor:       #eeeeee
+xlogin.Login.hiColor:           #000000
+xlogin.Login.shdColor:          #000000
+</code></pre>
+
+<p>And finally let&#39;s use a nice bitmap font to complete the look:</p>
+
+<pre><code>xlogin.Login.face:              Dina-11
+xlogin.Login.failFace:          Dina-11
+xlogin.Login.promptFace:        Dina-11
+</code></pre>
+
+<p>Note that last step requires the Dina font to be installed (it does not come with OpenBSD).</p>
+
+<h2 id="Xsetup_0">Xsetup_0</h2>
+
+<p>Next is the Xsetup file. Why is this called Xsetup_<em>0</em>? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out <code>&#47;etc&#47;X11&#47;xenodm&#47;xenodm-config</code>).</p>
+
+<p>This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+# set background
+&#47;usr&#47;X11R6&#47;bin&#47;xsetroot -solid \#000000
+
+# add Dina font to font list
+&#47;usr&#47;X11R6&#47;bin&#47;xset fp+ &#47;usr&#47;local&#47;share&#47;font&#47;dina
+ 
+# status bar
+(
+while true; do
+        reboot="%{F#b00035}%{A:reboot:} r %{A}%{F-}"
+        shutdown="%{F#b00035}%{A:shutdown -p now:} p %{A}%{F-}"
+
+        echo "  $(date &#39;+%T&#39;)  %{r}${reboot}&#47;${shutdown}  $(date &#39;+%F&#39;)    $(apm -l)%  "
+        sleep 1
+done | &#47;home&#47;zzz&#47;bin&#47;lemonbar -d -g 1920x40+0+0 -f &#39;Dina:style=Medium:pixelsize=13&#39; -B \#000000 -F \#eeeeee | sh
+) &#38;
+
+# uncomment to take &#39;screenshot&#39;
+#(sleep 5 &#38;&#38; xwd -out &#47;tmp&#47;xenodm.xwd -root) &#38;
+</code></pre>
+
+<p>The date, time, battery percent are all piped into lemonbar. Additionally the &#8216;r&#8217; and &#8216;p&#8217; text in red allow me to reboot or power off my machine respectively.</p>
+
+<p>It should be noted that I probably shouldn&#39;t be using a binary that&#39;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and&#47;or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
+
+<h2 id="Xsession%20extra">Xsession extra</h2>
+
+<p>Here&#39;s the optional bit. I&#39;m a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME&#47;</code> as possible. Moving <code>~&#47;.Xresources</code> was easy - just source a different file from <code>~&#47;.xsession</code>. But an annoyance is <code>~&#47;.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>!</p>
+
+<p>Look for the line that says:</p>
+
+<pre><code>startup=$HOME&#47;.xsession
+</code></pre>
+
+<p>Here we can change the <code>startup</code> variable to be any path we like:</p>
+
+<pre><code>startup=${HOME}&#47;etc&#47;x&#47;xsession
+</code></pre>
+
+<p>Also, if you&#39;ve themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
+
+<p>Look for this part of the script:</p>
+
+<pre><code># if we have private ssh key(s), start ssh-agent and add the key(s)
+id1=$HOME&#47;.ssh&#47;identity
+id2=$HOME&#47;.ssh&#47;id_dsa
+id3=$HOME&#47;.ssh&#47;id_rsa
+id4=$HOME&#47;.ssh&#47;id_ecdsa
+id5=$HOME&#47;.ssh&#47;id_ed25519
+if [ -z "$SSH_AGENT_PID" ];
+then
+    if [ -x &#47;usr&#47;bin&#47;ssh-agent ] &#38;&#38; [ -f $id1 -o -f $id2 -o -f $id3 -o -f $id4 -o -f $id5 ];
+    then
+        eval `ssh-agent -s`
+        ssh-add &#60; &#47;dev&#47;null
+    fi
+fi
+</code></pre>
+
+<p>Just anywhere above this section simply add <code>xrdb -load $HOME&#47;path&#47;to&#47;xresources</code>.</p>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p><a href="https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/">https:&#47;&#47;www.tumfatig.net&#47;20190208&#47;customizing-openbsd-xenodm&#47;</a><br/>
+this is the first article I read on the subject&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><a href="https://www.vincentdelft.be/post/post_20190720">https:&#47;&#47;www.vincentdelft.be&#47;post&#47;post_20190720</a>&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p><a href="https://www.romanzolotarev.com/openbsd/xenodm.html">https:&#47;&#47;www.romanzolotarev.com&#47;openbsd&#47;xenodm.html</a><br/>
+this article is the basis for my configuration, stylistically and config-wise.&#160;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</description>
+<pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+</item>
+<item>
 <link>https://zakaria.org/posts/2020-12-08-openbsd-notes</link>
 <title>OpenBSD notes</title>
 <description>
 <h1 id="OpenBSD%20notes">OpenBSD notes</h1>
 
-<p>Miscellaneous notes on running OpenBSD (some notes may only be usefull for a laptop install). Updated frequently.</p>
+<p>Miscellaneous notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
 
 <h2 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h2>
 
@@ -28,7 +194,7 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Manual%20pages%20as%20beautifully%20typset%20PDFs">Manual pages as beautifully typset PDFs</h2>
+<h2 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h2>
 
 <pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
 </code></pre>
@@ -91,7 +257,7 @@ xlogin.Login.promptFace:       Dina-11
 
 <h3 id="Changing%20location%20of%20%7E&amp;#47;.xsession%20(xenodm)">Changing location of ~&#47;.xsession (xenodm)</h3>
 
-<p>Change the location in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
+<p>Change the location through these vars in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
 
 <pre><code class="language-bash">startup=$HOME&#47;.xsession
 resources=$HOME&#47;.Xresources
@@ -103,6 +269,54 @@ resources=$HOME&#47;.Xresources
 xrdb -load $HOME&#47;x&#47;xresources
 
 # where ssh-agent is called below...
+</code></pre>
+
+<h2 id="PF">PF</h2>
+
+<p>Packet Filter (firewall). General stuff to remember:</p>
+
+<ul>
+<li>last rule &#8216;wins&#8217;*</li>
+<li><code>egress</code> = interface(s) that hold the default route(s)</li>
+</ul>
+
+<h3 id="Standard%20preamble">Standard preamble</h3>
+
+<pre><code># options 
+set block-policy drop
+set skip on lo
+
+# default deny
+block return
+block all 
+
+# antispoofing
+antispoof for egress
+antispoof for $vm_int
+</code></pre>
+
+<h3 id="VMs">VMs</h3>
+
+<p>Don&#39;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
+
+<pre><code># where:
+# vm_int        = vm interface (vether[0-9])
+# vm_dns_server = dns server to be used by vms
+
+# allow ssh traffic to vm
+pass out on $vm_int proto tcp to $vm_int:network port 22
+
+# vm nat
+match out on egress from $vm_int:network to any nat-to (egress)
+pass in proto { tcp udp } from $vm_int:network to any port domain \
+        rdr-to $vm_dns_server port domain
+
+# allow icmp + web from vms
+pass in on $vm_int proto icmp
+pass in on $vm_int proto tcp to port { www, https }
+
+# only allow X11 forwarding on the vm interface
+pass in on $vm_int proto tcp to port 6000:6010
 </code></pre>
 </description>
 <pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
