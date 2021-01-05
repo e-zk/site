@@ -25,7 +25,7 @@
 <h1 id="My%20xenodm%20setup">My xenodm setup</h1>
 <p class="info">
 Posted: 2021-01-04<br>
-Modified: 2021-01-04<br>
+Modified: 2021-01-05<br>
 </p>
 
 <p>OpenBSD uses the <a href="https://man.openbsd.org/xenodm"><code>xenodm(1)</code></a> display manager, which is a fork of xdm.<br/>
@@ -101,6 +101,8 @@ xlogin.Login.promptFace:        Dina-11
 <p>Next is the Xsetup file. Why is this called Xsetup_<em>0</em>? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out <code>&#47;etc&#47;X11&#47;xenodm&#47;xenodm-config</code>).</p>
 
 <p>This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
+
+<div><code>/etc/X11/xenodm/Xsetup_0:</code></div>
 
 <pre><code>#!&#47;bin&#47;sh
 
