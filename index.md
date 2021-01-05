@@ -9,6 +9,7 @@ Welcome to my personal spot in cyberspace and enjoy your stay!
 ## Projects
 
  * [cpass](https://github.com/e-zk/cpass) - A CLI password manager (Go)
+ * [after](https://github.com/e-zk/after) - Prints a string _after_ the specified process has died (OpenBSD) \(C\)
  * [shlog](https://github.com/e-zk/shlog) - Static site generator (Shell)
  * [sec](https://github.com/e-zk/sec) - Stupidly simple secret store using [age](https://age-encryption.org/) for encryption (Shell)
 
