@@ -112,6 +112,8 @@ pre code {
 	color: #123;
 	overflow-x: auto;
 	overflow-y: hidden;
+	scrollbar-color: #456 #9ab;
+	scrollbar-width: thin;
 }
 blockquote {
 	max-width: 100%;
@@ -176,6 +178,6 @@ hr {
 	summary::marker, li::marker, .postslist aside { color: #666 }
 	summary::-webkit-details-marker { color: #666 }
 	code { background: #222; color: #fff }
-	pre code { color: #fff }
+	pre code { color: #fff; scrollbar-color: #aaa #222; }
 	footer, .info, blockquote { color: #aaa }
 }
