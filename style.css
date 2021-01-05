@@ -83,37 +83,36 @@ a:focus {
 	color: #456;
 	text-decoration: underline;
 }
-/* images */
+
 main img {
 	max-width: 100%;
-	border-radius: 4px;
 }
-/* code styles */
+
 code {
 	padding: 4px;
 	border: 1px solid;
-	border-radius: 4px;
 	
 	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 80%;
-	background: transparent;
-	color: #123;
+	background: #9ab;
+	color: #fff;
 	border-color: #9ab;
 }
 pre {
 	line-height: 1.5;
+	margin: 0;
 }
 pre code {
 	display: block;
 	border: 1px solid;
 	border-color: #9ab;
 	padding: 1rem;
-	
+	background: transparent;
+	color: #123;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
-/* quotes */
 blockquote {
 	max-width: 100%;
 	padding-left: 20px;
@@ -124,23 +123,21 @@ blockquote {
 	font-family: serif;
 	font-style: italic;
 }
-/* list + summary */
+
 summary::marker,
 li::marker {
 	color: #456;
 }
-/* for chrome */
 summary::-webkit-details-marker {
 	color: #456;
 }
-/* list style */
+
 ul, ol {
 	padding-left: 1.5rem;
 }
 li {
 	padding-left: 0.2rem;
 }
-/* post list */
 .postslist {
 	padding: 0;
 	list-style: none;
@@ -151,12 +148,12 @@ li {
 	font-size: 14px;
 	color: #456;
 }
-/* hr */
+
 hr {
 	border: 0px;
 	border-top: 2px solid #9ab;
 }
-/* extra padding for desktop/wider displays */
+
 @media (min-width: 700px) {
 	header {
 		padding: 1.5rem 0;
@@ -165,61 +162,20 @@ hr {
 		margin-top: 1.5em;
 	}
 }
-/* dark mode */
 @media (prefers-color-scheme: dark) {
-	body, html {
-		background: #111;
-		color: #eee;
-	}
-	header {
-		background: #111;
-	}
-	nav a,
-	nav a:visited{
-		color: #eee;
-	}
-	nav a:hover,
-	nav a:focus {
-		color: #ddd;
-	}
-	a {
-		color: #ddd;
-	}
-	a:visited {
-		color: #aaa;
-	}
-	a:hover,
-	a:focus {
-		color: #eee;
-	}
-	h1, h2, h3, h4 {
-		color: #fff;
-	}
-	blockquote {
-		color: #aaa;
-	}
-	hr, blockquote {
-		border-color: #444;
-	}
-	summary::marker,
-	li::marker {
-		color: #444;
-	}
-	summary::-webkit-details-marker {
-		color: #444;
-	}
-	.postslist aside {
-		color: #aaa;
-	}
-	code {
-		background: #111;
-		color: #fff;
-		border-color: #222;
-	}
-	pre code {
-		border-color: #222;
-	}
-	footer, .info {
-		color: #aaa;
-	}
+	::selection { background: #cee318; color: #000 }
+	body, html { background: #111; color: #eee }
+	header { background: #111 }
+	nav a, nav a:visited{ color: #eee }
+	nav a:hover, nav a:focus { color: #ddd }
+	a { color: #ddd }
+	a:visited { color: #aaa }
+	a:hover, a:focus { color: #eee }
+	h1, h2, h3, h4 { color: #fff }
+	hr, blockquote, code, pre code { border-color: #222 }
+	summary::marker, li::marker, .postslist aside { color: #666 }
+	summary::-webkit-details-marker { color: #666 }
+	code { background: #222; color: #fff }
+	pre code { color: #fff }
+	footer, .info, blockquote { color: #aaa }
 }
