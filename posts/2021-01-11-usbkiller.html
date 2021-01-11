@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css"/>
+<title>usbkill the OpenBSD way - zakaria's web log</title>
+<meta property="og:title" content="usbkill the OpenBSD way" />
+<meta property="og:url" content="https://zakaria.org/posts/2021-01-11-usbkiller.html" />
+<meta property="og:type" content="article" />
+</head>
+<body>
+<header>
+<nav>
+<a href="/">zakaria.org</a>
+<aside>
+	<a href="/posts/">blog</a>&nbsp;&nbsp;<a href="/lists/">lists</a>&nbsp;&nbsp;<a href="/about.html">about</a>
+</aside>
+</nav>
+</header>
+<main>
+<h1 id="%3Ccode%3Eusbkill%3C/code%3E%20the%20OpenBSD%20way"><code>usbkill</code> the OpenBSD way</h1>
+<p class="info">
+Posted: 2021-01-11<br>
+Modified: 2021-01-11<br>
+</p>
+
+<p><a href="https://github.com/hephaest0s/usbkill"><code>usbkill</code></a> is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of <code>lsusb</code> and when there is a change it runs <code>shutdown -h now</code>.</p>
+
+<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD&#39;s base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
+
+<h2 id="hotplugd">hotplugd</h2>
+
+<p>So what is <code>hotplugd</code>, and how can it be useful? The <a href="https://man.openbsd.org/hotplugd">man page</a> does a good job of explaining it. Simply put: when any device is attached to or detached from your machine <code>hotplugd</code> will execute a script.</p>
+
+<p>To see how simple it is to write a hotplug script we can start by simply logging device attach events. First, start by enabling and starting <code>hotplugd</code> (as root):</p>
+
+<pre><code># rcctl enable hotplugd
+# rcctl start hotplugd
+hotplugd(ok)
+</code></pre>
+
+<p>Next we will write the script that is executed on a device attach event:</p>
+
+<pre><code># mkdir -p &#47;etc&#47;hotplug
+# $EDITOR &#47;etc&#47;hotplug&#47;attach
+</code></pre>
+
+<p>In this file we will log the device class and name:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+DEVCLASS=$1
+DEVNAME=$2
+
+# log attach event
+logger -t hotplug "$DEVCLASS:$DEVNAME attached"
+</code></pre>
+
+<p>To see this in action in another terminal type</p>
+
+<pre><code>$ tail -f &#47;var&#47;log&#47;messages
+</code></pre>
+
+<p>Then connect a USB device to your machine and you should see messages tagged &#8216;hotplug&#8217;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#39;t use):</p>
+
+<pre><code>Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
+Jan 11 11:48:32 x1 hotplug: 5:wsmouse2 attached
+Jan 11 11:48:32 x1 hotplug: 0:ums0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid1 attached
+Jan 11 11:48:32 x1 hotplug: 5:wskbd1 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid4 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid2 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev1 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev2 attached
+Jan 11 11:48:32 x1 hotplug: 0:ukbd0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid5 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid6 attached
+</code></pre>
+
+<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#39;s a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
+
+<h2 id="The%20&amp;#8216;kill&amp;#8217;%20part">The &#8216;kill&#8217; part</h2>
+
+<p>Now that we&#39;ve seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br/>
+We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the <em>kill</em> part, since I might need to plug something in once in a while. Make the <code>&#47;etc&#47;hotplug&#47;attach</code> script as so:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+arm_file=&#47;tmp&#47;arm_usbkill
+
+DEVCLASS="$1"
+DEVNAME="$2"
+
+logger -t "${0##*&#47;}" "${DEVCLASS}:${DEVNAME} attached"
+
+if [ -f "$arm_file" ]; then
+        shutdown -p now
+else
+        logger -t "${0##*&#47;}" "unarmed - aborted shutdown"
+fi
+</code></pre>
+
+<p>If the <code>&#47;tmp&#47;arm_usbkill</code> file exists then the machine will shutdown, if it doesn&#39;t exist it will just add a log entry to syslog.</p>
+
+<p><code>hotplug</code> also supports running a different script, <code>&#47;etc&#47;hotplug&#47;detach</code> on detach events. Since both scripts are exactly the same I&#39;ve symlinked the attach script to the location of the detach script.</p>
+
+<pre><code># ln -s &#47;etc&#47;hotplug&#47;attach &#47;etc&#47;hotplug&#47;detach
+</code></pre>
+
+<p>The <code>${0##*&#47;}</code> logger tag gets substituted to the filename of the script being executed (in this case it is either <code>attach</code> or <code>detach</code>).</p>
+
+<p>One thing to note is that this setup will execute the shutdown command on <em>any</em> device change event. This includes USBs but also includes network devices, disk drives, and serial line interfaces<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. If that is a problem, you can implement a device class-based whitelist by checking <code>$DEVCLASS</code>:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+
+# class whitelist (space-separated)
+class_whitelist="0 2 3 5"
+
+# arm file
+arm_file=&#47;tmp&#47;arm_usbkill
+
+DEVCLASS="$1"
+DEVNAME="$2"
+
+whitelisted() {
+    for class in $class_whitelist; do
+        if [ "$class" = "$1" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+logger -t "${0##*&#47;}" "${DEVCLASS}:${DEVNAME} attached"
+
+if [ -f "$arm_file" ]; then
+    if whitelisted "$DEVCLASS"; then
+        logger -t "${0##*&#47;}" "whitelisted - aborted shutdown"
+        exit 0
+    fi
+    shutdown -p now
+else
+    logger -t "${0##*&#47;}" "unarmed - aborted shutdown"
+fi
+</code></pre>
+
+<p>But this is not really useful to me since I use a laptop and I&#39;m not attaching and detaching network devices or disk drives.</p>
+
+<p>One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with <code>usbkill</code>. This could be acheived through a much more complicated script using <code>usbdevs</code> to get USB IDs, but as of yet I have no need for that.</p>
+
+<h2 id="Arming%20and%20disarming">Arming and disarming</h2>
+
+<p>To arm and disarm this script all you have to do is create or remove the <code>$arm_file</code> respectively. Here are some shell functions to add to your shell rc to make it easier:</p>
+
+<pre><code># arm&#47;disarm usbkill
+arm() {
+        touch &#47;tmp&#47;arm_usbkill &#38;&#38; printf &#39;armed\n&#39; || printf &#39;error arming\n&#39;
+}
+disarm() {
+        rm -f &#47;tmp&#47;arm_usbkill &#38;&#38; printf &#39;disarmed\n&#39; || printf &#39;error disarming\n&#39;
+}
+</code></pre>
+
+<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#39;t the case for <code>usbkill</code>, which requires root to run).<br/>
+Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn&#39;t cleared from <code>&#47;tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
+
+<h2 id="Why?">Why?</h2>
+
+<p>So why do all this? Why not just <code>pkg_add usbutils</code>, download + run <code>usbkill</code> and be done?<br/>
+Well for starters that isn&#39;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
+
+<h2 id="SEE%20ALSO">SEE ALSO</h2>
+
+<ul>
+<li>OpenBSD <code>hotplug(4)</code> pseudo-device man page: <a href="https://man.openbsd.org/hotplug">https:&#47;&#47;man.openbsd.org&#47;hotplug</a> .</li>
+<li>OpenBSD includes the <code>usbdevs(8)</code> tool in base that lists connected USB devices and their IDs: <a href="https://man.openbsd.org/usbdevs">https:&#47;&#47;man.openbsd.org&#47;usbdevs</a> <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</li>
+<li>OpenWRT has it&#39;s own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https:&#47;&#47;openwrt.org&#47;docs&#47;guide-user&#47;base-system&#47;hotplug</a>. But it&#39;s slightly different to OpenBSD&#39;s.</li>
+<li>A couple of years ago I wrote <a href="https://github.com/e-zk/hidlock">a hotplug script</a> that instead runs <a href="https://man.openbsd.org/xlock"><code>xlock(1)</code></a> on all running X displays after a HID is attached. In theory this would to thwart HID&#47;badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.</li>
+</ul>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p>As per the <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code> man page</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>In the future I might write a script to act more similarly to <code>usbkill</code>, using <code>usbdevs</code> to poll for device changes instead of <code>lsusb</code>.&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</main>
+<footer>
+View this page in <a href="2021-01-11-usbkiller.md">plaintext.</a>
+<br>Content for this site is <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>. Generated using <a href="https://github.com/e-zk/shlog">shlog</a>.
+</footer>
+</body>
+</html>
