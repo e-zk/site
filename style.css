@@ -26,7 +26,7 @@ header {
 nav {
 	font-family: Menlo, Monaco, Consolas, monospace;
 	text-transform: lowercase;
-	font-size: 80%;
+	font-size: 12px;
 }
 nav aside {
 	float: right;
@@ -47,7 +47,7 @@ main {
 }
 footer, .info {
 	color: #9ab;
-	font-size: 80%;
+	font-size: 12px;
 	line-height: 1.4;
 	font-family: Menlo, Monaco, Consolas, monospace;
 }
@@ -57,6 +57,7 @@ footer {
 }
 
 h1, h2, h3, h4 {
+	font-family: sans-serif;
 	font-size: 1.5rem;
 	line-height: 1.2;
 	color: #123;
@@ -65,6 +66,9 @@ h1 {
 	font-weight: 800;
 	font-size: 2.5rem;
 	margin-bottom: 2.5rem;
+}
+h1 code {
+	font-size: 80%;
 }
 
 .info {
@@ -89,14 +93,14 @@ main img {
 }
 
 code {
-	padding: 4px;
+	padding: 3px;
 	border: 1px solid;
 	
 	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
-	font-size: 80%;
-	background: #9ab;
-	color: #fff;
+	font-size: 12px;
+	background: transparent;
+	color: #000;
 	border-color: #9ab;
 }
 pre {
@@ -109,7 +113,7 @@ pre code {
 	border-color: #9ab;
 	padding: 1rem;
 	background: transparent;
-	color: #123;
+	color: #000;
 	overflow-x: auto;
 	overflow-y: hidden;
 	scrollbar-color: #456 #9ab;
@@ -166,7 +170,7 @@ hr {
 }
 @media (prefers-color-scheme: dark) {
 	::selection { background: #cee318; color: #000 }
-	body, html { background: #111; color: #eee }
+	body, html { background: #111; color: #eee; font-family: Menlo, Monaco, Consolas, monospace; font-size: 14px }
 	header { background: #111 }
 	nav a, nav a:visited{ color: #eee }
 	nav a:hover, nav a:focus { color: #ddd }
