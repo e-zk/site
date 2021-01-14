@@ -4,7 +4,7 @@ My name is Zakaria. Zak for short. I'm a computer science student who enjoys pro
 
 ## About this site
 
-This site is running [lighttpd](https://www.lighttpd.net/) on an [Alpine Linux](https://alpinelinux.org/) VPS.  
+This site is running on [OpenBSD](https://openbsd.org/), httpd, and relayd.  
 The content of this site is generated using a shell script I wrote, [shlog](https://github.com/e-zk/shlog).
 
 ## Contact
