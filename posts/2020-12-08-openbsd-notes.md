@@ -43,6 +43,8 @@ xsetroot -solid \#202a2b
 
 ### Main xenodm login theme
 
+See [full post](/posts/2021-01-04-xenodm.html) for update xenodm theme.
+
 `/etc/X11/xenodm/Xresources`:
 
 ```
@@ -118,12 +120,19 @@ set block-policy drop
 set skip on lo
 
 # default deny
-block return
 block all 
 
 # antispoofing
 antispoof for egress
 antispoof for $vm_int
+```
+
+### allow ntp
+
+In rare cases ntp can use tcp apparently...
+
+```
+pass quick inet proto { tcp, udp } to port ntp
 ```
 
 ### VMs
@@ -150,5 +159,4 @@ pass in on $vm_int proto tcp to port { www, https }
 # only allow X11 forwarding on the vm interface
 pass in on $vm_int proto tcp to port 6000:6010
 ```
-
 

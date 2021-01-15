@@ -67,6 +67,8 @@ xsetroot -solid \#202a2b
 
 <h3 id="Main%20xenodm%20login%20theme">Main xenodm login theme</h3>
 
+<p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for update xenodm theme.</p>
+
 <p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources</code>:</p>
 
 <pre><code>xlogin*login.translations: #override \
@@ -149,12 +151,18 @@ set block-policy drop
 set skip on lo
 
 # default deny
-block return
 block all 
 
 # antispoofing
 antispoof for egress
 antispoof for $vm_int
+</code></pre>
+
+<h3 id="allow%20ntp">allow ntp</h3>
+
+<p>In rare cases ntp can use tcp apparently&#8230;</p>
+
+<pre><code>pass quick inet proto { tcp, udp } to port ntp
 </code></pre>
 
 <h3 id="VMs">VMs</h3>
