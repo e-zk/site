@@ -53,7 +53,7 @@ footer, .info {
 }
 footer {
 	text-align: center;
-	padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+	padding: 0rem 1.5rem 2.5rem 1.5rem;
 }
 
 h1, h2, h3, h4 {
@@ -169,7 +169,7 @@ hr {
 	}
 }
 @media (prefers-color-scheme: dark) {
-	::selection { background: #cee318; color: #000 }
+	::selection { background: #ce1; color: #000 }
 	body, html { background: #111; color: #eee; font-family: Menlo, Monaco, Consolas, monospace; font-size: 14px }
 	header { background: #111 }
 	nav a, nav a:visited{ color: #eee }
