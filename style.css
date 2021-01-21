@@ -1,13 +1,13 @@
 ::selection {
-	background: #ffff00;
+	background: #d0eaff;
 	color: #000;
 }
 html, body {
 	margin: 0;
 	padding: 0;
 	color: #234;
-	font-family: sans-serif;
-	line-height: 1.8;
+	font-family: "Inter", sans-serif;
+	line-height: 1.8rem;
 	word-wrap: break-word; 
 }
 
@@ -33,13 +33,16 @@ nav aside {
 }
 nav a,
 nav a:visited {
-	color: #123;
-	text-decoration: underline;
+	color: #456;
+	text-decoration: none;
 }
 nav a:hover,
 nav a:focus {
 	text-decoration: underline;
-	color: #456;
+	color: #123;
+}
+nav > a:first-child::before {
+	content: "~";
 }
 
 main {
@@ -57,13 +60,13 @@ footer {
 }
 
 h1, h2, h3, h4 {
-	font-family: sans-serif;
+	font-family: "Inter", sans-serif;
 	font-size: 1.5rem;
+	font-weight: normal;
 	line-height: 1.2;
 	color: #123;
 }
 h1 {
-	font-weight: 800;
 	font-size: 2.5rem;
 	margin-bottom: 2.5rem;
 }
@@ -93,31 +96,27 @@ main img {
 }
 
 code {
-	padding: 3px;
-	border: 1px solid;
-	
-	text-transform: none;
 	font-family: Menlo, Monaco, Consolas, monospace;
 	font-size: 12px;
+	text-transform: none;
+	padding: 3px;
+	border: 1px solid;
 	background: transparent;
 	color: #000;
 	border-color: #9ab;
-}
-pre {
-	line-height: 1.5;
-	margin: 0;
 }
 pre code {
 	display: block;
-	border: 1px solid;
-	border-color: #9ab;
 	padding: 1rem;
+	border: 1px solid;
 	background: transparent;
 	color: #000;
+	border-color: #9ab;
 	overflow-x: auto;
 	overflow-y: hidden;
 	scrollbar-color: #456 #9ab;
 	scrollbar-width: thin;
+	line-height: 1.4;
 }
 blockquote {
 	max-width: 100%;
@@ -170,7 +169,7 @@ hr {
 }
 @media (prefers-color-scheme: dark) {
 	::selection { background: #ce1; color: #000 }
-	body, html { background: #111; color: #eee; font-family: Menlo, Monaco, Consolas, monospace; font-size: 14px }
+	body, html { background: #111; color: #eee; font-family: Menlo, Monaco, Consolas, monospace; font-size: 13px }
 	header { background: #111 }
 	nav a, nav a:visited{ color: #eee }
 	nav a:hover, nav a:focus { color: #ddd }
