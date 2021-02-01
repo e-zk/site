@@ -11,4 +11,13 @@ A hidden service version of this site can be accessed through Tor here: http://n
 
 ## Contact
 
+```
+uudecode <<EOF
+begin 644 zk-email.txt
+1>F%K87)I86M\`='5T82YI;PH\`
+\`
+end
+EOF
+```
+
 [Fediverse](https://qoto.org/@zzz) &bullet; [RSS feed](/rss.xml) &bullet; [Lobste.rs](https://lobste.rs/u/zk) &bullet; [Github](https://github.com/e-zk)
