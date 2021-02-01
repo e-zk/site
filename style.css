@@ -1,3 +1,7 @@
+:root {
+	--text: "Inter", sans-serif;
+	--mono: Menlo, Monaco, Consolas, monospace;
+}
 ::selection {
 	background: #d0eaff;
 	color: #000;
@@ -6,53 +10,49 @@ html, body {
 	margin: 0;
 	padding: 0;
 	color: #234;
-	font-family: "Inter", sans-serif;
+	font-family: var(--text);
 	line-height: 1.8rem;
 	word-wrap: break-word; 
 }
-
 nav, main, footer {
 	max-width: 740px;
 	margin: 0 auto;
 	padding: 0 1.5rem;
 }
-
+main {
+	padding-bottom: 1.5rem;
+}
 header {
 	padding: 1rem 0;
-	margin-bottom: 0.5rem;
 	background: #fff;
+	box-shadow: 0px 0px 10px rgba(16,32,48,0.125);
 }
-
 nav {
-	font-family: Menlo, Monaco, Consolas, monospace;
+	font-family: var(--mono);
 	text-transform: lowercase;
 	font-size: 12px;
 }
 nav aside {
 	float: right;
 }
-nav a,
-nav a:visited {
+nav a, nav a:visited,
+footer a, footer a:visited {
 	color: #456;
 	text-decoration: none;
 }
-nav a:hover,
-nav a:focus {
+nav a:hover, nav a:focus,
+footer a:hover, footer a:focus {
 	text-decoration: underline;
 	color: #123;
 }
 nav > a:first-child::before {
 	content: "~";
 }
-
-main {
-	padding-bottom: 1.5rem;
-}
 footer, .info {
-	color: #9ab;
+	color: #666;
 	font-size: 12px;
 	line-height: 1.4;
-	font-family: Menlo, Monaco, Consolas, monospace;
+	font-family: var(--mono);
 }
 footer {
 	text-align: center;
@@ -60,7 +60,7 @@ footer {
 }
 
 h1, h2, h3, h4 {
-	font-family: "Inter", sans-serif;
+	font-family: var(--text);
 	font-size: 1.5rem;
 	font-weight: normal;
 	line-height: 1.2;
@@ -68,7 +68,7 @@ h1, h2, h3, h4 {
 }
 h1 {
 	font-size: 2.5rem;
-	margin-bottom: 2.5rem;
+	margin: 2.5rem auto 2rem auto;
 }
 h1 code {
 	font-size: 80%;
@@ -96,7 +96,7 @@ main img {
 }
 
 code {
-	font-family: Menlo, Monaco, Consolas, monospace;
+	font-family: var(--mono);
 	font-size: 12px;
 	text-transform: none;
 	padding: 3px;
@@ -149,7 +149,7 @@ li {
 }
 .postslist aside {
 	float: right;
-	font-family: Menlo, Monaco, Consolas, monospace;
+	font-family: var(--mono);
 	font-size: 14px;
 	color: #456;
 }
@@ -169,13 +169,13 @@ hr {
 }
 @media (prefers-color-scheme: dark) {
 	::selection { background: #ce1; color: #000 }
-	body, html { background: #111; color: #eee; font-family: Menlo, Monaco, Consolas, monospace; font-size: 13px }
-	header { background: #111 }
-	nav a, nav a:visited{ color: #eee }
-	nav a:hover, nav a:focus { color: #ddd }
+	body, html { background: #111; color: #fff; }
+	header { background: #222 }
+	nav a, nav a:visited, footer a, footer a:visited { color: #eee }
+	nav a:hover, nav a:focus, footer a:hover, footer a:focus { color: #ddd }
 	a { color: #ddd }
 	a:visited { color: #aaa }
-	a:hover, a:focus { color: #eee }
+	a:hover, a:focus { color: #fff }
 	h1, h2, h3, h4 { color: #fff }
 	hr, blockquote, code, pre code { border-color: #222 }
 	summary::marker, li::marker, .postslist aside { color: #666 }
