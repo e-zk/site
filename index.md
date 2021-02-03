@@ -1,7 +1,7 @@
 # Welcome
 
 I'm Zak. Computer science student, open source advocate, and lover of all things Unix and Unix-like.  
-I blog about *nix, BSD, books I am reading, and anything I feel like really.  
+I blog about *nix, security, books, and anything I feel like really.  
 You can subscrible to my blog's RSS feed [here](/rss.xml).
 
 Welcome to my personal spot in cyberspace and enjoy your stay!
