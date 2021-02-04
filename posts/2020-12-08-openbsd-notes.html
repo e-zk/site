@@ -25,21 +25,49 @@
 <h1 id="OpenBSD%20notes">OpenBSD notes</h1>
 <p class="info">
 posted: 2020-12-08<br>
-modified: 2021-01-15<br>
+modified: 2021-02-05<br>
 </p>
 
-<p>Miscellaneous notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
+<p>Random notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
 
-<h2 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h2>
+<h2 id="Table%20of%20Contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#Power%2fBattery">Power&#47;Battery</a>
+
+<ul>
+<li><a href="#Hibernate%20on%20low%20battery">Hibernate on low battery</a></li>
+<li><a href="#User%20power%20commands">User power commands</a></li>
+</ul></li>
+<li><a href="#Multimedia">Multimedia</a>
+
+<ul>
+<li><a href="#Microphone%20Setup">Microphone Setup</a></li>
+</ul></li>
+<li><a href="#X">X</a></li>
+<li><a href="#PF">PF</a>
+
+<ul>
+<li><a href="#Standard%20preamble">Standard preamble</a></li>
+<li><a href="#Allow%20NTP">Allow NTP</a></li>
+<li><a href="#VMs">VMs</a></li>
+</ul></li>
+<li><a href="#Misc">Misc</a></li>
+<li><a href="#Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</a></li>
+</ul>
+
+<h2 id="Power&amp;#47;Battery">Power&#47;Battery</h2>
+
+<h3 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h3>
 
 <p>To hibernate at 5% remaining battery add in <code>&#47;etc&#47;rc.conf.local</code>:</p>
 
 <pre><code class="language-bash">apmd_flags=-A -Z 5
 </code></pre>
 
-<h2 id="Non-root%20power%20control">Non-root power control</h2>
+<h3 id="User%20power%20commands">User power commands</h3>
 
-<p><code>&#47;etc&#47;doas.conf</code>:</p>
+<p>In <code>&#47;etc&#47;doas.conf</code>:</p>
 
 <pre><code>permit nopass :staff as root cmd zzz
 permit nopass :staff as root cmd ZZZ
@@ -47,93 +75,29 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h2>
+<h2 id="Multimedia">Multimedia</h2>
 
-<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
+<h3 id="Microphone%20setup">Microphone setup</h3>
+
+<p>I have a fancy microphone that has a headphone passthrough. So it is both USB &#8220;speaker&#8221; and a USB microphone. Good news, that makes using it with sndio a <em>bit</em> easier.</p>
+
+<p>Change primary sndiod device to the microphone (check dmesg for <code>audio[0-9]</code> device id):</p>
+
+<pre><code># rcctl set sndiod flags -f rsnd&#47;1
+# rcctl restart sndiod
 </code></pre>
+
+<p>Switch mixer sources:</p>
+
+<pre><code># mixerctl outputs.hp_source=dac-2:3
+outputs.hp_source: dac-0:1 -&#62; dac-2:3
+</code></pre>
+
+<p>To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (<code>dac-0:1</code>).</p>
 
 <h2 id="X">X</h2>
 
-<p>Xorg settings, xenodm theming. </p>
-
-<h3 id="Run%20programs%20on%20xenodm%20login%20screen">Run programs on xenodm login screen</h3>
-
-<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0</code>:</p>
-
-<pre><code class="language-bash"># comment out xconsole
-
-xsetroot -solid \#202a2b
-</code></pre>
-
-<h3 id="Main%20xenodm%20login%20theme">Main xenodm login theme</h3>
-
-<p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for update xenodm theme.</p>
-
-<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources</code>:</p>
-
-<pre><code>xlogin*login.translations: #override \
-        Ctrl&#60;Key&#62;R: abort-display()
-\
-        &#60;Key&#62;F1: set-session-argument(failsafe) finish-field()
-\
-        &#60;Key&#62;Left: move-backward-character()
-\
-        &#60;Key&#62;Right: move-forward-character()
-\
-        &#60;Key&#62;Home: move-to-begining()
-\
-        &#60;Key&#62;End: move-to-end()
-\
-        Ctrl&#60;Key&#62;KP_Enter: set-session-argument(failsafe) finish-field()
-\
-        &#60;Key&#62;KP_Enter: set-session-argument() finish-field()
-\
-        Ctrl&#60;Key&#62;Return: set-session-argument(failsafe) finish-field()
-\
-        &#60;Key&#62;Return: set-session-argument() finish-field()
-
-
-xlogin.Login.echoPasswd:       true
-xlogin.Login.fail:             Access Denied
-xlogin.Login.greeting:
-xlogin.Login.namePrompt:         login 
-xlogin.Login.passwdPrompt:      passwd 
-
-xlogin.Login.height:           200
-xlogin.Login.width:            400
-xlogin.Login.y:                320
-xlogin.Login.frameWidth:       10
-xlogin.Login.innerFramesWidth: 0
-
-xlogin.Login.background:        #000000
-xlogin.Login.foreground:        #afafaf
-xlogin.Login.failColor:         red
-xlogin.Login.inpColor:          #1a1f1f
-xlogin.Login.promptColor:       #afafaf
-xlogin.Login.hiColor:           #000000
-xlogin.Login.shdColor:          #000000
-
-! font face
-xlogin.Login.face:             Dina-11
-xlogin.Login.failFace:         Dina-11
-xlogin.Login.promptFace:       Dina-11
-</code></pre>
-
-<h3 id="Changing%20location%20of%20%7E&amp;#47;.xsession%20(xenodm)">Changing location of ~&#47;.xsession (xenodm)</h3>
-
-<p>Change the location through these vars in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
-
-<pre><code class="language-bash">startup=$HOME&#47;.xsession
-resources=$HOME&#47;.Xresources
-</code></pre>
-
-<p>May also be wise to load Xresources before <code>ssh-agent</code> if <code>ssh-askpass</code> is themed:</p>
-
-<pre><code class="language-bash"># load xresources
-xrdb -load $HOME&#47;x&#47;xresources
-
-# where ssh-agent is called below...
-</code></pre>
+<p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for xenodm themeing.</p>
 
 <h2 id="PF">PF</h2>
 
@@ -158,7 +122,7 @@ antispoof for egress
 antispoof for $vm_int
 </code></pre>
 
-<h3 id="allow%20ntp">allow ntp</h3>
+<h3 id="Allow%20NTP">Allow NTP</h3>
 
 <p>In rare cases ntp can use tcp apparently&#8230;</p>
 
@@ -187,6 +151,13 @@ pass in on $vm_int proto tcp to port { www, https }
 
 # only allow X11 forwarding on the vm interface
 pass in on $vm_int proto tcp to port 6000:6010
+</code></pre>
+
+<h2 id="Misc">Misc</h2>
+
+<h3 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h3>
+
+<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
 </code></pre>
 </main>
 <footer>

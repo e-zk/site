@@ -1,8 +1,24 @@
 # OpenBSD notes
 
-Miscellaneous notes on running [OpenBSD](https://openbsd.org/) (some notes may only be useful for a laptop install). Updated frequently.
+Random notes on running [OpenBSD](https://openbsd.org/) (some notes may only be useful for a laptop install). Updated frequently.
 
-## Hibernate on low battery
+## Table of Contents
+* [Power/Battery](#Power%2fBattery)
+  * [Hibernate on low battery](#Hibernate%20on%20low%20battery)
+  * [User power commands](#User%20power%20commands)
+* [Multimedia](#Multimedia)
+  * [Microphone Setup](#Microphone%20Setup)
+* [X](#X)
+* [PF](#PF)
+  * [Standard preamble](#Standard%20preamble)
+  * [Allow NTP](#Allow%20NTP)
+  * [VMs](#VMs)
+* [Misc](#Misc)
+* [Manual pages as beautifully typeset PDFs](#Manual%20pages%20as%20beautifully%20typeset%20PDFs)
+
+## Power/Battery
+
+### Hibernate on low battery
 
 To hibernate at 5% remaining battery add in `/etc/rc.conf.local`:
 
@@ -10,9 +26,9 @@ To hibernate at 5% remaining battery add in `/etc/rc.conf.local`:
 apmd_flags=-A -Z 5
 ```
 
-## Non-root power control
+### User power commands
 
-`/etc/doas.conf`:
+In `/etc/doas.conf`:
 
 ```
 permit nopass :staff as root cmd zzz
@@ -21,89 +37,31 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 ```
 
-## Manual pages as beautifully typeset PDFs
+## Multimedia
 
-```console
-$ MANPAGER=zathura man -T pdf style
+### Microphone setup
+
+I have a fancy microphone that has a headphone passthrough. So it is both USB "speaker" and a USB microphone. Good news, that makes using it with sndio a _bit_ easier.
+
+Change primary sndiod device to the microphone (check dmesg for `audio[0-9]` device id):
+
 ```
+# rcctl set sndiod flags -f rsnd/1
+# rcctl restart sndiod
+```
+
+Switch mixer sources:
+
+```
+# mixerctl outputs.hp_source=dac-2:3
+outputs.hp_source: dac-0:1 -> dac-2:3
+```
+
+To switch back, remove the sndiod flag, and change the source back to it's original value (`dac-0:1`).
 
 ## X
 
-Xorg settings, xenodm theming. 
-
-### Run programs on xenodm login screen
-
-`/etc/X11/xenodm/Xsetup_0`:
-
-```bash
-# comment out xconsole
-
-xsetroot -solid \#202a2b
-```
-
-### Main xenodm login theme
-
-See [full post](/posts/2021-01-04-xenodm.html) for update xenodm theme.
-
-`/etc/X11/xenodm/Xresources`:
-
-```
-xlogin*login.translations: #override \
-        Ctrl<Key>R: abort-display()\n\
-        <Key>F1: set-session-argument(failsafe) finish-field()\n\
-        <Key>Left: move-backward-character()\n\
-        <Key>Right: move-forward-character()\n\
-        <Key>Home: move-to-begining()\n\
-        <Key>End: move-to-end()\n\
-        Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
-        <Key>KP_Enter: set-session-argument() finish-field()\n\
-        Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
-        <Key>Return: set-session-argument() finish-field()
-
-
-xlogin.Login.echoPasswd:       true
-xlogin.Login.fail:             Access Denied
-xlogin.Login.greeting:
-xlogin.Login.namePrompt:       \040\040login\040
-xlogin.Login.passwdPrompt:     \040passwd\040
-
-xlogin.Login.height:           200
-xlogin.Login.width:            400
-xlogin.Login.y:                320
-xlogin.Login.frameWidth:       10
-xlogin.Login.innerFramesWidth: 0
-
-xlogin.Login.background:        #000000
-xlogin.Login.foreground:        #afafaf
-xlogin.Login.failColor:         red
-xlogin.Login.inpColor:          #1a1f1f
-xlogin.Login.promptColor:       #afafaf
-xlogin.Login.hiColor:           #000000
-xlogin.Login.shdColor:          #000000
-
-! font face
-xlogin.Login.face:             Dina-11
-xlogin.Login.failFace:         Dina-11
-xlogin.Login.promptFace:       Dina-11
-```
-
-### Changing location of ~/.xsession (xenodm)
-
-Change the location through these vars in `/etc/X11/xenodm/Xsession`:
-
-```bash
-startup=$HOME/.xsession
-resources=$HOME/.Xresources
-```
-
-May also be wise to load Xresources before `ssh-agent` if `ssh-askpass` is themed:
-
-```bash
-# load xresources
-xrdb -load $HOME/x/xresources
-
-# where ssh-agent is called below...
-```
+See [full post](/posts/2021-01-04-xenodm.html) for xenodm themeing.
 
 ## PF
 
@@ -127,7 +85,7 @@ antispoof for egress
 antispoof for $vm_int
 ```
 
-### allow ntp
+### Allow NTP
 
 In rare cases ntp can use tcp apparently...
 
@@ -160,3 +118,10 @@ pass in on $vm_int proto tcp to port { www, https }
 pass in on $vm_int proto tcp to port 6000:6010
 ```
 
+## Misc
+
+### Manual pages as beautifully typeset PDFs
+
+```console
+$ MANPAGER=zathura man -T pdf style
+```
