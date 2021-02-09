@@ -9,7 +9,7 @@ On here I blog about *nix, security, books, and anything I feel like really.
 This site is running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/).  
 The content of this site is generated using a script I wrote, [shlog](https://github.com/e-zk/shlog).
 
-A hidden service version of this site can be accessed through Tor here: http://nnnmz2osree2yht2gw25rrf2riatblybxjoew54zkcu3pyxcghhg3gid.onion.
+A hidden service mirror of this site can be accessed through Tor here: http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion.
 
 ## Contact
 
