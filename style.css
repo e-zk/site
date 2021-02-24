@@ -111,6 +111,7 @@ footer {
 
 code {
 	padding: 2px;
+	text-transform: none;
 }
 pre code {
 	display: block;
