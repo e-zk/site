@@ -1,11 +1,62 @@
-<rss version="2.0" xml:base="https://zakaria.org">
+<rss version="2.0" xml:base="https://zakaria.org/">
 <channel>
 <title>zakaria's web log</title>
 <description/>
-<link>https://zakaria.org</link>
+<link>https://zakaria.org/posts/</link>
 <item>
-<link>https://zakaria.org/posts/2021-01-11-usbkiller</link>
+<link>https://zakaria.org/posts/2021-02-24-feb.html</link>
+<title>Update Feb 2021: git server + hidden service</title>
+<pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
+<description>
+<h1 id="Update%20Feb%202021:%20git%20server%20+%20hidden%20service">Update Feb 2021: git server + hidden service</h1>
+
+<p>Here&#39;s a little site update.</p>
+
+<h2 id="CSS%20changes">CSS changes</h2>
+
+<p>As usual the CSS of this website is ever-changing. I&#39;ve changed it to be more monochrome, with blue highlights on link hover&#47;focus and text selection. Headings are now all <code>1em</code>.</p>
+
+<h2 id="Git%20server">Git server</h2>
+
+<p>I&#39;ve set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It&#39;s a very well written guide for setting up stagit on OpenBSD.<br/>
+I modified some of the scripts provided to suit my workflow.</p>
+
+<p>I plan to move most of my projects that don&#39;t require an issue tracker over there. Namely personal configs&#47;programs.</p>
+
+<h2 id="Hidden%20service">Hidden service</h2>
+
+<p>During January I made this site accessible over Tor via a <a href="https://wikipedia.org/wiki/Tor_(anonymity_network)#Onion_services">hidden service&#47;onion service</a>. I had some (layer 8) issues with the service provider and had to reset the server and so the service URL has changed a few times. The canonical onion service URL can be found on the <a href="/about.html">about page</a> or in the footer.</p>
+
+<p>Why have I setup an onion service? Three reasons:</p>
+
+<ol start="1">
+<li>Tor is a technology that interests me</li>
+<li>I wanted to see how difficult it would be to setup a hidden service (it was not difficult<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>)</li>
+<li>It&#39;s fun</li>
+</ol>
+
+<p>Because onion services can&#39;t have subdomains, I&#39;ve setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>&#47;git&#47;</code> endpoint (this is only available on the hidden service).</p>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p><a href="https://hosakacorp.net/p/stagit-server.html">https:&#47;&#47;hosakacorp.net&#47;p&#47;stagit-server.html</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I referred to these two guides: <a href="https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c">https:&#47;&#47;medium.com&#47;@sarala.saraswati&#47;tor-hidden-services-on-openbsd-with-httpd-52852f49358c</a>, <a href="https://dataswamp.org/%7Esolene/2018-10-11-tor-hidden-service.html">https:&#47;&#47;dataswamp.org&#47;~solene&#47;2018-10-11-tor-hidden-service.html</a>  &#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</description>
+</item>
+<item>
+<link>https://zakaria.org/posts/2021-01-11-usbkiller.html</link>
 <title>usbkill the OpenBSD way</title>
+<pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
 <description>
 <h1 id="%3Ccode%3Eusbkill%3C/code%3E%20the%20OpenBSD%20way"><code>usbkill</code> the OpenBSD way</h1>
 
@@ -180,11 +231,11 @@ Well for starters that isn&#39;t as fun. The main reason is that all this works 
 </ol>
 </div>
 </description>
-<pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2021-01-04-xenodm</link>
+<link>https://zakaria.org/posts/2021-01-04-xenodm.html</link>
 <title>My xenodm setup</title>
+<pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
 <description>
 <h1 id="My%20xenodm%20setup">My xenodm setup</h1>
 
@@ -201,7 +252,7 @@ Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><
 
 <h2 id="Files">Files</h2>
 
-<p>xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll had to deal with are:</p>
+<p>xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll have to deal with are:</p>
 
 <pre><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources
 &#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0
@@ -348,26 +399,54 @@ this article is the basis for my configuration, stylistically and config-wise.&#
 </ol>
 </div>
 </description>
-<pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-12-08-openbsd-notes</link>
+<link>https://zakaria.org/posts/2020-12-08-openbsd-notes.html</link>
 <title>OpenBSD notes</title>
+<pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="OpenBSD%20notes">OpenBSD notes</h1>
 
-<p>Miscellaneous notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
+<p>Random notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
 
-<h2 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h2>
+<h2 id="Table%20of%20Contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#Power%2fBattery">Power&#47;Battery</a>
+
+<ul>
+<li><a href="#Hibernate%20on%20low%20battery">Hibernate on low battery</a></li>
+<li><a href="#User%20power%20commands">User power commands</a></li>
+</ul></li>
+<li><a href="#Multimedia">Multimedia</a>
+
+<ul>
+<li><a href="#Microphone%20Setup">Microphone Setup</a></li>
+</ul></li>
+<li><a href="#X">X</a></li>
+<li><a href="#PF">PF</a>
+
+<ul>
+<li><a href="#Standard%20preamble">Standard preamble</a></li>
+<li><a href="#Allow%20NTP">Allow NTP</a></li>
+<li><a href="#VMs">VMs</a></li>
+</ul></li>
+<li><a href="#Misc">Misc</a></li>
+<li><a href="#Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</a></li>
+</ul>
+
+<h2 id="Power&amp;#47;Battery">Power&#47;Battery</h2>
+
+<h3 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h3>
 
 <p>To hibernate at 5% remaining battery add in <code>&#47;etc&#47;rc.conf.local</code>:</p>
 
 <pre><code class="language-bash">apmd_flags=-A -Z 5
 </code></pre>
 
-<h2 id="Non-root%20power%20control">Non-root power control</h2>
+<h3 id="User%20power%20commands">User power commands</h3>
 
-<p><code>&#47;etc&#47;doas.conf</code>:</p>
+<p>In <code>&#47;etc&#47;doas.conf</code>:</p>
 
 <pre><code>permit nopass :staff as root cmd zzz
 permit nopass :staff as root cmd ZZZ
@@ -375,82 +454,29 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h2>
+<h2 id="Multimedia">Multimedia</h2>
 
-<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
+<h3 id="Microphone%20setup">Microphone setup</h3>
+
+<p>I have a fancy microphone that has a headphone passthrough. So it is both USB &#8220;speaker&#8221; and a USB microphone. Good news, that makes using it with sndio a <em>bit</em> easier.</p>
+
+<p>Change primary sndiod device to the microphone (check dmesg for <code>audio[0-9]</code> device id):</p>
+
+<pre><code># rcctl set sndiod flags -f rsnd&#47;1
+# rcctl restart sndiod
 </code></pre>
+
+<p>Switch mixer sources:</p>
+
+<pre><code># mixerctl outputs.hp_source=dac-2:3
+outputs.hp_source: dac-0:1 -&#62; dac-2:3
+</code></pre>
+
+<p>To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (<code>dac-0:1</code>).</p>
 
 <h2 id="X">X</h2>
 
-<p>Xorg settings, xenodm theming. </p>
-
-<h3 id="Run%20programs%20on%20xenodm%20login%20screen">Run programs on xenodm login screen</h3>
-
-<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0</code>:</p>
-
-<pre><code class="language-bash"># comment out xconsole
-
-xsetroot -solid \#202a2b
-</code></pre>
-
-<h3 id="Main%20xenodm%20login%20theme">Main xenodm login theme</h3>
-
-<p><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources</code>:</p>
-
-<pre><code>xlogin*login.translations: #override \
-        Ctrl&#60;Key&#62;R: abort-display()\n\
-        &#60;Key&#62;F1: set-session-argument(failsafe) finish-field()\n\
-        &#60;Key&#62;Left: move-backward-character()\n\
-        &#60;Key&#62;Right: move-forward-character()\n\
-        &#60;Key&#62;Home: move-to-begining()\n\
-        &#60;Key&#62;End: move-to-end()\n\
-        Ctrl&#60;Key&#62;KP_Enter: set-session-argument(failsafe) finish-field()\n\
-        &#60;Key&#62;KP_Enter: set-session-argument() finish-field()\n\
-        Ctrl&#60;Key&#62;Return: set-session-argument(failsafe) finish-field()\n\
-        &#60;Key&#62;Return: set-session-argument() finish-field()
-
-
-xlogin.Login.echoPasswd:       true
-xlogin.Login.fail:             Access Denied
-xlogin.Login.greeting:
-xlogin.Login.namePrompt:       \040\040login\040
-xlogin.Login.passwdPrompt:     \040passwd\040
-
-xlogin.Login.height:           200
-xlogin.Login.width:            400
-xlogin.Login.y:                320
-xlogin.Login.frameWidth:       10
-xlogin.Login.innerFramesWidth: 0
-
-xlogin.Login.background:        #000000
-xlogin.Login.foreground:        #afafaf
-xlogin.Login.failColor:         red
-xlogin.Login.inpColor:          #1a1f1f
-xlogin.Login.promptColor:       #afafaf
-xlogin.Login.hiColor:           #000000
-xlogin.Login.shdColor:          #000000
-
-! font face
-xlogin.Login.face:             Dina-11
-xlogin.Login.failFace:         Dina-11
-xlogin.Login.promptFace:       Dina-11
-</code></pre>
-
-<h3 id="Changing%20location%20of%20%7E&amp;#47;.xsession%20(xenodm)">Changing location of ~&#47;.xsession (xenodm)</h3>
-
-<p>Change the location through these vars in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>:</p>
-
-<pre><code class="language-bash">startup=$HOME&#47;.xsession
-resources=$HOME&#47;.Xresources
-</code></pre>
-
-<p>May also be wise to load Xresources before <code>ssh-agent</code> if <code>ssh-askpass</code> is themed:</p>
-
-<pre><code class="language-bash"># load xresources
-xrdb -load $HOME&#47;x&#47;xresources
-
-# where ssh-agent is called below...
-</code></pre>
+<p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for xenodm themeing.</p>
 
 <h2 id="PF">PF</h2>
 
@@ -468,12 +494,18 @@ set block-policy drop
 set skip on lo
 
 # default deny
-block return
 block all 
 
 # antispoofing
 antispoof for egress
 antispoof for $vm_int
+</code></pre>
+
+<h3 id="Allow%20NTP">Allow NTP</h3>
+
+<p>In rare cases ntp can use tcp apparently&#8230;</p>
+
+<pre><code>pass quick inet proto { tcp, udp } to port ntp
 </code></pre>
 
 <h3 id="VMs">VMs</h3>
@@ -499,12 +531,19 @@ pass in on $vm_int proto tcp to port { www, https }
 # only allow X11 forwarding on the vm interface
 pass in on $vm_int proto tcp to port 6000:6010
 </code></pre>
+
+<h2 id="Misc">Misc</h2>
+
+<h3 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h3>
+
+<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
+</code></pre>
 </description>
-<pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-12-05-fonts</link>
+<link>https://zakaria.org/posts/2020-12-05-fonts.html</link>
 <title>How I (almost) fixed my fonts</title>
+<pubDate>Sat, 05 Dec 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="How%20I%20(almost)%20fixed%20my%20fonts">How I (almost) fixed my fonts</h1>
 
@@ -568,11 +607,11 @@ html, body {
 <p>Chances are whenever you&#39;re reading this the site has already been changed to reflect this change.<br/>
 Sans-serif looks better for this site anyways :P  </p>
 </description>
-<pubDate>Sat, 05 Dec 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-11-07-malthusian-belt</link>
+<link>https://zakaria.org/posts/2020-11-07-malthusian-belt.html</link>
 <title>Malthusian Belt</title>
+<pubDate>Sat, 07 Nov 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="Malthusian%20Belt">Malthusian Belt</h1>
 
@@ -601,11 +640,11 @@ Sans-serif looks better for this site anyways :P  </p>
 </ol>
 </div>
 </description>
-<pubDate>Sat, 07 Nov 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-09-09-tmux</link>
+<link>https://zakaria.org/posts/2020-09-09-tmux.html</link>
 <title>Quick setup script with tmux</title>
+<pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
 
@@ -639,11 +678,11 @@ tmux attach-session -d
 
 <p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
 </description>
-<pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-08-03-m4</link>
+<link>https://zakaria.org/posts/2020-08-03-m4.html</link>
 <title>M4 Troubles...</title>
+<pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="M4%20Troubles&amp;#8230;">M4 Troubles&#8230;</h1>
 
@@ -680,11 +719,11 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
 </description>
-<pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 <item>
-<link>https://zakaria.org/posts/2020-08-01-shblog</link>
+<link>https://zakaria.org/posts/2020-08-01-shblog.html</link>
 <title>The /bin/sh Blog. Part I: Timmy's Templates</title>
+<pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
 <description>
 <h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#39;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#39;s Templates</h1>
 
@@ -813,7 +852,6 @@ Moving on-</p>
 <p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
 Stay tuned for part II.</p>
 </description>
-<pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
 </item>
 </channel>
 </rss>
