@@ -1,4 +1,4 @@
-# Hey.
+# Hey
 
 I am Zakaria. You can call me Zak.
 
