@@ -1,6 +1,6 @@
 :root {
 	--text: "Inter",sans-serif;
-	--mono: monospace,monospace;
+	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 	--mw: 700px;
 	--c0: #ffffff;
 	--c1: rgba(0,0,0,0.2);
@@ -45,6 +45,12 @@ main, nav, footer {
 	padding: 1rem;
 	margin: 0 auto;
 }
+footer {
+	border-top: 1px solid var(--c1);
+}
+nav {
+	border-bottom: 1px solid var(--c1);
+}
 
 ul {
 	margin-block-start: 0;
@@ -65,9 +71,10 @@ strong {
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 600;
 	font-size: 1em;
+	text-transform: uppercase;
 }
 h1 {
-	text-transform: capitalize;
+	text-transform: uppercase;
 }
 h1::after {
 	font-family: var(--mono);
@@ -99,6 +106,7 @@ nav aside,
 
 .info, footer, nav {
 	color: var(--c2);
+	text-transform: uppercase;
 }
 
 code {
@@ -134,7 +142,10 @@ a:hover code, a:focus code {
 }
 
 blockquote {
-	
+	padding-left: 1rem;
+	margin-left: 2rem;
+	border-left: 1px solid var(--c1);
+	font-style: italic;
 }
 
 .postslist {
