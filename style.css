@@ -107,7 +107,7 @@ nav a::before {
 	content: '~';
 }
 
-.info, footer, nav {
+.info, footer {
 	color: var(--c2);
 	text-transform: lowercase;
 }
