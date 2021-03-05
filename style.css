@@ -57,7 +57,7 @@ ul {
 	margin-block-end: 0;
 	padding-inline-start: 0;
 	padding-inline-end: 0;
-	list-style-type: square;
+	list-style-type: disc;
 }
 li {
 	margin: 0rem 1rem;
@@ -100,9 +100,16 @@ nav aside,
 	float: right;
 }
 
+nav a {
+	border-bottom: none;
+}
+nav a::before {
+	content: '~';
+}
+
 .info, footer, nav {
 	color: var(--c2);
-	text-transform: uppercase;
+	text-transform: lowercase;
 }
 
 code {
