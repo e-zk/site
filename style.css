@@ -12,7 +12,7 @@
 }
 ::selection {
 	background-color: var(--c4);
-	color: #fff;
+	color: var(--c0);
 }
 ::-webkit-scrollbar {
 	width: 8px;
@@ -173,10 +173,10 @@ blockquote {
 }
 @media (prefers-color-scheme: dark) {
 	:root {
-		--c0: #111111;
-		--c1: rgba(255,255,255,0.2);
-		--c2: rgba(255,255,255,0.6);
-		--c3: #fff;
-		--c4: royalblue;
+		--c0: #050505;
+		--c1: #3d3d3d;
+		--c2: #666666;
+		--c3: #dfdfdf;
+		--c4: #d00055;
 	}
 }
