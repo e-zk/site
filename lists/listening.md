@@ -8,6 +8,8 @@ Music in no particular order.
 * _Crystal Castles - Amnesty(I)_ (2016) \[[yt](https://www.youtube.com/watch?v=QU3b72dVLWQ)\]  
 * _Andy Stott - It Should Be Us_ (2019)
 * _Neurolucifer - Entropy_ (2018) \[[bc](https://lainlabel.bandcamp.com/album/entropy)\]  
+* _Lorn - A/D_ (2017) \[[bc](https://lorn.bandcamp.com/album/a-d)\]
+* _Haru Nemuri - Haru To Shura_ (2019) \[[bc](https://specific.bandcamp.com/album/haru-to-shura)\]
 * _FKA twigs - MAGDALENE_ (2019) \[[yt](https://www.youtube.com/watch?v=0Fop8j8QWsA&list=PLZ9DoO2uX9wU3-o1IzUnAvkP7nB0dxY2_)\]  
 * _OSC - Girls On Bikes_ (2017) \[[bc](https://opussciencecollective.bandcamp.com/album/girls-on-bikes-2)\]  
 * _MF Doom - Operation Doomsday_ (1999)  
@@ -24,3 +26,4 @@ Music in no particular order.
 * [Björk - Isobel](https://www.youtube.com/watch?v=VGPYO0mzmBQ) (1995)
 * [Nylo - Someone like you](https://www.youtube.com/watch?v=dRee4Q4gM9Y) (2013)
 * [Blue Sky Black Death - Gold In Gold Out](https://www.youtube.com/watch?v=WQWBMBQLRME) (2011)
+* [Brent Faiyaz - Show U Off](https://www.youtube.com/watch?v=IE2auM5W08E) (2021)
