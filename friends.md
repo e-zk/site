@@ -2,6 +2,7 @@
 
 People and blogs I follow online in no particular order.
 
+* [Foxtrot](https://realloc.me/ "nerd tbh")
 * [Sigrid](http://ftrv.se/)
 * [z3bra](https://z3bra.org/)
 * [poptart](https://hosakacorp.net/)
