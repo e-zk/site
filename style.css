@@ -3,8 +3,8 @@
 	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 	--mw: 42rem;
 	--c0: #ffffff;
-	--c1: #a0a5afaf;
-	--c2: #a0a5afe0;
+	--c1: #a0aaafe0;
+	--c2: #606a6faf;
 	--c3: #101112;
 	--c4: #000000;
         scrollbar-color: var(--c2) var(--c1);
