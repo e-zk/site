@@ -1,35 +1,36 @@
 :root {
-	--text: "Inter",sans-serif;
-	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--mw: 42rem;
-	--c0: #ffffff;
-	--c1: #a0aaafe0;
-	--c2: #606a6faf;
-	--c3: #101112;
-	--c4: #000000;
-        scrollbar-color: var(--c2) var(--c1);
-        scrollbar-width: thin;
+--text: "Inter",sans-serif;
+--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+--mw: 42rem;
+--c0: #ffffff;
+--c1: #bbbbbb;
+--c2: #999999;
+--c3: #1b1b1b;
+--c4: #000000;
+scrollbar-color: var(--c1) var(--c0);
+scrollbar-width: thin;
 }
 @media (prefers-color-scheme: dark) {
-	:root {
-		--c0: #101112;
-		--c1: #606a6faf;
-		--c2: #a0aaafaf;
-		--c3: #e0e1e2e0;
-		--c4: #ffffff;
-	}
+:root {
+--c0: #101112;
+--c1: #505556;
+--c2: #90999a;
+--c3: #e0e1e2;
+--c4: #ffffff;
+}
 }
 ::selection {
 	background-color: var(--c4);
 	color: var(--c0);
 }
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 6px;
-	background-color: var(--c1);
+	width: 4px;
+	height: 4px;
+	background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
-	background: var(--c2);
+	background: var(--c1);
+	border-radius: 4px;
 }
 
 html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box {
@@ -95,6 +96,9 @@ a {
 	text-decoration: none;
 	border-bottom: 1px solid var(--c1);
 }
+a[href*="//"]:not([href*="zakaria.org"])::after {
+	content: '\2197';
+}
 a:hover,
 a:focus {
 	border-bottom: 1px solid var(--c2);
@@ -120,6 +124,9 @@ nav a:hover,
 footer a:hover  {
 	border-bottom: 0;
 	color: var(--c2);
+}
+nav a::after, footer a::after {
+	content '';
 }
 
 .right, aside {
