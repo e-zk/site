@@ -1,0 +1,31 @@
+pre{
+font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
+font-size: 12px;
+line-height: 1.4;
+max-width: 300px;
+margin: auto auto;
+}
+a:visited,
+a{
+color: #000000;
+text-decoration: underline;
+}
+a:hover,
+a:focus{
+color: #b00060;
+text-decoration: underline;
+}
+@media (prefers-color-scheme: dark){
+body{
+	background: #1b1b1b;
+	color: #ffffff;
+}
+a:visited,
+a{
+	color: #52ad91;
+}
+a:hover,
+a:focus{
+	color: #b0ead9;
+}
+}
