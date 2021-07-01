@@ -1,8 +1,12 @@
+body {
+	padding: 1rem;
+}
+
 pre{
 font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
 font-size: 1rem;
-line-height: 1.4;
-max-width: 30ch;
+line-height: 1.25;
+max-width: 40ch;
 margin: auto auto;
 }
 a:visited,
