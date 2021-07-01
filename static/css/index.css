@@ -1,3 +1,7 @@
+::selection {
+	background: #1b1b1b;
+	color: #ffffff;
+}
 pre{
 font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
 font-size: 1rem;
@@ -7,25 +11,25 @@ margin: auto auto;
 }
 a:visited,
 a{
-color: #000000;
-text-decoration: underline;
+color: blue;
+text-decoration: none;
 }
 a:hover,
 a:focus{
-color: #b00060;
+color: darkblue;
 text-decoration: underline;
 }
 @media (prefers-color-scheme: dark){
 body{
-	background: #1b1b1b;
-	color: #ffffff;
+	background: #000000;
+	color: #eeeeee;
 }
 a:visited,
 a{
-	color: #52ad91;
+	color: red;
 }
 a:hover,
 a:focus{
-	color: #b0ead9;
+	color: crimson;
 }
 }
