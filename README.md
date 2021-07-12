@@ -1,3 +1,4 @@
-# site
+site
+====
 
-site+blog built using [shlog](https://github.com/e-zk/shlog)
+source files for static website
