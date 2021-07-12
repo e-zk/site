@@ -1,7 +1,4 @@
-::selection {
-	background: #1b1b1b;
-	color: #ffffff;
-}
+::selection { background: #1a1b1c; color: #ffffff }
 pre{
 font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
 font-size: 1rem;
@@ -9,27 +6,10 @@ line-height: 1.25;
 max-width: 40ch;
 margin: auto auto;
 }
-a:visited,
-a{
-color: blue;
-text-decoration: none;
-}
-a:hover,
-a:focus{
-color: darkblue;
-text-decoration: underline;
-}
+a:visited, a { color: blue; text-decoration: none; }
+a:hover, a:focus { color: darkblue; text-decoration: underline }
 @media (prefers-color-scheme: dark){
-body{
-	background: #000000;
-	color: #eeeeee;
-}
-a:visited,
-a{
-	color: red;
-}
-a:hover,
-a:focus{
-	color: crimson;
-}
+body { background: black; color: crimson }
+a:visited, a { color: red }
+a:hover, a:focus { color: crimson }
 }
