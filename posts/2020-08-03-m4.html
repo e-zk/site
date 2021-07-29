@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111"/>
+<meta name="theme-color" content="#101010"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <link rel="alternate icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css"/>
-<title>M4 Troubles... - zakaria's web log</title>
-<meta property="og:title" content="M4 Troubles..." />
-<meta property="og:url" content="https://zakaria.org/posts/2020-08-03-m4.html" />
-<meta property="og:type" content="article" />
+<meta property="og:description" content="Maybe m4 isn't such a good idea">
+<meta property="og:title" content="M4 Troubles">
 </head>
 <body>
 <header>
 <nav>
-<a href="/">zakaria.org</a>
-<aside>
-	<a href="/posts/">blog</a>&nbsp;&nbsp;<a href="/lists/">lists</a>&nbsp;&nbsp;<a href="/about.html">about</a>
-</aside>
+<a href="/">zakaria.org</a>&nbsp;/&nbsp;<a href="/posts/">posts</a>
+<span class="right">
+<a href="https://git.zakaria.org/">git</a>&nbsp&nbsp<a href="/about.html">about</a>
+</span>
 </nav>
 </header>
 <main>
+<p class="info">2020-08-03 &bullet; M4 Troubles &bullet; Maybe m4 isn't such a good idea</p>
 <h1 id="M4%20Troubles&amp;#8230;">M4 Troubles&#8230;</h1>
-<p class="info">
-posted: 2020-08-03<br>
-modified: 2021-02-09<br>
-</p>
 
 <p>In my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> I wrote about mostly M4 templates.
-Well, it turns out I&#39;ve run into some issues.</p>
+Well, it turns out I&#8217;ve run into some issues.</p>
 
 <h2 id="Chapter%20I:%20The%20Problem">Chapter I: The Problem</h2>
 
@@ -46,7 +41,7 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <h2 id="Chapter%20III:%20The%20Root%20of%20All%20Evil">Chapter III: The Root of All Evil</h2>
 
-<p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#39;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#39;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
+<p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#8217;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#8217;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
 
 <p>As a crappy bandaid I added a couple of <code>sed</code>s to my script:</p>
 
@@ -55,17 +50,17 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too).</p>
 
-<p>I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.</p>
+<p>I may have to rethink using M4 completely because I won&#8217;t lie I have no idea what I&#8217;m doing - it seems like I&#8217;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#8217;t be that messy. We&#8217;ll have to see what I come up with.</p>
 
 <h2 id="Chapter%20IV:%20Going%20Forward">Chapter IV: Going Forward</h2>
 
-<p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
+<p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#8217;t even been a part II yet!).</p>
 </main>
 <footer>
-<a href="2020-08-03-m4.md" title="open page as plain markdown">[plaintext]</a>
-<a href="http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion/">[onion]</a><br>
-(C) Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>
-
+<a href="./2020-08-03-m4.md">plaintext</a>&nbsp;&nbsp;<a href="http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion//posts/2020-08-03-m4.html">onion</a>
+<span class="right">
+(c) zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">cc by-sa</a>
+</span>
 </footer>
 </body>
 </html>
