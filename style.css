@@ -16,12 +16,12 @@
 @media (prefers-color-scheme: dark) {
 :root {
 	--bg: #181818;
-	--fg: #dddddd;
+	--fg: #e0e0e0;
 	--fg2: #dddddd80;
 	--accent: #cbdfdb;
 }
 ::selection {
-	background-color: #1b2f2b;
+	background-color: #cbdfdb30;
 	color: var(--fg);
 }
 }
@@ -139,6 +139,7 @@ pre code {
 	display: block;
 	padding: 1rem;
 	border-radius: 4px;
+	border: 1px dotted var(--fg2);
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: thin;
