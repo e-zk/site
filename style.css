@@ -111,18 +111,6 @@ header, footer {
 	color: var(--fg2);
 	text-transform: lowercase;
 }
-/*
-nav a, footer a {
-	border-bottom: 1px solid var(--fg2);
-	font-weight: normal;
-}
-nav a:hover,
-footer a:hover  {
-	border-bottom: 1px solid var(--accent);
-}
-nav a::after, footer a::after {
-	content '';
-}*/
 
 .right, aside {
 	float: right;
@@ -155,7 +143,6 @@ pre code {
 
 .postdate::after {
 	content: ' ';
-/*	color: var(--accent);*/
 }
 
 .info {
