@@ -4,7 +4,7 @@
 	--mw: 42rem;
 	--bg: #ffffff;
 	--fg: #1b1b1b;
-	--fg2: #1b1b1b30;
+	--fg2: #1b1b1b55;
 	--accent: blue;
 	scrollbar-color: var(--fg2) var(--bg);
 	scrollbar-width: thin;
@@ -108,7 +108,7 @@ header, footer {
 	margin: 4rem 0;
 	padding: 0;
 	font-weight: normal;
-	color: var(--accent);
+	color: var(--fg2);
 	text-transform: lowercase;
 }
 /*
