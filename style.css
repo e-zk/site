@@ -54,7 +54,6 @@ body {
 	word-wrap: break-word;
 	line-height: 1.666666;
 }
-
 ul {
 	margin-block-start: 0;
 	margin-block-end: 0;
@@ -66,14 +65,12 @@ li {
 	margin: 0rem 1rem;
 	line-height: 1.55555;
 }
-
 blockquote {
 	padding-left: 1rem;
 	margin-left: 2rem;
-	font-style:italic;
 	border-left: 1px solid var(--c1);
+	font-style: italic;
 }
-
 hr {
 	box-sizing: content-box;
 	height: 0;
@@ -81,13 +78,14 @@ hr {
 	border: 0;
 	border-top: 1px solid var(--c1);
 }
-h1 {
-	margin: 0.5rem 0 1.5rem 0;
-}
 h1,h2,h3,h4,h5,h6 {
 	font-weight: normal;
+	text-transform: lowercase;
 }
-
+h1 {
+	margin: 0.5rem 0 1.5rem 0;
+	font-weight: 500;
+}
 a {
 	color: var(--accent);
 	text-decoration: none;
@@ -101,11 +99,9 @@ a:hover,
 a:focus {
 	border-bottom: 1px dotted var(--accent);
 }
-
 img {
 	max-width: 100%;
 }
-
 header, footer {
 	margin: 3rem 0 3rem 0;
 	padding: 0;
@@ -113,18 +109,12 @@ header, footer {
 	color: var(--fg2);
 	text-transform: lowercase;
 }
-
-.right, aside {
-	float: right;
-}
-
 code {
 	padding: 2px;
 	font-family: var(--mono);
 	font-size: 0.8em;
 	color: var(--fg);
 }
-
 pre code {
 	display: block;
 	padding: 1rem;
@@ -136,21 +126,24 @@ pre code {
 	background: transparent;
 	line-height: 1.4;
 }
-
 .postdate {
 	font-family: var(--mono);
-	font-size: 0.8rem;
 	color: var(--accent);
 }
-
 .postdate::after {
-	content: ' ';
+	font-family: var(--mono);
+	content: ' ~ ';
 }
-
+.postitem {
+	text-transform: lowercase;
+}
 .info {
 	margin-top: 3rem;
 	margin-bottom: 1rem;
 	font-family: var(--mono);
-	font-size: 1rem;
 	color: var(--fg);
+	text-align: right;
+}
+.right, aside {
+	float: right;
 }
