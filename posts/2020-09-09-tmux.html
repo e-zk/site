@@ -20,7 +20,6 @@
 </nav>
 </header>
 <main>
-<p class="info">2020-09-09 &bullet; Quick setup script with tmux &bullet; Scripting a tmux workspace</p>
 <h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
 
 <p>In my network security class we ssh into a handful of VMs pretty often.<br/>
@@ -52,6 +51,7 @@ tmux attach-session -d
 <p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
 
 <p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#8217;m ready to start hacking away at my messy nftables configs.</p>
+<p class="info">Quick setup script with tmux &bullet; 2020-09-09</p>
 </main>
 <footer>
 <a href="./2020-09-09-tmux.md">plaintext</a>&nbsp;&nbsp;<a href="http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion//posts/2020-09-09-tmux.html">onion</a>
