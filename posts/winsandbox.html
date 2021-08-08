@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css"/>
+<meta http-equiv="onion-location" content="http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion/posts/winsandbox.html">
+<title>Windows Sandbox</title>
+<meta property="og:title" content="Windows Sandbox">
+<meta property="og:description" content="Using Windows Sandbox for program isolation and compartmentalisation">
+</head>
+<body>
+<header>
+<nav>
+<a href="/">zakaria.org</a>&nbsp;/&nbsp;<a href="/posts/">posts</a>
+<span class="right">
+<a href="https://git.zakaria.org/">git</a>&nbsp&nbsp<a href="/about.html">about</a>
+</span>
+</nav>
+</header>
+<main>
+<h1 id="Windows%20Sandbox">Windows Sandbox</h1>
+
+<p>If you[&#8216;re forced to] use Windows this might be useful for compartmentalisation.  </p>
+
+<p>Windows Sandbox is a Windows 10 feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.</p>
+
+<h2 id="Enabling">Enabling</h2>
+
+<p>Windows Sandbox isn&#8217;t enabled by default. To enable it follow these steps:</p>
+
+<ol>
+<li>Open &#8220;Control Panel&#8221; and click the upside down caret next to the back&#47;forward buttons</li>
+<li>Click &#8220;All Control Panel Items&#8221;</li>
+<li>Navigate to &#8220;Programs and Features&#8221;</li>
+<li>On the left click &#8220;Turn Windows features on or off&#8221;</li>
+<li>Scroll down and tick the box next to &#8220;Windows Sandbox&#8221; if it isn&#8217;t already ticked</li>
+</ol>
+
+<p>From the start menu search for &#8220;Windows Sandbox&#8221;. Hit enter and a fresh Sandbox window will appear.</p>
+
+<h2 id="Configuring">Configuring</h2>
+
+<p>Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.<br/>
+This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.</p>
+
+<p>To make it easier for these cases you can pre-configure sandbox instances via <code>.wsb</code> files. With this file you can configure memory, networking, audio&#47;video passthrough, among other things. See the Microsoft official documentation for Windows Sandbox configuration<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It also supports running a script at startup, and mapping network devices and local shares.</p>
+
+<h3 id="Example:%20Zoom">Example: Zoom</h3>
+
+<p>Zoom is a very popular group call&#47;video conference software (I won&#8217;t bore you with the details I&#8217;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#8217;re paranoid like me you may feel uneasy just seeing it&#8217;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
+
+<pre><code class="language-xml">&#60;Configuration&#62;
+    &#60;MappedFolders&#62;
+        &#60;MappedFolder&#62;
+            &#60;HostFolder&#62;C:\Sandbox\Installers&#60;&#47;HostFolder&#62;
+            &#60;SandboxFolder&#62;C:\Installers&#60;&#47;SandboxFolder&#62;
+            &#60;ReadOnly&#62;true&#60;&#47;ReadOnly&#62;
+        &#60;&#47;MappedFolder&#62;
+    &#60;&#47;MappedFolders&#62;
+    &#60;AudioInput&#62;Enable&#60;&#47;AudioInput&#62;
+    &#60;VideoInput&#62;Enable&#60;&#47;VideoInput&#62;
+    &#60;VGpu&#62;Enable&#60;&#47;VGpu&#62;
+    &#60;MemoryInMB&#62;12288&#60;&#47;MemoryInMB&#62;
+    &#60;LogonCommand&#62;
+        &#60;Command&#62;C:\Installers\ZoomInstaller.exe&#60;&#47;Command&#62;
+    &#60;&#47;LogonCommand&#62;
+&#60;&#47;Configuration&#62;
+</code></pre>
+
+<p>It maps the local <code>C:\Sandbox\Installers</code> directory (where I store <code>ZoomInstaller.exe</code>) to <code>C:\Installers</code> in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.</p>
+
+<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#8217;d rather install on an ephemeral virtual machine.</p>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p><a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file">https:&#47;&#47;docs.microsoft.com&#47;en-us&#47;windows&#47;security&#47;threat-protection&#47;windows-sandbox&#47;windows-sandbox-configure-using-wsb-file</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+<p class="info">Windows Sandbox &bullet; 2021-08-08</p>
+</main>
+<footer>
+<a href="./winsandbox.md">plaintext</a>&nbsp;&nbsp;<a href="http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion/posts/winsandbox.html">onion</a>
+<span class="right">
+(c) zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">cc by-sa</a>
+</span>
+</footer>
+</body>
+</html>
