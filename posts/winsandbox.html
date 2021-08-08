@@ -49,6 +49,8 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>To make it easier for these cases you can pre-configure sandbox instances via <code>.wsb</code> files. With this file you can configure memory, networking, audio&#47;video passthrough, among other things. See the Microsoft official documentation for Windows Sandbox configuration<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It also supports running a script at startup, and mapping network devices and local shares.</p>
 
+<p>I highly suggest reading through the documentation for the <code>.wsb</code> file format. There are some good examples and interesting features.</p>
+
 <h3 id="Example:%20Zoom">Example: Zoom</h3>
 
 <p>Zoom is a very popular group call&#47;video conference software (I won&#8217;t bore you with the details I&#8217;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#8217;re paranoid like me you may feel uneasy just seeing it&#8217;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
@@ -73,7 +75,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>It maps the local <code>C:\Sandbox\Installers</code> directory (where I store <code>ZoomInstaller.exe</code>) to <code>C:\Installers</code> in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.</p>
 
-<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#8217;d rather install on an ephemeral virtual machine.</p>
+<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#8217;t reboot a sandbox without deleting everything).</p>
+
+<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#8217;d rather install on an ephemeral virtual machine than my main OS.</p>
 
 <div class="footnotes">
 <hr/>
