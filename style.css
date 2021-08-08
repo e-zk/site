@@ -76,7 +76,7 @@ hr {
 	height: 0;
 	overflow: visible;
 	border: 0;
-	border-top: 1px dotted var(--fg2);
+	border-top: 1px dashed var(--fg2);
 }
 h1,h2,h3,h4,h5,h6 {
 	font-weight: normal;
@@ -91,14 +91,14 @@ a {
 	color: var(--accent);
 	text-decoration: none;
 	font-weight: normal;
-	border-bottom: 1px dotted var(--fg2);
+	border-bottom: 1px dashed var(--fg2);
 }
 a[href*="//"]:not([href*="zakaria.org"])::after {
 	content: '\2197';
 }
 a:hover,
 a:focus {
-	border-bottom: 1px dotted var(--accent);
+	border-bottom: 1px dashed var(--accent);
 }
 img {
 	max-width: 100%;
@@ -120,7 +120,7 @@ pre code {
 	display: block;
 	padding: 1rem;
 	border-radius: 4px;
-	border: 1px dotted var(--fg2);
+	border: 1px dashed var(--fg2);
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: thin;
