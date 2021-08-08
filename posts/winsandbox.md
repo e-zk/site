@@ -1,7 +1,7 @@
 # Windows Sandbox
 If you['re forced to] use Windows this might be useful for compartmentalisation.  
 
-Windows Sandbox is a Windows 10 feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.
+Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.
 
 ## Enabling
 
