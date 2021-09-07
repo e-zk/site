@@ -1,44 +1,18 @@
 :root {
 	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--text: "Inter", sans-serif;
-	--mw: 50rem;
-	--bg: #ffffff;
-	--fg: #1b1b1b;
-	--fg2: #1b1b1b55;
-	--accent: blue;
-	scrollbar-color: var(--fg2) var(--bg);
-	scrollbar-width: thin;
+	--text: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+	--mw: 48rem;
+	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f; --a1: black; --a2: blue;
+	scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
 }
-::selection {
-	background-color: #caeaee;
-	color: var(--fg);
+::selection { background-color: #caeaee; color: var(--fg) }
+@media(prefers-color-scheme:dark) {
+:root { --bg: #101010; --fg: #efefef; --fg2: #efefefa0; --a1: white; --a2: crimson }
+::selection { background-color: #eaebef40; color: var(--fg) }
 }
-@media (prefers-color-scheme: dark) {
-:root {
-	--bg: #181818;
-	--fg: #e0e0e0;
-	--fg2: #dddddd80;
-	--accent: #cbdfdb;
-}
-::selection {
-	background-color: #cbdfdb30;
-	color: var(--fg);
-}
-}
-::-webkit-scrollbar {
-	width: 4px;
-	height: 4px;
-	background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-	background: var(--fg2);
-	border-radius: 4px;
-}
-
-html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box {
-    box-sizing: border-box
-}
-
+::-webkit-scrollbar { width: 4px; height: 4px; background-color: transparent }
+::-webkit-scrollbar-thumb { background: var(--fg2); border-radius: 4px }
+html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box { box-sizing: border-box }
 html {
 	scroll-behaviour: smooth;
 	transition: 0.5s ease all;
@@ -50,9 +24,14 @@ body {
 	background: var(--bg);
 	color: var(--fg);
 	font-family: var(--text);
-	font-size: 16px;
 	word-wrap: break-word;
-	line-height: 1.666666;
+	line-height: 1.45;
+}
+main p {
+	text-align: justify;
+}
+main img {
+	max-width: 100%;
 }
 ul {
 	margin-block-start: 0;
@@ -68,9 +47,10 @@ li {
 blockquote {
 	padding-left: 1rem;
 	margin-left: 2rem;
-	border-left: 1px solid var(--c1);
+	border-left: 1px dashed var(--fg2);
 	font-style: italic;
 }
+blockquote p { text-align: left }
 hr {
 	box-sizing: content-box;
 	height: 0;
@@ -79,47 +59,42 @@ hr {
 	border-top: 1px dashed var(--fg2);
 }
 h1,h2,h3,h4,h5,h6 {
-	font-weight: normal;
+	font-size: 1em;
+	font-weight: bold;
+	text-transform: capitalize;
 	text-transform: lowercase;
 }
 h1 {
+	text-transform: uppercase;
 	margin: 0.5rem 0 1.5rem 0;
-	font-weight: 500;
-	font-size: 2.5em
+	font-weight: bold;
 }
 a {
-	color: var(--accent);
-	text-decoration: none;
+	color: var(--a1);
+	text-decoration: underline;
+	text-decoration-color: var(--fg2);
 	font-weight: normal;
-	border-bottom: 1px dashed var(--fg2);
 }
-a[href*="//"]:not([href*="zakaria.org"])::after {
-	content: '\2197';
-}
-a:hover,
-a:focus {
-	border-bottom: 1px dashed var(--accent);
-}
-img {
-	max-width: 100%;
-}
+a:hover, a:focus { color: var(--a2); text-decoration-color: inherit }
+a:hover > *, a:hover > *::after { color: var(--a2) } /* stupid */
+a[href*="//"]:not([href*="zakaria.org"])::after { content: '\2197' }
 header, footer {
 	margin: 3rem 0 3rem 0;
 	padding: 0;
 	font-weight: normal;
-	color: var(--fg2);
 	text-transform: lowercase;
 }
 code {
 	padding: 2px;
+	border-radius: 2px;
 	font-family: var(--mono);
 	font-size: 0.8em;
-	color: var(--fg);
+	background: #1b1b1b10;
 }
 pre code {
 	display: block;
 	padding: 1rem;
-	border-radius: 4px;
+	border-radius: 2px;
 	border: 1px dashed var(--fg2);
         overflow-x: auto;
         overflow-y: hidden;
@@ -128,23 +103,20 @@ pre code {
 	line-height: 1.4;
 }
 .postdate {
-	font-family: var(--mono);
-	color: var(--accent);
+	font-size: 0.8em;
+	color: var(--fg2);
 }
 .postdate::after {
 	font-family: var(--mono);
-	content: ' ~ ';
+	color: var(--fg2);
+	content: ':  ';
 }
-.postitem {
-	text-transform: lowercase;
-}
+.postitem { text-transform: lowercase }
 .info {
 	margin-top: 3rem;
 	margin-bottom: 1rem;
 	font-family: var(--mono);
-	color: var(--fg);
+	color: var(--fg2);
 	text-align: right;
 }
-.right, aside {
-	float: right;
-}
+.right { float: right }
