@@ -1,0 +1,4 @@
+title: LD_PRELOAD and pledge
+description: Using LD_PRELOAD to get around pledge(2) restrictions
+date: 2021-09-16
+
