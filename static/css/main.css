@@ -76,7 +76,7 @@ a {
 	font-weight: normal;
 }
 a:hover, a:focus { color: var(--a2); text-decoration-color: inherit }
-a:hover > *, a:hover > *::after { color: var(--a2) } /* stupid */
+a:hover > *, a:hover > *::after, a:focus > *, a:focus > *::after { color: var(--a2) } /* stupid */
 a[href*="//"]:not([href*="zakaria.org"])::after { content: '\2197' }
 header, footer {
 	margin: 3rem 0 3rem 0;
