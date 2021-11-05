@@ -1,6 +1,6 @@
 :root {
 	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--text: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+	--text: sans-serif;
 	--mw: 48rem;
 	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f; --a1: black; --a2: blue;
 	scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
@@ -25,7 +25,7 @@ body {
 	color: var(--fg);
 	font-family: var(--text);
 	word-wrap: break-word;
-	line-height: 1.45;
+	line-height: 1.666;
 }
 main p {
 	text-align: justify;
