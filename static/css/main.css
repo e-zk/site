@@ -1,6 +1,6 @@
 :root {
 	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--text: sans-serif;
+	--text: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 	--mw: 48rem;
 	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f; --a1: black; --a2: blue;
 	scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
@@ -9,7 +9,7 @@
 @media(prefers-color-scheme:dark) {
 :root { --bg: #101010; --fg: #efefef; --fg2: #efefefa0; --a1: white; --a2: crimson }
 ::selection { background-color: #eaebef40; color: var(--fg) }
-}
+}o
 ::-webkit-scrollbar { width: 4px; height: 4px; background-color: transparent }
 ::-webkit-scrollbar-thumb { background: var(--fg2); border-radius: 4px }
 html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box { box-sizing: border-box }
@@ -103,12 +103,12 @@ pre code {
 	line-height: 1.4;
 }
 .postdate {
-	font-size: 0.8em;
-	color: var(--fg2);
+	/*font-size: 0.8em;*/
+	/*color: var(--fg);*/
 }
 .postdate::after {
-	font-family: var(--mono);
-	color: var(--fg2);
+	/*font-family: var(--mono);*/
+	/*color: var(--fg);*/
 	content: ':  ';
 }
 .postitem { text-transform: lowercase }
