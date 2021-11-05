@@ -2,12 +2,12 @@
 	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 	--text: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 	--mw: 48rem;
-	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f; --a1: black; --a2: blue;
+	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f;
 	scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color: var(--fg) }
 @media(prefers-color-scheme:dark) {
-:root { --bg: #101010; --fg: #efefef; --fg2: #efefefa0; --a1: white; --a2: crimson }
+:root { --bg: #101010; --fg: #e0e0e0; --fg2: #dddddd; }
 ::selection { background-color: #eaebef40; color: var(--fg) }
 }o
 ::-webkit-scrollbar { width: 4px; height: 4px; background-color: transparent }
@@ -15,7 +15,7 @@
 html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box { box-sizing: border-box }
 html {
 	scroll-behaviour: smooth;
-	transition: 0.5s ease all;
+	transition: 0.2s ease all;
 }
 body {
 	max-width: var(--mw);
@@ -25,10 +25,7 @@ body {
 	color: var(--fg);
 	font-family: var(--text);
 	word-wrap: break-word;
-	line-height: 1.666;
-}
-main p {
-	text-align: justify;
+	line-height: 1.666666;
 }
 main img {
 	max-width: 100%;
@@ -59,59 +56,59 @@ hr {
 	border-top: 1px dashed var(--fg2);
 }
 h1,h2,h3,h4,h5,h6 {
-	font-size: 1em;
-	font-weight: bold;
+	font-weight: normal;
 	text-transform: capitalize;
-	text-transform: lowercase;
 }
 h1 {
-	text-transform: uppercase;
 	margin: 0.5rem 0 1.5rem 0;
-	font-weight: bold;
 }
 a {
-	color: var(--a1);
-	text-decoration: underline;
-	text-decoration-color: var(--fg2);
+	color: var(--fg);
+	text-decoration: none;
+	border-bottom: 1px solid var(--fg);
 	font-weight: normal;
 }
-a:hover, a:focus { color: var(--a2); text-decoration-color: inherit }
-a:hover > *, a:hover > *::after, a:focus > *, a:focus > *::after { color: var(--a2) } /* stupid */
-a[href*="//"]:not([href*="zakaria.org"])::after { content: '\2197' }
+a:hover, a:focus {
+	text-decoration: none;
+	color: var(--bg);
+	background-color: var(--fg);
+}
+a:hover > code, a:focus > code {
+	border-radius: 0px;
+	color: var(--bg);
+	background-color: transparent;
+}
+
 header, footer {
 	margin: 3rem 0 3rem 0;
 	padding: 0;
 	font-weight: normal;
 	text-transform: lowercase;
 }
+
 code {
 	padding: 2px;
 	border-radius: 2px;
 	font-family: var(--mono);
 	font-size: 0.8em;
-	background: #1b1b1b10;
+
+	background: #7f7f7f;
+	background: #10101010;
 }
 pre code {
 	display: block;
 	padding: 1rem;
-	border-radius: 2px;
-	border: 1px dashed var(--fg2);
+	border-radius: 4px;
+	border: 1px solid var(--fg2);
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: thin;
 	background: transparent;
+	color: var(--fg);
 	line-height: 1.4;
 }
-.postdate {
-	/*font-size: 0.8em;*/
-	/*color: var(--fg);*/
-}
-.postdate::after {
-	/*font-family: var(--mono);*/
-	/*color: var(--fg);*/
-	content: ':  ';
-}
-.postitem { text-transform: lowercase }
+.postitem { text-transform: lowercase; margin: 0; margin-bottom: 0.5rem }
+.postdate::after { content: ':  ' }
 .info {
 	margin-top: 3rem;
 	margin-bottom: 1rem;
