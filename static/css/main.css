@@ -1,17 +1,17 @@
 :root {
-	--mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--text: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+	--mono: "Inconsolata","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+	--body: var(--mono);
 	--mw: 48rem;
-	--bg: #ffffff; --fg: #1b1b1b; --fg2: #8f8f8f;
-	scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
+	--bg: #ffffff; --fg: #1b1b1b; --fg2: #707070;
+	scrollbar-color: var(--fg) var(--bg); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color: var(--fg) }
 @media(prefers-color-scheme:dark) {
-:root { --bg: #101010; --fg: #e0e0e0; --fg2: #dddddd; }
-::selection { background-color: #eaebef40; color: var(--fg) }
-}o
+:root { --bg: #101010; --fg: #afafaf; --fg2: #707070; }
+::selection { background-color: #0a2a2e; color: var(--fg) }
+}
 ::-webkit-scrollbar { width: 4px; height: 4px; background-color: transparent }
-::-webkit-scrollbar-thumb { background: var(--fg2); border-radius: 4px }
+::-webkit-scrollbar-thumb { background: var(--fg); border-radius: 0px }
 html,body,div,article,aside,section,main,nav,footer,header,form,fieldset,legend,pre,code,a,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,blockquote,figcaption,figure,textarea,table,td,th,tr,input[type="email"],input[type="number"],input[type="password"],input[type="tel"],input[type="text"],input[type="url"],.border-box { box-sizing: border-box }
 html {
 	scroll-behaviour: smooth;
@@ -23,7 +23,7 @@ body {
 	margin: 0 auto;
 	background: var(--bg);
 	color: var(--fg);
-	font-family: var(--text);
+	font-family: var(--body);
 	word-wrap: break-word;
 	line-height: 1.666666;
 }
@@ -57,24 +57,24 @@ hr {
 }
 h1,h2,h3,h4,h5,h6 {
 	font-weight: normal;
-	text-transform: capitalize;
+	line-height: 1.4444;
 }
 h1 {
 	margin: 0.5rem 0 1.5rem 0;
 }
-h1 > code {
-	text-transform: none;
-}
 a {
 	color: var(--fg);
-	text-decoration: none;
 	border-bottom: 1px solid var(--fg);
 	font-weight: normal;
+	text-decoration: none;
 }
 a:hover, a:focus {
-	text-decoration: none;
 	color: var(--bg);
 	background-color: var(--fg);
+	text-decoration: none;
+}
+a:visited:not(:where(:hover, :focus)) {
+	color: var(--fg2);
 }
 a:hover > code, a:focus > code {
 	border-radius: 0px;
@@ -82,6 +82,7 @@ a:hover > code, a:focus > code {
 	background-color: transparent;
 }
 
+header a:visited:not(:where(:hover, focus)) { color: var(--fg) }
 header, footer {
 	margin: 3rem 0 3rem 0;
 	padding: 0;
@@ -110,12 +111,11 @@ pre code {
 	color: var(--fg);
 	line-height: 1.4;
 }
-.postitem { text-transform: lowercase; margin: 0; margin-bottom: 0.5rem }
+.postitem { line-height: 1.4444 }
 .postdate::after { content: ':  ' }
 .info {
 	margin-top: 3rem;
 	margin-bottom: 1rem;
-	font-family: var(--mono);
 	color: var(--fg2);
 	text-align: right;
 }
