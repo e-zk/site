@@ -1,15 +1,13 @@
-::selection { background: #00000088; color: #ff2025 }
-pre{
-font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
-font-size: 1rem;
-line-height: 1.25;
-max-width: 40ch;
-margin: auto auto;
+body { background: #dde0e5; padding: 1.5rem }
+pre {
+	max-width: 50rem;
+	background: #000000;
+	color: #e7f8fa;
+	padding: 1.5rem;
+	border-radius: 4px;
+	margin: 0 auto;
+	line-height: 1.55555;
+	box-shadow: 0px 20px 60px rgba(0,0,0,0.2)
 }
-a:visited, a { color: blue; text-decoration: none; border-bottom: 1px solid blue }
-a:hover, a:focus { text-decoration: none; background: blue; color: white; }
-@media (prefers-color-scheme: dark){
-body { background: #101010; color: #e0e0e0 }
-a:visited, a { color: #cbdfdb; border-color: #cbdfdb }
-a:hover, a:focus { color: #181818;  background: #cbdfdb }
-}
+a, a:visited, a:focus { color: inherit }
+a:hover, a:focus { text-decoration: none }
