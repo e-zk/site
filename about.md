@@ -5,7 +5,6 @@ I am Zakaria. You can call me Zak.
 ## About this site
 
 On here I blog about *nix, security, books, and anything I feel like really.  
-My writing varies greatly in tone and prose.  
 
 This site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/).
 Content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html).  
