@@ -63,7 +63,7 @@ a {
 	font-weight: normal;
 	text-decoration: none;
 }
-a:hover, a:focus {
+a:focus {
 	color: var(--bg);
 	background-color: var(--fg);
 	text-decoration: none;
