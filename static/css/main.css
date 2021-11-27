@@ -1,24 +1,21 @@
 :root {
-	--mono: "Inconsolata","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
-	--body: var(--mono);
-	--mw: 56rem;
-	--bg: #ffffff; --bg2: #f5f5f5; --fg: #101010; --fg2: #707070;
-	scrollbar-color: var(--fg) var(--bg); scrollbar-width: thin
+--body: sans-serif;
+--mono: "Inconsolata","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+--mw: 50rem;
+--bg: #ffffff; --bg2: #f0f0f0; --fg: #101010; --fg2: #707070;
+scrollbar-color: var(--fg) var(--bg); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color var(--fg) }
 @media(prefers-color-scheme:dark) {
-:root { --bg: #101010; --bg2: #202325; --fg: #a0aaaf; --fg2: #808a8f; }
+:root { --bg: #101010; --bg2: #202325; --fg: #a0aaaf; --fg2: #808a8f }
 ::selection { background-color: var(--fg); color: var(--bg) }
 }
 
-*, *::before, *::after { box-sizing: border-box }
-html, body { height: 100% }
-img, picture, video, canvas, svg { display: block; max-width: 100% }
-p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word }
+*,*::before,*::after { box-sizing: border-box }
+html,body { height: 100%; scroll-behaviour: smooth }
+img,picture,video,canvas,svg { display: block; max-width: 100% }
+p,h1 h2,h3,h4,h5,h6 { overflow-wrap: break-word }
 
-html {
-	scroll-behaviour: smooth;
-}
 body {
 	max-width: var(--mw);
 	padding: 0 2rem;
@@ -40,6 +37,7 @@ li {
 	margin: 0rem 1rem;
 	line-height: 1.55555;
 }
+li::marker { color: var(--fg2) }
 blockquote {
 	padding-left: 1rem;
 	margin-left: 2rem;
@@ -55,12 +53,10 @@ hr {
 	border-top: 1px dashed var(--fg2);
 }
 h1,h2,h3,h4,h5,h6 {
-	font-weight: normal;
+	font-weight: 600;
 	line-height: 1.4444;
 }
-h1 {
-	margin: 0.5rem 0 1.5rem 0;
-}
+h1 { margin: 0 0 1.5rem 0 }
 a {
 	color: var(--fg);
 	border-bottom: 1px solid var(--fg);
@@ -75,9 +71,7 @@ a:hover, a:focus {
 a:visited:not(:where(:hover, :focus)) {
 	color: var(--fg2);
 }
-a > code {
-	border-bottom: 1px solid var(--fg);
-}
+a > code { border-bottom: 1px solid var(--fg) }
 a:hover > code, a:focus > code {
 	border-radius: 0px;
 	color: var(--bg);
@@ -85,11 +79,11 @@ a:hover > code, a:focus > code {
 }
 header a:visited:not(:where(:hover, focus)) { color: var(--fg) }
 header, footer {
-	margin: 3rem 0 3rem 0;
+	padding: 2rem 0 2rem 0;
 	text-transform: lowercase;
 }
 code {
-	padding: 2px 4px 2px 4px;
+	padding: 2px 4px;
 	border-radius: 4px;
 	font-family: var(--mono);
 	font-size: 0.8em;
@@ -100,17 +94,15 @@ pre code {
 	padding: 1rem;
 	color: var(--fg);
 	font-size: 0.96em;
-	line-height: 1.4;
-	border-radius: 4px;
+	line-height: 1.4444;
+	border-radius: 8px;
         scrollbar-width: thin;
         overflow-x: auto;
         overflow-y: hidden;
 }
-.postitem { line-height: 1 }
+.postitem { line-height: 1.4444 }
 .postdate::after { content: ':  ' }
 .info {
-	margin-top: 3rem;
-	margin-bottom: 1rem;
 	margin: 3rem 0 1rem 0;
 	color: var(--fg2);
 	text-align: right;
