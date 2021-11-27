@@ -77,7 +77,7 @@ a:hover > code, a:focus > code {
 	color: var(--bg);
 	background-color: transparent;
 }
-header a:visited:not(:where(:hover, focus)) { color: var(--fg) }
+header a:visited:not(:where(:hover, :focus)) { color: var(--fg) }
 header, footer {
 	padding: 2rem 0 2rem 0;
 	text-transform: lowercase;
