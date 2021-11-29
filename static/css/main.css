@@ -3,7 +3,7 @@
 --mono: "Inconsolata","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
 --mw: 50rem;
 --bg: #ffffff; --bg2: #f0f0f0; --fg: #101010; --fg2: #707070;
-scrollbar-color: var(--fg) var(--bg); scrollbar-width: thin
+scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color var(--fg) }
 @media(prefers-color-scheme:dark) {
@@ -11,6 +11,7 @@ scrollbar-color: var(--fg) var(--bg); scrollbar-width: thin
 ::selection { background-color: var(--fg); color: var(--bg) }
 }
 
+/* reset */
 *,*::before,*::after { box-sizing: border-box }
 html,body { height: 100%; scroll-behaviour: smooth }
 img,picture,video,canvas,svg { display: block; max-width: 100% }
@@ -72,16 +73,18 @@ a:visited:not(:where(:hover, :focus)) {
 	color: var(--fg2);
 }
 a > code { border-bottom: 1px solid var(--fg) }
-a:hover > code, a:focus > code {
+a:hover > code,a:focus > code {
 	border-radius: 0px;
 	color: var(--bg);
 	background-color: transparent;
 }
-header a:visited:not(:where(:hover, :focus)) { color: var(--fg) }
-header, footer {
+header,footer {
 	padding: 2rem 0 2rem 0;
-	text-transform: lowercase;
 }
+header a {
+	margin-right: 1rem;
+}
+header a:visited:not(:where(:hover, :focus)) { color: var(--fg) }
 code {
 	padding: 2px 4px;
 	border-radius: 4px;
@@ -102,9 +105,11 @@ pre code {
 }
 .postitem { line-height: 1.4444 }
 .postdate::after { content: ':  ' }
+/*
 .info {
 	margin: 3rem 0 1rem 0;
 	color: var(--fg2);
 	text-align: right;
 }
 .right { float: right }
+*/
