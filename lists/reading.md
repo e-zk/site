@@ -9,14 +9,11 @@
 ## 2020
 
 * _I don't know, Timmy, being God is a big responsibility_, by qntm (2007) [x](https://qntm.org/responsibility)
-* _Neuromancer_, by William Gibson (1984)  
-* _In the Miso Soup_, by Ryu Murakami (1997/2003)  
-* _Chocky_, by John Wyndham (1968)  
-* _Brave New World_, by Aldous Huxley (1932)  
+* _Neuromancer_, by William Gibson (1984)
+* _In the Miso Soup_, by Ryu Murakami (1997/2003)
+* _Chocky_, by John Wyndham (1968)
+* _Brave New World_, by Aldous Huxley (1932)
 * _Modes of Operation of the AES Algorithm_, by D. Blazhevski, A. Bozhinovski, B. Stojchevska, and V. Pachovski (CIIT 2013)
-
-  
-
 * [Everyone Talks About Insecure Randomness, But Nobody Does Anything About It](https://www.airza.net/2020/11/09/everyone-talks-about-insecure-randomness-but-nobody-does-anything-about-it.html), by John Labelle (2020)
 * [Notes from a Gibsonian novel](http://boston.conman.org/2004/09/19), by Sean Conner (2004)
 * [This is Real. That's Not.](https://streetlifesolutions.blogspot.com/2020/12/this-is-real-thats-not.html), by Street Life Solutions / Doreen Traylor (2020)
