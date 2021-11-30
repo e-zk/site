@@ -13,7 +13,7 @@ scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
 
 /* reset */
 *,*::before,*::after { box-sizing: border-box }
-html,body { height: 100%; scroll-behaviour: smooth }
+html,body { height: 100%; font-size: 100%; scroll-behavior: smooth }
 img,picture,video,canvas,svg { display: block; max-width: 100% }
 p,h1 h2,h3,h4,h5,h6 { overflow-wrap: break-word }
 
@@ -35,7 +35,7 @@ ul,ol {
 }
 ul { list-style-type: disc }
 ol { padding-inline-start: 1.5rem }
-li { margin: 0 0 0.25rem 1rem; line-height: 1.4 }
+li { margin: 0 0 0.3rem 1rem; line-height: 1.4 }
 li::marker { color: var(--fg2) }
 blockquote {
 	padding-left: 1rem;
@@ -66,13 +66,17 @@ a:focus {
 	background-color: var(--fg);
 	text-decoration: none;
 }
-a:visited:not(:where(:hover, :focus)) { color: var(--fg2) }
-a > code { border-bottom: 1px solid var(--fg) }
-a:hover > code,a:focus > code {
+a > code {
+	border-bottom: 1px solid var(--fg);
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+a:focus > code {
 	border-radius: 0px;
 	color: var(--bg);
-	background-color: transparent;
+	background-color: var(--fg);
 }
+a:visited:not(:where(:hover, :focus)) { color: var(--fg2) }
 header,footer { padding: 2rem 0 2rem 0 }
 header a { margin-right: 1rem }
 header a:visited:not(:where(:hover, :focus)) { color: var(--fg) }
