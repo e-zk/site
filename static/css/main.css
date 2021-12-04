@@ -1,9 +1,9 @@
 :root {
---body: sans-serif;
---mono: "Inconsolata","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+--body: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+--mono: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
 --mw: 50rem;
 --bg: #ffffff; --bg2: #f0f0f0; --fg: #101010; --fg2: #707070;
-scrollbar-color: var(--fg2) var(--bg); scrollbar-width: thin
+scrollbar-color: var(--fg2) var(--bg2); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color var(--fg) }
 @media(prefers-color-scheme:dark) {
@@ -81,21 +81,20 @@ header,footer { padding: 2rem 0 2rem 0 }
 header a { margin-right: 1rem }
 header a:visited:not(:where(:hover, :focus)) { color: var(--fg) }
 code {
-	padding: 2px 4px;
+	padding: 4px;
 	border-radius: 4px;
 	font-family: var(--mono);
-	font-size: 0.8em;
+	font-size: 0.85em;
 	background: var(--bg2);
 }
 pre code {
 	display: block;
 	padding: 1rem;
 	color: var(--fg);
-	font-size: 0.96em;
 	line-height: 1.4;
 	border-radius: 8px;
-        scrollbar-width: thin;
-        overflow-x: auto;
-        overflow-y: hidden;
+	scrollbar-width: thin;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 .postdate::after { content: ':  ' }
