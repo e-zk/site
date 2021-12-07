@@ -2,7 +2,7 @@
 --body: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
 --mono: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
 --mw: 50rem;
---bg: #ffffff; --bg2: #f0f0f0; --fg: #101010; --fg2: #707070;
+--bg: #ffffff; --bg2: #f1f3f4; --fg: #101010; --fg2: #707070;
 scrollbar-color: var(--fg2) var(--bg2); scrollbar-width: thin
 }
 ::selection { background-color: #caeaee; color var(--fg) }
