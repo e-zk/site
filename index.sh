@@ -10,7 +10,7 @@ exclude_files="${exclude_files}"
 meta_ext="${meta_ext:-.meta}"
 site_root="${site_root}"
 html_dir="${html_dir:-html}"
-post_dir="${post_dir:-posts}"
+#post_dir="${post_dir:-posts}"
 
 log() {
 	printf 'shite: [%s] %s\n' "$1" "$2" >&2
