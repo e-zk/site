@@ -19,10 +19,10 @@
 </nav>
 </header>
 <main>
-<h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#8217;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#8217;s Templates</h1>
+<h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#39;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#39;s Templates</h1>
 
-<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#8217;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
-Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#8217;s another way of running a bunch of commands?</p>
+<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#39;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
+Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#39;s another way of running a bunch of commands?</p>
 
 <blockquote>
 <p>Oh! I know!</p>
@@ -34,11 +34,11 @@ Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.
 <p>Why, shell scripts of course!</p>
 </blockquote>
 
-<p>Woah, thanks Timmy, why that&#8217;s correct.</p>
+<p>Woah, thanks Timmy, why that&#39;s correct.</p>
 
 <blockquote>
-<p>But how will you ever manage a website&#8217;s HTML layout all in a shell script?
-Wouldn&#8217;t that get messy?</p>
+<p>But how will you ever manage a website&#39;s HTML layout all in a shell script?
+Wouldn&#39;t that get messy?</p>
 </blockquote>
 
 <p>Why yes Timmy, it would get pretty messy. What we need is some kind of &#8220;template&#8221; which can take some input and output HTML which we can serve&#8230;</p>
@@ -55,7 +55,7 @@ Wouldn&#8217;t that get messy?</p>
 
 <p>Okay Timmy, no need to be rude now. We have guests, remember?</p>
 
-<p>Ignoring Timmy&#8217;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#8217;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
+<p>Ignoring Timmy&#39;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#39;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
 
 <pre><code>define(`_HTMLHEAD&#39;, `&#60;head&#62;   
 &#60;title&#62;My Blog Lol&#60;&#47;title&#62;
@@ -63,7 +63,7 @@ Wouldn&#8217;t that get messy?</p>
 &#60;&#47;head&#62;&#39;)
 </code></pre>
 
-<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#8217;s title and a link to our stylesheet will be printed. There&#8217;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
+<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#39;s title and a link to our stylesheet will be printed. There&#39;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;, `&#60;head&#62;
 &#60;title&#62;$1 - My Blog Lol&#60;&#47;title&#62;
@@ -76,7 +76,7 @@ Wouldn&#8217;t that get messy?</p>
 </blockquote>
 
 <p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br/>
-In M4, macros can have arguments that can be placed into the macro&#8217;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
+In M4, macros can have arguments that can be placed into the macro&#39;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
 
 <pre><code class="language-HTML">&#60;head&#62;
 &#60;title&#62;This is a post - My Blog Lol&#60;&#47;title&#62;
@@ -84,7 +84,7 @@ In M4, macros can have arguments that can be placed into the macro&#8217;s conte
 &#60;&#47;head&#62;
 </code></pre>
 
-<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#8217;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#8217;s navigation links:</p>
+<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#39;s navigation links:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;,`&#60;head&#62;
 &#60;meta http-equiv="content-type" content="text&#47;html; charset=utf-8"&#62;
@@ -100,8 +100,8 @@ define(`_HTMLNAV&#39;, `&#60;nav&#62;
 )
 </code></pre>
 
-<p>For the sake of neatness, I&#8217;ve placed this code in <code>head.m4</code>. 
-For our individual posts, we need to write more M4. Here&#8217;s a simple post template, we&#8217;ll call it <code>post.m4</code>:</p>
+<p>For the sake of neatness, I&#39;ve placed this code in <code>head.m4</code>. 
+For our individual posts, we need to write more M4. Here&#39;s a simple post template, we&#39;ll call it <code>post.m4</code>:</p>
 
 <pre><code class="language-m4">include(m4&#47;head.m4)dnl
 &#60;!DOCTYPE html&#62;
@@ -116,11 +116,11 @@ POSTCONTENT
 &#60;&#47;html&#62;
 </code></pre>
 
-<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#8217;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
+<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#39;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
 Moving on-</p>
 
 <blockquote>
-<p>I&#8217;m confused</p>
+<p>I&#39;m confused</p>
 </blockquote>
 
 <p>About what, Timmy?</p>
@@ -129,7 +129,7 @@ Moving on-</p>
 <p>Those strange upper-case words littered throughout the file: <code>POSTTILE</code> and <code>POSTCONTENT</code>.</p>
 </blockquote>
 
-<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#8217;t defined in any of the M4 files we&#8217;re using. That&#8217;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
+<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#39;t defined in any of the M4 files we&#39;re using. That&#39;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
 
 <pre><code class="language-console">$ m4 -DPOSTTILE="Hello?" post.m4
 </code></pre>
@@ -143,7 +143,7 @@ Moving on-</p>
 
 <p>Now that we have a (an?) M4 template set up, instead of <code>echo</code>ing a bunch of <code>&#60;html&#62;</code> in our script, now all we have to do is call <code>m4</code> and pass arguments to it for our content to show up in the resulting HTML.</p>
 
-<p>Don&#8217;t be mad. But that&#8217;s the end of this post. <em>I know, I know</em> we didn&#8217;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#8217;s for another time.<br/>
+<p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
 Stay tuned for part II.</p>
 </main>
 <footer>

@@ -21,18 +21,18 @@
 <main>
 <h1 id="Update%20Feb%202021:%20git%20server%20+%20hidden%20service">Update Feb 2021: git server + hidden service</h1>
 
-<p>Here&#8217;s a little site update.</p>
+<p>Here&#39;s a little site update.</p>
 
 <h2 id="CSS%20changes">CSS changes</h2>
 
-<p>As usual the CSS of this website is ever-changing. I&#8217;ve changed it to be more monochrome, with blue highlights on link hover&#47;focus and text selection. Headings are now all <code>1em</code>.</p>
+<p>As usual the CSS of this website is ever-changing. I&#39;ve changed it to be more monochrome, with blue highlights on link hover&#47;focus and text selection. Headings are now all <code>1em</code>.</p>
 
 <h2 id="Git%20server">Git server</h2>
 
-<p>I&#8217;ve set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It&#8217;s a very well written guide for setting up stagit on OpenBSD.<br/>
+<p>I&#39;ve set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It&#39;s a very well written guide for setting up stagit on OpenBSD.<br/>
 I modified some of the scripts provided to suit my workflow.</p>
 
-<p>I plan to move most of my projects that don&#8217;t require an issue tracker over there. Namely personal configs&#47;programs.</p>
+<p>I plan to move most of my projects that don&#39;t require an issue tracker over there. Namely personal configs&#47;programs.</p>
 
 <h2 id="Hidden%20service">Hidden service</h2>
 
@@ -40,17 +40,17 @@ I modified some of the scripts provided to suit my workflow.</p>
 
 <p>Why have I setup an onion service? Three reasons:</p>
 
-<ol>
+<ol start="1">
 <li>Tor is a technology that interests me</li>
 <li>I wanted to see how difficult it would be to setup a hidden service (it was not difficult<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>)</li>
-<li>It&#8217;s fun</li>
+<li>It&#39;s fun</li>
 </ol>
 
-<p>Because onion services can&#8217;t have subdomains, I&#8217;ve setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>&#47;git&#47;</code> endpoint (this is only available on the hidden service).</p>
+<p>Because onion services can&#39;t have subdomains, I&#39;ve setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>&#47;git&#47;</code> endpoint (this is only available on the hidden service).</p>
 
 <h2 id="Other">Other</h2>
 
-<p>Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#8217;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.  </p>
+<p>Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#39;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.  </p>
 
 <div class="footnotes">
 <hr/>

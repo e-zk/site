@@ -21,45 +21,45 @@
 <h1 id="My%20xenodm%20setup">My xenodm setup</h1>
 
 <p>OpenBSD uses the <a href="https://man.openbsd.org/xenodm"><code>xenodm(1)</code></a> display manager, which is a fork of xdm.<br/>
-Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> articles<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> on themeing xenodm I&#8217;ve come up with my own setup.</p>
+Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> articles<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> on themeing xenodm I&#39;ve come up with my own setup.</p>
 
-<p>Before we get into the configs, here&#8217;s what it actually looks like:</p>
+<p>Before we get into the configs, here&#39;s what it actually looks like:</p>
 
 <p><a href="/static/img/xenodm.png"><img src="/static/img/xenodm.png" alt="themed xenodm" /></a></p>
 
 <p><em>(The text might be small, click to view the image file)</em></p>
 
-<p>Clean and simple. Now that you&#8217;ve seen what it looks like you can close this tab if that&#8217;s all you came here to see. If you want to see how this is accomplished then continue reading.</p>
+<p>Clean and simple. Now that you&#39;ve seen what it looks like you can close this tab if that&#39;s all you came here to see. If you want to see how this is accomplished then continue reading.</p>
 
 <h2 id="Files">Files</h2>
 
-<p>xenodm uses multiple files for configuration. It&#8217;s quite inconvenient, and I was very confused at first I admit. The files we&#8217;ll have to deal with are:</p>
+<p>xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll have to deal with are:</p>
 
 <pre><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources
 &#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0
 &#47;etc&#47;X11&#47;xenodm&#47;Xsession
 </code></pre>
 
-<p>The last one is for an optional non-cosmetic change that I&#8217;ll cover later. All these files require root access, so it&#8217;d be wise to <code>doas -s</code> before continuing on.</p>
+<p>The last one is for an optional non-cosmetic change that I&#39;ll cover later. All these files require root access, so it&#39;d be wise to <code>doas -s</code> before continuing on.</p>
 
 <h2 id="Xresources">Xresources</h2>
 
-<p>If you&#8217;ve ever dabbled in trying to rice your Unix-like operating system there&#8217;s a good change you&#8217;ve come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &#8220;resource database&#8221; as a &#8216;unified&#8217; way to store configuration data.</p>
+<p>If you&#39;ve ever dabbled in trying to rice your Unix-like operating system there&#39;s a good change you&#39;ve come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &#8220;resource database&#8221; as a &#8216;unified&#8217; way to store configuration data.</p>
 
 <p>xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.</p>
 
-<p>First off, I&#8217;d like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
+<p>First off, I&#39;d like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
 
 <pre><code>xlogin.Login.echoPasswd: true
 </code></pre>
 
-<p>Next I don&#8217;t want to be &#8216;greeted&#8217;, and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
+<p>Next I don&#39;t want to be &#8216;greeted&#8217;, and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
 
 <pre><code>xlogin.Login.fail: ya dun goofed
 xlogin.Login.greeting:
 </code></pre>
 
-<p>Now I&#8217;ll configure the dimensions and positioning of the login box:</p>
+<p>Now I&#39;ll configure the dimensions and positioning of the login box:</p>
 
 <pre><code>xlogin.Login.height:            200
 xlogin.Login.width:             400
@@ -79,7 +79,7 @@ xlogin.Login.hiColor:           #000000
 xlogin.Login.shdColor:          #000000
 </code></pre>
 
-<p>And finally let&#8217;s use a nice bitmap font to complete the look:</p>
+<p>And finally let&#39;s use a nice bitmap font to complete the look:</p>
 
 <pre><code>xlogin.Login.face:              Dina-11
 xlogin.Login.failFace:          Dina-11
@@ -92,7 +92,7 @@ xlogin.Login.promptFace:        Dina-11
 
 <p>Next is the Xsetup file. Why is this called Xsetup_<em>0</em>? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out <code>&#47;etc&#47;X11&#47;xenodm&#47;xenodm-config</code>).</p>
 
-<p>This file is fairly simple. It&#8217;s a shell script that xenodm runs. That&#8217;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
+<p>This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 
@@ -119,11 +119,11 @@ done | &#47;home&#47;zzz&#47;bin&#47;lemonbar -d -g 1920x40+0+0 -f &#39;Dina:sty
 
 <p>The date, time, battery percent are all piped into lemonbar. Additionally the &#8216;r&#8217; and &#8216;p&#8217; text in red allow me to reboot or power off my machine respectively.</p>
 
-<p>It should be noted that I probably shouldn&#8217;t be using a binary that&#8217;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and&#47;or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
+<p>It should be noted that I probably shouldn&#39;t be using a binary that&#39;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and&#47;or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
 
 <h2 id="Xsession%20extra">Xsession extra</h2>
 
-<p>Here&#8217;s the optional bit. I&#8217;m a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME&#47;</code> as possible. Moving <code>~&#47;.Xresources</code> was easy - just source a different file from <code>~&#47;.xsession</code>. But an annoyance is <code>~&#47;.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>!</p>
+<p>Here&#39;s the optional bit. I&#39;m a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME&#47;</code> as possible. Moving <code>~&#47;.Xresources</code> was easy - just source a different file from <code>~&#47;.xsession</code>. But an annoyance is <code>~&#47;.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>!</p>
 
 <p>Look for the line that says:</p>
 
@@ -135,7 +135,7 @@ done | &#47;home&#47;zzz&#47;bin&#47;lemonbar -d -g 1920x40+0+0 -f &#39;Dina:sty
 <pre><code>startup=${HOME}&#47;etc&#47;x&#47;xsession
 </code></pre>
 
-<p>Also, if you&#8217;ve themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
+<p>Also, if you&#39;ve themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
 
 <p>Look for this part of the script:</p>
 
