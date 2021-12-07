@@ -1,4 +1,4 @@
-title: LD_PRELOAD and pledge
+title: Breaking promises with LD_PRELOAD
 description: Using LD_PRELOAD to get around pledge(2) restrictions
-date: 2021-09-16
+date: 2021-12-07
 
