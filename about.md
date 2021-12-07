@@ -2,6 +2,8 @@
 
 I am Zakaria. You can call me Zak if you like. If you're ever crediting me somewhere important, I'd appreciate if you used my full name, Zakaria Khamissa. Jump to [contact](#Contact) if you'd like to contact me.
 
+I'm a CS graduate with an interest in information security, digital privacy, and cryptography.
+
 21 &sdot; He/Him
 
 ## Location (cyberspace)
@@ -38,8 +40,7 @@ module to make creating sub commands for CLIs much easier.
 ### [STSD](https://github.com/e-zk/stsd) (wip)
 
 Secure Time Sync Daemon - a time synchronisation daemon written in Go that does 
-not use Network Time Protocol (NTP). NTP does not make use of any
-cryptography whatsoever - no encryption, and no authentication. stsd aims to overcome the shortcomings of NTP to provide a secure way of keeping a system's time accurate. It's still very much a work in progress, so I don't recommend trying it out just yet.
+not use Network Time Protocol (NTP). See the project [README](https://raw.githubusercontent.com/e-zk/stsd/trunk/README) for more information.
 
 ## Contact
 
