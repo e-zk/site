@@ -1,20 +1,57 @@
 # About me
 
-I am Zakaria. You can call me Zak.
+I am Zakaria. You can call me Zak if you like. If you're ever crediting me somewhere important, I'd appreciate if you used my full name, Zakaria Khamissa. Jump to [contact](#Contact) if you'd like to contact me.
 
-## About this site
+21 &sdot; He/Him
 
-On here I blog about *nix, security, books, and anything I feel like really.  
+## Location (cyberspace)
 
-This site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/).
-Content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html).  
+You can find me zooming around the information super-highway under various aliases:
 
-A hidden service mirror of this site can be accessed through Tor here: http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion.
+* I am zk on [Lobste.rs](https://lobste.rs/u/zk).
+* I am e-zk on [GitHub](https://github.com/e-zk/).
+* I am zxzxzxzxzxzxz on [Bandcamp](https://bandcamp.com/zxzxzxzxzxzxz).
+
+## Location (meatspace)
+
+Australia.
+
+## Code
+
+I code recreationally in a variety of programming languages. I have worked with a lot of Python, PHP, C#, Java, and JavaScript in the past. Nowadays I tend to write a lot of Go, C, and I also enjoy writing shell scripts.
+
+Git repos: [GitHub](https://github.com/e-zk/), [git.zakaria.org](https://git.zakaria.org/).
+
+## Selected projects
+
+### [after](https://github.com/e-zk/after)
+
+This small utility written in C waits for the specified process to exit 
+before it outputs a string to standard output. It's useful in situations 
+where you've already started a process and want to be notified when it exits.  
+
+### [subc](https://github.com/e-zk/subc)
+
+This [Go module](https://pkg.go.dev/github.com/e-zk/subc) is a super simple wrapper for the standard library's `flag`
+module to make creating sub commands for CLIs much easier.
+
+### [STSD](https://github.com/e-zk/stsd) (wip)
+
+Secure Time Sync Daemon - a time synchronisation daemon written in Go that does 
+not use Network Time Protocol (NTP). NTP does not make use of any
+cryptography whatsoever - no encryption, and no authentication. stsd aims to overcome the shortcomings of NTP to provide a secure way of keeping a system's time accurate. It's still very much a work in progress, so I don't recommend trying it out just yet.
 
 ## Contact
 
-```
-(deoevmeo ex xyxe HSX ms) >> 22
-```
+You can contact me via email at `contact@zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).
 
-[Lobste.rs](https://lobste.rs/u/zk) &bullet; [Github](https://github.com/e-zk)
+In the future a more secure contact option will be listed here. Until then, if you would like to contact me via a secure channel I suggest reaching out via email first. 
+
+# About this website
+
+Hosting of this server is provided by [Linode](https://www.linode.com/).
+
+The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html) (which I wrote).  
+
+A hidden service mirror of this site can be accessed through Tor here: http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion.
+

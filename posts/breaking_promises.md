@@ -34,7 +34,6 @@ pledge(const char *promises, const char *execpromises) {
 	// noop
 	return 0;
 }
-
 ```
 
 Compile it into a `.so`:
@@ -49,3 +48,4 @@ Now, with this shared object file, you can run anything you want, ignoring it's 
 $ LD_PRELOAD=./override.so <program>
 ```
 
+[^py]: https://nullprogram.com/blog/2021/09/15/
