@@ -191,7 +191,7 @@ idea.</li>
 
 <ul>
 <li>I&#39;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#39;s 
-<a href="https://man.openbsd.org/vmd">vmd(1)</a> and X11 forwarding. But I never fleshed out
+<a href="https://man.openbsd.org/vmd">vmd(8)</a> and X11 forwarding. But I never fleshed out
 any scripts for making it truly ephemeral - that might be the focus of a future blog post. 
 <a href="/static/img/linuxwebvm.png">Here&#39;s</a> an old screenshot of that running on OpenBSD 6.7. </li>
 </ul></li>

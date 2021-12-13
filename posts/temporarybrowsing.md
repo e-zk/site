@@ -165,7 +165,7 @@ Some other methods to look into include:
     idea.
 - Dedicated **virtual machine**
   - I've actually accomplished this in the past on an Alpine Linux VM running on OpenBSD's 
-    [vmd(1)](https://man.openbsd.org/vmd) and X11 forwarding. But I never fleshed out
+    [vmd(8)](https://man.openbsd.org/vmd) and X11 forwarding. But I never fleshed out
     any scripts for making it truly ephemeral - that might be the focus of a future blog post. 
     [Here's](/static/img/linuxwebvm.png) an old screenshot of that running on OpenBSD 6.7. 
 
