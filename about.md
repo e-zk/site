@@ -10,9 +10,9 @@ I'm a CS graduate with an interest in information security, digital privacy, and
 
 You can find me zooming around the information super-highway under various aliases:
 
-* I am zk on [Lobste.rs](https://lobste.rs/u/zk).
-* I am e-zk on [GitHub](https://github.com/e-zk/).
-* I am zxzxzxzxzxzxz on [Bandcamp](https://bandcamp.com/zxzxzxzxzxzxz).
+* I am [zk](https://lobste.rs/u/zk) on Lobste.rs.
+* I am [e-zk](https://github.com/e-zk/) on GitHub.
+* I am [zxzxzxzxzxzxz](https://bandcamp.com/zxzxzxzxzxzxz) on Bandcamp.
 
 ## Location (meatspace)
 
@@ -54,5 +54,5 @@ Hosting of this server is provided by [Linode](https://www.linode.com/).
 
 The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html) (which I wrote).  
 
-A hidden service mirror of this site can be accessed through Tor here: http://g5hwwozzm3co43bu6np2noyhsju7zuok3cqawlbeo4entvfoads5trqd.onion.
+A hidden service mirror of this site can be accessed through Tor here: http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion.
 
