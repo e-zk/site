@@ -8,7 +8,6 @@ h1::after { content: ' \00AC ' }
 .postdate::after { content: ' - ' }
 nav { padding: 0.67em 0 calc(0.67em * 2) 0 }
 footer { padding-top: 2rem }
-a { color: blue }
 a:hover { background-color: lemonchiffon }
 a:focus { background-color: blue; color: #fff }
 nav a,nav a:visited { margin-right: 2ch; color: blue }
