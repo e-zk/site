@@ -1,30 +1,31 @@
-* { font-family: monospace }
-::selection { background-color: lemonchiffon }
-html { height: 100%; font-size: 100%; scroll-behavior: smooth }
-body { line-height: calc(100% * 1.618) ; max-width: 50rem; margin: 1rem auto; color: #222; padding: 0 2rem 2rem 2rem}
+* { font-family: "Menlo", "Consolas", monospace }
+::selection { background-color: #222; color: #fff }
+html { height: 100%; font-size: 14px; scroll-behavior: smooth }
+body { line-height: calc(14px * 1.618) ; max-width: 50rem; margin: 1rem auto; color: #222; padding: 0 2rem 2rem 2rem}
 img,video { max-width: 100% } 
 h1,h2,h3,h4,h5,h6 { font-size: 1em; font-weight: normal; color: #000 }
 h1::after { content: ' \00AC ' } 
 .postdate::after { content: ' - ' }
 nav { padding: 0.67em 0 calc(0.67em * 2) 0 }
 footer { padding-top: 2rem }
-a { color: blue; }
-a:focus { color: #fff; background: blue; }
-nav a, nav a:visited { margin-right: 2ch; color: blue }
-nav a:focus { color: #fff }
+a { color: blue }
+a:hover { background-color: lemonchiffon }
+a:focus { background-color: blue; color: #fff }
+nav a,nav a:visited { margin-right: 2ch; color: blue }
 hr { box-sizing: content-box; height: 0; border: 0; border-top: 1px solid #ddd }
-ul, ol { margin-block-start: 1em; margin-block-end: 1em; padding-inline-start: 2.5em }
+ul,ol { margin-block-start: 1em; margin-block-end: 1em; padding-inline-start: 2.5em }
 ul { padding-inline-start: 1.5em }
 pre code { display: block; line-height: 1.25; padding: 1.5em; background: #eee; overflow-x: auto; overflow-y: hidden }
 code { background: #eee; color: #000; padding: 0 1ch }
 @media(prefers-color-scheme:dark) {
-body { background: #101010; color: #a0aaaf }
+body { background-color: #101010; color: #a0aaaf }
 a { color: #d0dadf }
 a:visited { color: #808a8f }
-a:focus { background: #d0dadf; color: #101010 }
+a:hover { background-color: #202325 }
+a:focus { background-color: #d0dadf; color: #101010 }
 nav a, nav a:visited { color: #d0dadf }
 hr { border-color: #808a8f }
-code, pre code { background: #202325; color: #a0aaaf }
+code, pre code { background-color: #202325; color: #a0aaaf }
 h1,h2,h3,h4,h5,h6 { color: #d0dadf }
-::selection { color: #101010; background: #a0aaaf } 
+::selection { color: #101010; background-color: #a0aaaf } 
 }
