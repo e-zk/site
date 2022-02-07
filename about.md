@@ -50,7 +50,7 @@ In the future a more secure contact option will be listed here. Until then, if y
 
 # About this website
 
-Hosting of this server is provided by [Linode](https://www.linode.com/).
+Hosting of this server is provided by [Vultr](https://vultr.com/).
 
 The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html) (which I wrote).  
 
