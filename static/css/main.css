@@ -1,10 +1,10 @@
-* { font-family: "Menlo", "Consolas", monospace }
 ::selection { background-color: #222; color: #fff }
-html { height: 100%; font-size: 13px; scroll-behavior: smooth }
-body { line-height: calc(13px * 1.618) ; max-width: 50rem; margin: 1rem auto; color: #222; padding: 0 2rem 2rem 2rem}
+html { height: 100%; font-size: 14px; scroll-behavior: smooth; font-family: "Menlo", "Consolas", monospace }
+body { line-height: calc(14px * 1.618); max-width: 50rem; margin: 1rem auto; color: #222; padding: 0 2rem 2rem 2rem }
 img,video { max-width: 100% } 
-h1,h2,h3,h4,h5,h6 { font-size: 1em; font-weight: normal; color: #000 }
-h1::after { content: ' \00AC ' } 
+h1,h2,h3,h4,h5,h6 { font-size: 1em; line-height: 1.2; font-weight: normal; color: #000 }
+h1::after { content: ' \00AC ' }
+h1,h2 { line-height: calc(14px * 1.4); border-bottom: 1px solid #ddd }
 .postdate::after { content: ' - ' }
 nav { padding: 0.67em 0 calc(0.67em * 2) 0 }
 footer { padding-top: 2rem }
@@ -15,7 +15,11 @@ hr { box-sizing: content-box; height: 0; border: 0; border-top: 1px solid #ddd }
 ul,ol { margin-block-start: 1em; margin-block-end: 1em; padding-inline-start: 2.5em }
 ul { padding-inline-start: 1.5em }
 pre code { display: block; line-height: 1.25; padding: 1.5em; background: #eee; overflow-x: auto; overflow-y: hidden }
-code { background: #eee; color: #000; padding: 0 1ch }
+code { background: #eee; color: #000; padding: 3px 1ch; border-radius :8px }
+table { border-collapse: collapse }
+table tr td,table tr th { padding: 0 1ch }
+table tr td { vertical-align: top }
+table tr th { border-bottom: 1px solid #ddd; color: #000; font-weight: normal }
 @media(prefers-color-scheme:dark) {
 body { background-color: #101010; color: #a0aaaf }
 a { color: #d0dadf }
@@ -23,8 +27,9 @@ a:visited { color: #808a8f }
 a:hover { background-color: #202325 }
 a:focus { background-color: #d0dadf; color: #101010 }
 nav a, nav a:visited { color: #d0dadf }
-hr { border-color: #808a8f }
+hr,table tr th { border-color: #808a8f }
 code, pre code { background-color: #202325; color: #a0aaaf }
-h1,h2,h3,h4,h5,h6 { color: #d0dadf }
+h1,h2,h3,h4,h5,h6,table tr th { color: #d0dadf }
+h1,h2 { border-color: #808a8f }
 ::selection { color: #101010; background-color: #a0aaaf } 
 }
