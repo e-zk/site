@@ -26,6 +26,8 @@ Git repos: [GitHub](https://github.com/e-zk/), [git.zakaria.org](https://git.zak
 
 ## Selected projects
 
+A list of all of my programming projects can be found on the [projects page](/projects.html). Here are a few:
+
 ### [after](https://github.com/e-zk/after)
 
 This small utility written in C waits for the specified process to exit 
@@ -46,7 +48,7 @@ not use Network Time Protocol (NTP). See the project [README](https://raw.github
 
 You can contact me via email at `contact@zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).
 
-In the future a more secure contact option will be listed here. Until then, if you would like to contact me via a secure channel I suggest reaching out via email first. 
+I can be reached via Matrix at `zk:envs.net`.
 
 # About this website
 
