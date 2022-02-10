@@ -4,19 +4,11 @@ I am Zakaria. You can call me Zak if you like. If you're ever crediting me somew
 
 I'm a CS graduate with an interest in information security, digital privacy, and cryptography.
 
-21 &sdot; He/Him
+21 &bullet; He/Him &bullet; Australia
 
-## Location (cyberspace)
-
-You can find me zooming around the information super-highway under various aliases:
-
-* I am [zk](https://lobste.rs/u/zk) on Lobste.rs.
-* I am [e-zk](https://github.com/e-zk/) on GitHub.
-* I am [zxzxzxzxzxzxz](https://bandcamp.com/zxzxzxzxzxzxz) on Bandcamp.
-
-## Location (meatspace)
-
-Australia.
+- [zk](https://lobste.rs/u/zk) @ Lobste.rs.
+- [e-zk](https://github.com/e-zk/) @ GitHub.
+- [zxzxzxzxzxzxz](https://bandcamp.com/zxzxzxzxzxzxz) @ Bandcamp.  
 
 ## Code
 
@@ -24,25 +16,7 @@ I code recreationally in a variety of programming languages. I have worked with 
 
 Git repos: [GitHub](https://github.com/e-zk/), [git.zakaria.org](https://git.zakaria.org/).
 
-## Selected projects
-
-A list of all of my programming projects can be found on the [projects page](/projects.html). Here are a few:
-
-### [after](https://github.com/e-zk/after)
-
-This small utility written in C waits for the specified process to exit 
-before it outputs a string to standard output. It's useful in situations 
-where you've already started a process and want to be notified when it exits.  
-
-### [subc](https://github.com/e-zk/subc)
-
-This [Go module](https://pkg.go.dev/github.com/e-zk/subc) is a super simple wrapper for the standard library's `flag`
-module to make creating sub commands for CLIs much easier.
-
-### [STSD](https://github.com/e-zk/stsd) (wip)
-
-Secure Time Sync Daemon - a time synchronisation daemon written in Go that does 
-not use Network Time Protocol (NTP). See the project [README](https://raw.githubusercontent.com/e-zk/stsd/trunk/README) for more information.
+A list of all of my programming projects can be found on the [projects page](/projects.html).
 
 ## Contact
 
