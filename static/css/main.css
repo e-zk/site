@@ -1,6 +1,6 @@
-::selection { background-color: #222; color: #fff }
+::selection { background-color: lemonchiffon; color: #000 }
 html { height: 100%; font-size: 14px; scroll-behavior: smooth; font-family: "Menlo", "Consolas", monospace }
-body { line-height: calc(14px * 1.618); max-width: 50rem; margin: 1rem auto; color: #222; padding: 0 2rem 2rem 2rem }
+body { line-height: calc(14px * 1.618); max-width: 50rem; margin: 1rem auto; color: #333; padding: 0 2rem 2rem 2rem }
 img,video { max-width: 100% } 
 h1,h2,h3,h4,h5,h6 { font-size: 1em; line-height: 1.2; font-weight: normal; color: #000 }
 h1::after { content: ' \00AC ' }
@@ -16,6 +16,7 @@ ul,ol { margin-block-start: 1em; margin-block-end: 1em; padding-inline-start: 2.
 ul { padding-inline-start: 1.5em }
 pre code { display: block; line-height: 1.25; padding: 1.5em; background: #eee; overflow-x: auto; overflow-y: hidden }
 code { background: #eee; color: #000; padding: 3px 1ch; border-radius :8px }
+blockquote { margin-inline-start: 20px; padding-left: 20px; border-left: 2px solid #ddd; font-style: italic }
 table { border-collapse: collapse }
 table tr td,table tr th { padding: 0 1ch }
 table tr td { vertical-align: top }
@@ -27,7 +28,7 @@ a:visited { color: #808a8f }
 a:hover { background-color: #202325 }
 a:focus { background-color: #d0dadf; color: #101010 }
 nav a, nav a:visited { color: #d0dadf }
-hr,table tr th { border-color: #808a8f }
+hr,table tr th,blockquote { border-color: #808a8f }
 code, pre code { background-color: #202325; color: #a0aaaf }
 h1,h2,h3,h4,h5,h6,table tr th { color: #d0dadf }
 h1,h2 { border-color: #808a8f }
