@@ -1,0 +1,4 @@
+title: Installing Headscale on OpenBSD
+description: In this post I'll detail the steps I took to install and configure headscale, an open-source self-hostable implementation of the Tailscale control server, on OpenBSD.
+date: 2022-02-15
+

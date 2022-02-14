@@ -1,0 +1,4 @@
+title: My stagit setup
+date: 2022-02-14
+description: Setting up a static git web interface on OpenBSD with stagit + httpd(8).
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<meta content="#101010" name="theme-color"/>
+<link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
+<link href="/favicon.ico" rel="alternate icon">
+<link href="/static/css/main.css" rel="stylesheet">
+<meta http-equiv="onion-location" content="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/headscale-setup.html">
+<title>Installing Headscale on OpenBSD</title>
+<meta property="og:title" content="Installing Headscale on OpenBSD">
+<meta property="og:description" content="In this post I'll detail the steps I took to install and configure headscale, an open-source self-hostable implementation of the Tailscale control server, on OpenBSD.">
+</head>
+<body>
+<header>
+<nav>
+<a href="/">zakaria.org</a><a href="/posts/">posts</a><a href="/about.html">about</a>
+</nav>
+</header>
+<main>
+<h1 id="Installing%20headscale%20on%20OpenBSD">Installing headscale on OpenBSD</h1>
+
+<p>In this post I&#39;ll detail the steps I took to install and configure
+<a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
+
+<p>Code blocks prefixed with <code>#</code> imply that the command should be run as a privileged user&#47;root.</p>
+
+<p>If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
+
+<h2 id="Compilation">Compilation</h2>
+
+<p>Since my server is on OpenBSD-stable, headscale is only available via <code>pkg_add</code> on -current, I need to compile the headscale binary by hand and upload it to the server.
+I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+should be a breeze.</p>
+
+<pre><code>$ git clone git@github.com:juanfont&#47;headscale.git
+$ cd headscale
+$ make
+$ sftp user@server &#60;&#60;EOF
+&#62; put .&#47;headscale
+&#62; bye
+EOF
+</code></pre>
+
+<p>Then login, get root access, and copy the binary to <code>&#47;usr&#47;local&#47;bin</code>:</p>
+
+<pre><code>$ ssh user@server
+$ doas -s
+...
+# cp .&#47;headscale &#47;usr&#47;local&#47;bin
+# chown root:bin &#47;usr&#47;local&#47;bin&#47;headscale
+</code></pre>
+
+<h2 id="Configuration">Configuration</h2>
+
+<p>Next we need to setup:</p>
+
+<ol start="1">
+<li>a <code>_headscale</code> daemon user that headscale will run as.</li>
+<li>directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions&#47;owner).</li>
+<li>copy the example config from GitHub, and edit it to our liking</li>
+</ol>
+
+<p>First we setup some directories:</p>
+
+<pre><code># mkdir -p &#47;etc&#47;headscale
+# touch &#47;etc&#47;headscale&#47;config.yaml
+# mkdir -p &#47;var&#47;headscale
+</code></pre>
+
+<p>Then we add our <code>_headscale</code> daemon user, and <code>chown</code> all the necessary dirs.<br/>
+Here we also run <code>doas</code> to get us a shell as <code>_headscale</code> so I can create the db.sqlite file. Note doing it this way requires some <code>doas.conf</code> rules.</p>
+
+<pre><code># useradd -L daemon -s &#47;sbin&#47;nologin -d &#47;var&#47;headscale _headscale
+# chown -R _headscale:_headscale &#47;var&#47;headscale 
+# doas -u _headscale &#47;bin&#47;ksh
+$ touch &#47;var&#47;headscale&#47;db.sqlite
+</code></pre>
+
+<p>Finally we can edit the headscale config. I highly recommend copying the <a href="https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml">example config</a> and using that as a starting point.</p>
+
+<pre><code># vi &#47;etc&#47;headscale&#47;config.yaml
+# # copy the example config
+# # change domain, IPs, ports
+# # change sock location to &#47;var&#47;headscale&#47;headscale.sock 
+</code></pre>
+
+<p>I&#39;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to
+configure any TLS-related stuff.</p>
+
+<p>Run <code>headscale serve</code> to see if the config works, and all the directories and permissions are correct:</p>
+
+<pre><code># doas -u _headscale headscale serve
+...
+</code></pre>
+
+<p>If all is well we can move onto setting up an init script for the headscale daemon.</p>
+
+<h2 id="rc.d">rc.d</h2>
+
+<p>I&#39;ve made an init script to making stopping&#47;starting and running at boot
+a lot easier. Drop this simple script into <code>&#47;etc&#47;rc.d&#47;headscale</code>:</p>
+
+<pre><code>#!&#47;bin&#47;ksh
+#
+# &#47;etc&#47;rc.d&#47;headscale
+
+daemon_user="_headscale"
+daemon="&#47;usr&#47;local&#47;bin&#47;headscale"
+daemon_flags="serve"
+
+. &#47;etc&#47;rc.d&#47;rc.subr
+
+rc_cmd $1
+</code></pre>
+
+<p><code>chmod</code>, enable and start it as usual:</p>
+
+<pre><code># chmod +x &#47;etc&#47;rc.d&#47;headscale
+# rcctl enable headscale
+# rcctl start headscale
+headscale(ok)
+</code></pre>
+
+<h2 id="Clients">Clients</h2>
+
+<p>So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
+
+<h3 id="OpenBSD%20client">OpenBSD client</h3>
+
+<p>It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
+
+<pre><code># pkg_add tailscale
+# rcctl enable tailscaled; rcctl start tailscaled
+# tailscale --login-server "https:&#47;&#47;headscale.example.com:443"
+...
+</code></pre>
+
+<p>Where <code>https:&#47;&#47;headscale.example.com:443</code> is your control server URL.</p>
+
+<h3 id="Android%20client">Android client</h3>
+
+<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code> in the android client&#39;s repo and viola!</p>
+
+<p>I will edit this post to provide links and more details for this process.<br/>
+Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk set me back a few hours.</p>
+
+<p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
+</main>
+<footer>
+Installing Headscale on OpenBSD&nbsp;&sdot;&nbsp;2022-02-15&nbsp;&sdot;&nbsp;<a href="/posts/headscale-setup.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/headscale-setup.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+</body>
+</html>

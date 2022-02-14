@@ -4,6 +4,410 @@
 <description/>
 <link>https://zakaria.org/posts/</link>
 <item>
+<link>https://zakaria.org/posts/headscale-setup.html</link>
+<title>Installing Headscale on OpenBSD</title>
+<pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
+<description>
+<h1 id="Installing%20headscale%20on%20OpenBSD">Installing headscale on OpenBSD</h1>
+
+<p>In this post I&#39;ll detail the steps I took to install and configure
+<a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
+
+<p>Code blocks prefixed with <code>#</code> imply that the command should be run as a privileged user&#47;root.</p>
+
+<p>If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
+
+<h2 id="Compilation">Compilation</h2>
+
+<p>Since my server is on OpenBSD-stable, headscale is only available via <code>pkg_add</code> on -current, I need to compile the headscale binary by hand and upload it to the server.
+I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+should be a breeze.</p>
+
+<pre><code>$ git clone git@github.com:juanfont&#47;headscale.git
+$ cd headscale
+$ make
+$ sftp user@server &#60;&#60;EOF
+&#62; put .&#47;headscale
+&#62; bye
+EOF
+</code></pre>
+
+<p>Then login, get root access, and copy the binary to <code>&#47;usr&#47;local&#47;bin</code>:</p>
+
+<pre><code>$ ssh user@server
+$ doas -s
+...
+# cp .&#47;headscale &#47;usr&#47;local&#47;bin
+# chown root:bin &#47;usr&#47;local&#47;bin&#47;headscale
+</code></pre>
+
+<h2 id="Configuration">Configuration</h2>
+
+<p>Next we need to setup:</p>
+
+<ol start="1">
+<li>a <code>_headscale</code> daemon user that headscale will run as.</li>
+<li>directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions&#47;owner).</li>
+<li>copy the example config from GitHub, and edit it to our liking</li>
+</ol>
+
+<p>First we setup some directories:</p>
+
+<pre><code># mkdir -p &#47;etc&#47;headscale
+# touch &#47;etc&#47;headscale&#47;config.yaml
+# mkdir -p &#47;var&#47;headscale
+</code></pre>
+
+<p>Then we add our <code>_headscale</code> daemon user, and <code>chown</code> all the necessary dirs.<br/>
+Here we also run <code>doas</code> to get us a shell as <code>_headscale</code> so I can create the db.sqlite file. Note doing it this way requires some <code>doas.conf</code> rules.</p>
+
+<pre><code># useradd -L daemon -s &#47;sbin&#47;nologin -d &#47;var&#47;headscale _headscale
+# chown -R _headscale:_headscale &#47;var&#47;headscale 
+# doas -u _headscale &#47;bin&#47;ksh
+$ touch &#47;var&#47;headscale&#47;db.sqlite
+</code></pre>
+
+<p>Finally we can edit the headscale config. I highly recommend copying the <a href="https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml">example config</a> and using that as a starting point.</p>
+
+<pre><code># vi &#47;etc&#47;headscale&#47;config.yaml
+# # copy the example config
+# # change domain, IPs, ports
+# # change sock location to &#47;var&#47;headscale&#47;headscale.sock 
+</code></pre>
+
+<p>I&#39;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to
+configure any TLS-related stuff.</p>
+
+<p>Run <code>headscale serve</code> to see if the config works, and all the directories and permissions are correct:</p>
+
+<pre><code># doas -u _headscale headscale serve
+...
+</code></pre>
+
+<p>If all is well we can move onto setting up an init script for the headscale daemon.</p>
+
+<h2 id="rc.d">rc.d</h2>
+
+<p>I&#39;ve made an init script to making stopping&#47;starting and running at boot
+a lot easier. Drop this simple script into <code>&#47;etc&#47;rc.d&#47;headscale</code>:</p>
+
+<pre><code>#!&#47;bin&#47;ksh
+#
+# &#47;etc&#47;rc.d&#47;headscale
+
+daemon_user="_headscale"
+daemon="&#47;usr&#47;local&#47;bin&#47;headscale"
+daemon_flags="serve"
+
+. &#47;etc&#47;rc.d&#47;rc.subr
+
+rc_cmd $1
+</code></pre>
+
+<p><code>chmod</code>, enable and start it as usual:</p>
+
+<pre><code># chmod +x &#47;etc&#47;rc.d&#47;headscale
+# rcctl enable headscale
+# rcctl start headscale
+headscale(ok)
+</code></pre>
+
+<h2 id="Clients">Clients</h2>
+
+<p>So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
+
+<h3 id="OpenBSD%20client">OpenBSD client</h3>
+
+<p>It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
+
+<pre><code># pkg_add tailscale
+# rcctl enable tailscaled; rcctl start tailscaled
+# tailscale --login-server "https:&#47;&#47;headscale.example.com:443"
+...
+</code></pre>
+
+<p>Where <code>https:&#47;&#47;headscale.example.com:443</code> is your control server URL.</p>
+
+<h3 id="Android%20client">Android client</h3>
+
+<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code> in the android client&#39;s repo and viola!</p>
+
+<p>I will edit this post to provide links and more details for this process.<br/>
+Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk set me back a few hours.</p>
+
+<p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
+</description>
+</item>
+<item>
+<link>https://zakaria.org/posts/stagit-setup.html</link>
+<title>My stagit setup</title>
+<pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+<description>
+<h1 id="stagit%20setup%20on%20OpenBSD">stagit setup on OpenBSD</h1>
+
+<p><a href="https://codemadness.org/stagit.html">stagit</a> is a static page generator for git repos. It&#39;s very minimal - which I like.</p>
+
+<p>In this post I&#39;ll detail how I set up <a href="https://git.zakaria.org/">git.zakaria.org</a> on my OpenBSD server.</p>
+
+<p>The majority of my setup is based upon a post by <code>poptart</code>. Be sure to check out the original post here: <a href="https://hosakacorp.net/p/stagit-server.html">https:&#47;&#47;hosakacorp.net&#47;p&#47;stagit-server.html</a>. It&#39;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). <code>poptart</code> has some other great OpenBSD-related posts on there as well.</p>
+
+<h2 id="Setup">Setup</h2>
+
+<p>On the server install <code>git</code>, create the <code>_git</code> user, and make some directories:</p>
+
+<pre><code>server# pkg_add git libgit2
+server# groupadd _git
+server# mkdir -p -m 744 &#47;var&#47;git&#47;repos &#47;var&#47;git&#47;template
+server# useradd -g _git -L daemon -c "git backend user" -d &#47;var&#47;git&#47;repos -s &#47;usr&#47;local&#47;bin&#47;git-shell _git
+server# chown _git:_git &#47;var&#47;git&#47;repos
+</code></pre>
+
+<p>The directories we created:</p>
+
+<ul>
+<li><code>&#47;var&#47;www&#47;repos</code> contains the bare git files (also the <code>$HOME</code> of user <code>_git</code>)</li>
+<li><code>&#47;var&#47;git&#47;template</code> will contain the template for new repositories.</li>
+</ul>
+
+<p>The next steps are only if like me you&#39;ve made source changes to stagit and you&#39;d like to use your custom version. If you want to use plain stagit, install it on the server with <code>pkg_add stagit</code>.<br/>
+On another machine, compile stagit and <code>sftp</code> it over to the server:</p>
+
+<pre><code>laptop$ make
+laptop$ md5 stagit stagit-index
+laptop$ # remember these checksums for verifying it&#39;s been copied over correctly
+laptop$ sftp enderman &#60;&#60;EOF
+&#62; put stagit
+&#62; put stagit-index
+&#62; bye
+EOF
+</code></pre>
+
+<p>Back on the server, verify the binaries were copied over correctly:</p>
+
+<pre><code>server# md5 stagit stagit-index
+server# # verify the checksums
+</code></pre>
+
+<p>Copy these binaries to <code>&#47;usr&#47;local&#47;bin</code> and set permissions appropriately:</p>
+
+<pre><code>server# cp stagit{,-index} &#47;usr&#47;local&#47;bin
+server# chown root:bin &#47;usr&#47;local&#47;bin&#47;stagit{,-index} 
+server# chmod 755 &#47;usr&#47;local&#47;bin&#47;stagit{,-index}
+</code></pre>
+
+<p>The following is a message from the future:</p>
+
+<blockquote>
+<p>I wrote this post a while ago. But I recall abandoning the modified stagit binary setup
+purely because the libraries on my laptop were newer than my server, and I 
+could not get static compilation to work&#8230; 
+So I gave up and installed stagit via <code>pkg_add stagit</code> on the server :P</p>
+</blockquote>
+
+<h2 id="Scripts">Scripts</h2>
+
+<p>Next we&#39;ll configure a few scripts:</p>
+
+<ul>
+<li><code>&#47;var&#47;git&#47;repos&#47;template&#47;post-receive</code><br/>
+Will be executed every time we push to a repo.</li>
+<li><code>&#47;usr&#47;local&#47;bin&#47;stagit-gen-index</code><br/>
+A helper script to generate the index page.</li>
+<li><code>&#47;usr&#47;local&#47;bin&#47;stagit-newrepo</code><br/>
+Script to run to create a new repository.</li>
+<li><code>&#47;usr&#47;local&#47;bin&#47;stagit-chdesc</code><br/>
+Script to change the description of an existing repository.</li>
+</ul>
+
+<p>Some internal variables will be shared between these scripts, for instance the
+git user, htdocs path, etc. Instead of writing these out into each script we
+can create a config file that each script will source before running anything.<br/>
+In <code>&#47;var&#47;git&#47;config.rc</code>:</p>
+
+<pre><code># shared variables
+GIT_HOME="&#47;var&#47;git"
+GIT_REPOS="${GIT_HOME}&#47;repos"
+WWW_HOME="&#47;var&#47;www&#47;htdocs&#47;git.zakaria.org
+CLONE_URI="_git@git.zakaria.org"
+DEFAULT_OWNER="zakaria"
+DEFAULT_DESC=""
+GIT_USER="_git"
+</code></pre>
+
+<p>We restrict access to this file to <code>root:wheel</code>:</p>
+
+<pre><code>server# chown root:wheel &#47;var&#47;git&#47;config.rc
+</code></pre>
+
+<p>After a <code>git push</code> we want the server to (re)generate the static html pages. To do this, we write a script in <code>&#47;var&#47;git&#47;template&#47;post-receive</code>:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+# Author: Cale "poptart" Black
+# Modified by: zakaria @ zakaria.org
+# License: MIT
+
+set -euf
+
+. &#47;var&#47;git&#47;config.rc
+
+export LC_TYPE="en_US.UTF-8"
+src="$(pwd)"
+name="$(basename "$src")"
+dest="${WWW_HOME}&#47;$(basename "$name" &#39;.git&#39;)"
+mkdir -p "$dest"
+cd "$dest" || exit 1
+
+echo "[stagit] building $dest"
+&#47;usr&#47;local&#47;bin&#47;stagit "$src"
+
+echo "[stagit] linking $dest"
+# if a README.html exists use that as the index.html
+# if not use log.html
+if [ -f "README.html" ]; then
+    ln -sf README.html index.html
+else
+    ln -sf log.html index.html
+fi
+ln -sf ..&#47;style.css style.css
+ln -sf ..&#47;logo.png logo.png
+</code></pre>
+
+<p>Next, we need a script to generate the stagit <code>&#47;index.html</code>. In <code>&#47;usr&#47;local&#47;bin&#47;stagit-gen-index</code>:</p>
+
+<pre><code>#!&#47;bin&#47;sh 
+# Author: Cale "poptart" Black
+# License: MIT
+
+set -eu
+
+. &#47;var&#47;git&#47;config.rc
+stagit-index "${GIT_REPOS}&#47;*.git" &#62; "${WWW_HOME}&#47;index.html"
+</code></pre>
+
+<p>The next script will be used to setup a new repository. In <code>&#47;usr&#47;local&#47;bin&#47;stagit-newrepo</code>:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+# Author: Cale "poptart" Black
+# Modified by: zakaria @ zakaria.org
+# License: MIT
+# Usage: stagit-newrepo &#60;name&#62; [desc] [author]
+
+set -eu
+
+. &#47;var&#47;git&#47;config.rc
+
+log() {
+    printf &#39;%s\n&#39; "$*" &#62;&#38;2
+}
+die() {
+    log "error: $*"
+    printf &#39;exiting...\n&#39;
+    exit 1
+}
+
+REPO="$1"
+DESC="${2:-$DEFAULT_DESC}"
+OWNER="${3:-$DEFAULT_OWNER}"
+
+if [ -z "$REPO" ]; then
+    die "no repo name given"
+fi
+
+REPO_PATH="${GIT_REPOS}&#47;${REPO}.git"
+
+git init --bare "$REPO_PATH"
+cp "${GIT_HOME}&#47;template&#47;post-receive" "${REPO_PATH}&#47;hooks&#47;post-receive"
+echo "${CLONE_URI}&#47;${REPO}.git" &#62; "${REPO_PATH}&#47;url"
+echo "$OWNER" &#62; "${REPO_PATH}&#47;owner"
+echo "$DESC" &#62; "${REPO_PATH}&#47;description"
+
+chmod u+x "${REPO_PATH}&#47;hooks&#47;post-receive"
+mkdir "${WWW_HOME}&#47;${REPO}"
+&#47;usr&#47;local&#47;bin&#47;stagit-gen-index
+</code></pre>
+
+<p>At the end of this script we call our <code>stagit-gen-index</code> helper script to regenerate
+the <code>index.html</code>.</p>
+
+<p>The last script is a simple wrapper that will allow us to change a repo&#39;s description:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+# Author: zakaria &#47; zakaria.org
+# License: MIT
+# Usage: stagit-chdesc &#60;repo&#62; &#60;new_description&#62;
+
+set -eu
+
+. &#47;var&#47;git&#47;config.rc
+
+log() {
+    printf &#39;%s\n&#39; "$*" &#62;&#38;2
+}
+die() {
+    log "error: $*"
+    printf &#39;exiting...\n&#39;
+    exit 1
+}
+
+REPO="$1"
+DESC="$2"
+
+if [ -z "$REPO" ]; then
+    die "no repo name provided"
+fi
+if [ -z "$DESC" ]; then
+    die "no new description provided"
+fi
+
+REPO_PATH="${GIT_REPOS}&#47;${REPO}.git"
+
+echo "$DESC" &#62; ${REPO_PATH}&#47;description
+</code></pre>
+
+<p>Then set the appropriate permissions and restrictions for these scripts:</p>
+
+<pre><code>$ chmod +x &#47;usr&#47;local&#47;bin&#47;stagit-{gen-index,newrepo,chdesc}
+$ chown -R _git:_git &#47;var&#47;git&#47;template
+$ chmod +x $GIT_HOME&#47;template
+$ chown -R _git:_git $WWW_HOME
+</code></pre>
+
+<p>Replacing <code>GIT_HOME</code> and <code>WWW_HOME</code> with the variables we configured previously in <code>config.rc</code>.</p>
+
+<p>Finally we configure our <a href="https://man.openbsd.org/doas.conf">doas.conf(5)</a> to allow our main user to run these commands:</p>
+
+<pre><code>permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-newrepo
+permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-gen-index
+permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-chdesc
+</code></pre>
+
+<p>I&#39;ve made a git repository for these scripts (and maybe a few more) available on <a href="https://github.com/e-zk/stagit-scripts">GitHub</a> which is mirrored on <a href="https://git.zakaria.org/stagit-scripts/log.html">git.zakaria.org</a></p>
+
+<h2 id="httpd%20config">httpd config</h2>
+
+<p>To actually serve the generated static files we need to configure <a href="https://man.openbsd.org/httpd">httpd(8)</a>. In <a href="https://man.openbsd.org/httpd.conf"><code>&#47;etc&#47;httpd.conf</code></a>:</p>
+
+<pre><code>...snip...
+
+server "git.zakaria.org" {
+    listen on 127.0.0.1 on 8080
+
+    # for letsencrypt
+    location "&#47;.well-known&#47;acme-challenge&#47;*" {
+        root "&#47;acme"
+        request strip 2
+    }
+
+    root "&#47;htdocs&#47;git.zakaria.org"
+}
+
+...snip...
+</code></pre>
+
+<p>I use <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to configure TLS certs in httpd.conf.</p>
+</description>
+</item>
+<item>
 <link>https://zakaria.org/posts/temporarybrowsing.html</link>
 <title>Temporary web browsing</title>
 <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
