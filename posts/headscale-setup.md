@@ -15,7 +15,8 @@ should be a breeze.
 
 	$ git clone git@github.com:juanfont/headscale.git
 	$ cd headscale
-	$ make
+	$ make generate
+	$ make build
 	$ sftp user@server <<EOF
 	> put ./headscale
 	> bye
@@ -109,10 +110,11 @@ Where `https://headscale.example.com:443` is your control server URL.
 
 ### Android client
 
-I didn't bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can't be bothered to move all the junk I've accumulated in my WSL distro's $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran `make tailscale-debug.apk` in the android client's repo and viola!
+You can find the instructions for patching and building the custom APK [here](https://github.com/juanfont/headscale/issues/58#issuecomment-950386833).
 
-I will edit this post to provide links and more details for this process.  
-Quite frankly this was painful, but it isn't supposed to be. Wrangling with old documentation I found online about installing the android sdk set me back a few hours.
+I didn't bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can't be bothered to move all the junk I've accumulated in my WSL distro's $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran `make tailscale-debug.apk`.
+
+Quite frankly this was painful, but it isn't supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.
 
 In the end it was quite rewarding to install the APK file, open it up and see it all working!
 

@@ -36,7 +36,8 @@ should be a breeze.</p>
 
 <pre><code>$ git clone git@github.com:juanfont&#47;headscale.git
 $ cd headscale
-$ make
+$ make generate
+$ make build
 $ sftp user@server &#60;&#60;EOF
 &#62; put .&#47;headscale
 &#62; bye
@@ -141,10 +142,11 @@ headscale(ok)
 
 <h3 id="Android%20client">Android client</h3>
 
-<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code> in the android client&#39;s repo and viola!</p>
+<p>You can find the instructions for patching and building the custom APK <a href="https://github.com/juanfont/headscale/issues/58#issuecomment-950386833">here</a>.</p>
 
-<p>I will edit this post to provide links and more details for this process.<br/>
-Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk set me back a few hours.</p>
+<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
+
+<p>Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
 
 <p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
 </main>
