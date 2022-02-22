@@ -18,7 +18,9 @@ Projects marked with a `*` are archived old projects and/or unmaintained.
 | [recreg](https://github.com/e-zk/recreg)      | Script that records a region of X11 screen.   |
 | [reprose](https://github.com/e-zk/go-reprose) | Basic Go package server.                      |
 | [sec](https://github.com/e-zk/sec)\*          | Minimal secret store using age with SSH keys for encryption. |
-| [sghs](https://github.com/e-zk/sghs)          | Sh~tty Go HTTP Server. |
+| [sghs](https://github.com/e-zk/sghs)          | Shitty Go HTTP Server. |
+| [shite](https://github.com/e-zk/shite)        | Static site generator script(s) in `/bin/sh`. |
+| [shlog](https://github.com/e-zk/shlog)\*      | Old static site generator script.             |
 | [status](https://github.com/e-zk/status)\*    | Lemonbar status generator.                    |
 | [stsd](https://github.com/e-zk/stsd)\*        | Secure Time Sync Daemon. |
 | [subc](https://github.com/e-zk/subc)          | Subcommand package for Go.                    |
@@ -30,10 +32,10 @@ Projects marked with a `*` are archived old projects and/or unmaintained.
 List of open-source projects I have contributed to in some capacity.  
 Spelling mistakes/formatting changes not included. 
 
-| Project                                                                      |
-|:-----------------------------------------------------------------------------|
-| [jonjonmckay/fritter](https://github.com/jonjonmckay/fritter) |
+| |
+|:-------------------------------------------------------------|
+| [jonjomckay/fritter](https://github.com/jonjomckay/fritter) |
 | [nkanaev/yarr](https://github.com/nkanaev/yarr) |
-| [foxtrot/scyzzy](https://github.com/foxtrot/scuzzy) |
+| [foxtrot/scuzzy](https://github.com/foxtrot/scuzzy) |
 | [standardnotes/standalone](https://github.com/standardnotes/standalone) |
 
