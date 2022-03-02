@@ -32,11 +32,9 @@ Projects marked with a `*` are archived old projects and/or unmaintained.
 List of open-source projects I have contributed to in some capacity.  
 Spelling mistakes/formatting changes not included. 
 
-| |
-|:-------------------------------------------------------------|
-| [jonjomckay/fritter](https://github.com/jonjomckay/fritter) |
-| [juanfont/headscale](https://github.com/juanfont/headscale) |
-| [foxtrot/scuzzy](https://github.com/foxtrot/scuzzy) |
-| [standardnotes/standalone](https://github.com/standardnotes/standalone) |
-| [nkanaev/yarr](https://github.com/nkanaev/yarr) |
+- [jonjomckay/fritter](https://github.com/jonjomckay/fritter)
+- [juanfont/headscale](https://github.com/juanfont/headscale)
+- [foxtrot/scuzzy](https://github.com/foxtrot/scuzzy)
+- [standardnotes/standalone](https://github.com/standardnotes/standalone)
+- [nkanaev/yarr](https://github.com/nkanaev/yarr)
 
