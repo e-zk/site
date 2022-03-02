@@ -35,7 +35,8 @@ Spelling mistakes/formatting changes not included.
 | |
 |:-------------------------------------------------------------|
 | [jonjomckay/fritter](https://github.com/jonjomckay/fritter) |
-| [nkanaev/yarr](https://github.com/nkanaev/yarr) |
+| [juanfont/headscale](https://github.com/juanfont/headscale) |
 | [foxtrot/scuzzy](https://github.com/foxtrot/scuzzy) |
 | [standardnotes/standalone](https://github.com/standardnotes/standalone) |
+| [nkanaev/yarr](https://github.com/nkanaev/yarr) |
 
