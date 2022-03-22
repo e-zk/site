@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<meta content="#101010" name="theme-color"/>
+<link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
+<link href="/favicon.ico" rel="alternate icon">
+<link href="/static/css/main.css" rel="stylesheet">
+<meta http-equiv="onion-location" content="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/resident-ssh-keys-on-windows.html">
+<title>YubiKey resident SSH keys on Windows+WSL</title>
+<meta property="og:title" content="YubiKey resident SSH keys on Windows+WSL">
+<meta property="og:description" content="Getting YubiKeys, Windows and WSL to all just get along.">
+</head>
+<body>
+<header>
+<nav>
+<a href="/">zakaria.org</a><a href="/posts/">posts</a><a href="/about.html">about</a>
+</nav>
+</header>
+<main>
+<h1 id="yubikey-resident-ssh-keys-on-windowswsl">YubiKey resident SSH keys on Windows+WSL</h1>
+
+<p>This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via <code>npiperelay</code> and <code>socat</code>.</p>
+
+<p>It&#8217;s important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn&#8217;t notice any functional differences.</p>
+
+<h2 id="download-openssh">Download OpenSSH</h2>
+
+<p>As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via <code>ssh-add</code> or <code>ssh-keygen</code>. So first we need to update OpenSSH for Windows:</p>
+
+<ol>
+<li>Download the latest .zip from the <a href="https://github.com/PowerShell/Win32-OpenSSH/releases">Win32-OpenSSH GitHub releases page</a>. (OpenSSH-Win64.zip in my case).</li>
+<li>Unzip it, and run the <code>install-sshd.ps1</code> script as Administrator.</li>
+</ol>
+
+<p>This script will update the appropriate Windows system services (<code>sshd</code> and <code>ssh-agent</code>) to use the executables in the current directory instead of the default ones. The script will not, however install the the executables into your PATH (of which <code>ssh-add</code> and <code>ssh-keygen</code> we&#8217;ll need later on) so remember where you&#8217;ve unzipped it.</p>
+
+<p>Next restart the <code>ssh-agent</code> Windows service:</p>
+
+<ol>
+<li>Open <code>services.msc</code> from Run (<code>Win+R</code>).</li>
+<li>Find &#8220;OpenSSH Authentication Agent&#8221;, right click and select &#8220;Restart&#8221;.</li>
+</ol>
+
+<h2 id="configuring-wsl2">Configuring WSL2</h2>
+
+<ol>
+<li><p>Install <code>socat</code> using your package manager (e.g. <code>sudo apt install socat</code>).</p></li>
+<li><p>Download the latest npiperelay from the <a href="https://github.com/jstarks/npiperelay/releases">GitHub releases page</a>. Unzip it, and copy npiperelay.exe to somewhere in your WSL&#8217;s <code>$PATH</code> (<code>~&#47;bin&#47;npiperelay.exe</code> in my case).</p></li>
+<li><p>In your <code>~&#47;.profile</code>, or <code>~&#47;.bashrc</code> shell startup script add the following (adapted from the <a href="https://github.com/rupor-github/wsl-ssh-agent"><code>wsl-ssh-agent</code> README</a>):</p>
+
+<pre><code>export NPIPE_CMD=$(command -v npiperelay.exe)
+export SSH_AUTH_SOCK=$HOME&#47;.ssh&#47;agent.sock
+
+# setup socat
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ "$?" -ne "0" ]; then
+    rm -f $SSH_AUTH_SOCK
+    ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$NPIPE_CMD -ei -s &#47;&#47;.&#47;pipe&#47;openssh-ssh-agent",nofork &#38; ) &#62;&#47;dev&#47;null 2&#62;&#38;1
+fi
+
+# add your ssh private key paths here ...
+ssh-add ~&#47;.ssh&#47;id_ed25519 ~&#47;.ssh&#47;id_rsa
+</code></pre></li>
+</ol>
+
+<h2 id="importing-resident-ssh-keys">Importing resident SSH keys</h2>
+
+<p>Importing resident ssh private keys from the YubiKey via <code>ssh-keygen -K</code> isn&#8217;t supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:</p>
+
+<ol>
+<li>Open a privileged <strong>Administrator</strong> PowerShell window. It must be a privileged PowerShell window, otherwise it will fail with an &#8220;invalid format&#8221; error.</li>
+<li><code>cd</code> to the directory the previously downloaded OpenSSH binaries reside (the path I told you to keep a not of).</li>
+<li>Run <code>.\ssh-keygen -K</code>, and follow the prompts:</li>
+</ol>
+
+<p><img src="/static/img/import-resident-key.png" alt="screencap of PowerShell window showing the steps to import a resident ssh key" /></p>
+
+<p>There is another method that requires a second device running anything that isn&#8217;t Windows (Linux, *BSD, etc). I did this way before realising I could use the updated <code>ssh-keygen</code> binary:</p>
+
+<ol>
+<li>Import the resident keys to a file; <code>ssh-keygen -K -f .&#47;id_ed25519_sk</code>, (make sure to set a password).</li>
+<li>Either copy the resulting file to a USB drive, or upload it somewhere private (this is, after all, your <em>private</em> key).</li>
+<li>Copy&#47;download the file onto your Windows machine, and add it to the authentication agent via <code>ssh-add c:\path\to\file</code>.</li>
+</ol>
+
+<h2 id="adding-keys-to-the-agent">Adding keys to the agent</h2>
+
+<p>Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the <code>ssh-add</code> command. </p>
+
+<p>In WSL2:</p>
+
+<pre><code>$ ssh-add &#47;path&#47;to&#47;file
+</code></pre>
+
+<p>In Windows (PowerShell):</p>
+
+<pre><code>PS C:\Windows\system32&#62; ssh-add C:\path\to\file
+</code></pre>
+
+<h3 id="automating">Automating</h3>
+
+<p>If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won&#8217;t load your keys on startup, we can write a simple PowerShell one-liner that runs at login:</p>
+
+<pre><code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\ssh-add.exe "$env:USERPROFILE\.ssh\id_yubikey" "$env:USERPROFILE\.ssh\id_something_nonstandard"
+</code></pre>
+
+<p>You will need to replace <code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\</code> with the path to where you unzipped Win32-OpenSSH previously (hope you didn&#8217;t forget!).</p>
+
+<p>Save this script as <code>ssh-keys.ps1</code> in: <code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp</code>, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.</p>
+
+<p>Similarly, for adding the private keys in WSL2 you can add a <code>ssh-add &#47;path&#47;to&#47;key1 &#47;path&#47;to&#47;key1</code> line to your shell rc.</p>
+</main>
+<footer>
+YubiKey resident SSH keys on Windows+WSL&nbsp;&sdot;&nbsp;2022-03-23&nbsp;&sdot;&nbsp;<a href="/posts/resident-ssh-keys-on-windows.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/resident-ssh-keys-on-windows.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+</body>
+</html>

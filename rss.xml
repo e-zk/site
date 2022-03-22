@@ -4,23 +4,122 @@
 <description/>
 <link>https://zakaria.org/posts/</link>
 <item>
+<link>https://zakaria.org/posts/resident-ssh-keys-on-windows.html</link>
+<title>YubiKey resident SSH keys on Windows+WSL</title>
+<pubDate>Wed, 23 Mar 2022 00:00:00 +0000</pubDate>
+<description>
+<h1 id="yubikey-resident-ssh-keys-on-windowswsl">YubiKey resident SSH keys on Windows+WSL</h1>
+
+<p>This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via <code>npiperelay</code> and <code>socat</code>.</p>
+
+<p>It&#8217;s important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn&#8217;t notice any functional differences.</p>
+
+<h2 id="download-openssh">Download OpenSSH</h2>
+
+<p>As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via <code>ssh-add</code> or <code>ssh-keygen</code>. So first we need to update OpenSSH for Windows:</p>
+
+<ol>
+<li>Download the latest .zip from the <a href="https://github.com/PowerShell/Win32-OpenSSH/releases">Win32-OpenSSH GitHub releases page</a>. (OpenSSH-Win64.zip in my case).</li>
+<li>Unzip it, and run the <code>install-sshd.ps1</code> script as Administrator.</li>
+</ol>
+
+<p>This script will update the appropriate Windows system services (<code>sshd</code> and <code>ssh-agent</code>) to use the executables in the current directory instead of the default ones. The script will not, however install the the executables into your PATH (of which <code>ssh-add</code> and <code>ssh-keygen</code> we&#8217;ll need later on) so remember where you&#8217;ve unzipped it.</p>
+
+<p>Next restart the <code>ssh-agent</code> Windows service:</p>
+
+<ol>
+<li>Open <code>services.msc</code> from Run (<code>Win+R</code>).</li>
+<li>Find &#8220;OpenSSH Authentication Agent&#8221;, right click and select &#8220;Restart&#8221;.</li>
+</ol>
+
+<h2 id="configuring-wsl2">Configuring WSL2</h2>
+
+<ol>
+<li><p>Install <code>socat</code> using your package manager (e.g. <code>sudo apt install socat</code>).</p></li>
+<li><p>Download the latest npiperelay from the <a href="https://github.com/jstarks/npiperelay/releases">GitHub releases page</a>. Unzip it, and copy npiperelay.exe to somewhere in your WSL&#8217;s <code>$PATH</code> (<code>~&#47;bin&#47;npiperelay.exe</code> in my case).</p></li>
+<li><p>In your <code>~&#47;.profile</code>, or <code>~&#47;.bashrc</code> shell startup script add the following (adapted from the <a href="https://github.com/rupor-github/wsl-ssh-agent"><code>wsl-ssh-agent</code> README</a>):</p>
+
+<pre><code>export NPIPE_CMD=$(command -v npiperelay.exe)
+export SSH_AUTH_SOCK=$HOME&#47;.ssh&#47;agent.sock
+
+# setup socat
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ "$?" -ne "0" ]; then
+    rm -f $SSH_AUTH_SOCK
+    ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$NPIPE_CMD -ei -s &#47;&#47;.&#47;pipe&#47;openssh-ssh-agent",nofork &#38; ) &#62;&#47;dev&#47;null 2&#62;&#38;1
+fi
+
+# add your ssh private key paths here ...
+ssh-add ~&#47;.ssh&#47;id_ed25519 ~&#47;.ssh&#47;id_rsa
+</code></pre></li>
+</ol>
+
+<h2 id="importing-resident-ssh-keys">Importing resident SSH keys</h2>
+
+<p>Importing resident ssh private keys from the YubiKey via <code>ssh-keygen -K</code> isn&#8217;t supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:</p>
+
+<ol>
+<li>Open a privileged <strong>Administrator</strong> PowerShell window. It must be a privileged PowerShell window, otherwise it will fail with an &#8220;invalid format&#8221; error.</li>
+<li><code>cd</code> to the directory the previously downloaded OpenSSH binaries reside (the path I told you to keep a not of).</li>
+<li>Run <code>.\ssh-keygen -K</code>, and follow the prompts:</li>
+</ol>
+
+<p><img src="/static/img/import-resident-key.png" alt="screencap of PowerShell window showing the steps to import a resident ssh key" /></p>
+
+<p>There is another method that requires a second device running anything that isn&#8217;t Windows (Linux, *BSD, etc). I did this way before realising I could use the updated <code>ssh-keygen</code> binary:</p>
+
+<ol>
+<li>Import the resident keys to a file; <code>ssh-keygen -K -f .&#47;id_ed25519_sk</code>, (make sure to set a password).</li>
+<li>Either copy the resulting file to a USB drive, or upload it somewhere private (this is, after all, your <em>private</em> key).</li>
+<li>Copy&#47;download the file onto your Windows machine, and add it to the authentication agent via <code>ssh-add c:\path\to\file</code>.</li>
+</ol>
+
+<h2 id="adding-keys-to-the-agent">Adding keys to the agent</h2>
+
+<p>Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the <code>ssh-add</code> command. </p>
+
+<p>In WSL2:</p>
+
+<pre><code>$ ssh-add &#47;path&#47;to&#47;file
+</code></pre>
+
+<p>In Windows (PowerShell):</p>
+
+<pre><code>PS C:\Windows\system32&#62; ssh-add C:\path\to\file
+</code></pre>
+
+<h3 id="automating">Automating</h3>
+
+<p>If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won&#8217;t load your keys on startup, we can write a simple PowerShell one-liner that runs at login:</p>
+
+<pre><code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\ssh-add.exe "$env:USERPROFILE\.ssh\id_yubikey" "$env:USERPROFILE\.ssh\id_something_nonstandard"
+</code></pre>
+
+<p>You will need to replace <code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\</code> with the path to where you unzipped Win32-OpenSSH previously (hope you didn&#8217;t forget!).</p>
+
+<p>Save this script as <code>ssh-keys.ps1</code> in: <code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp</code>, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.</p>
+
+<p>Similarly, for adding the private keys in WSL2 you can add a <code>ssh-add &#47;path&#47;to&#47;key1 &#47;path&#47;to&#47;key1</code> line to your shell rc.</p>
+</description>
+</item>
+<item>
 <link>https://zakaria.org/posts/headscale-setup.html</link>
 <title>Installing Headscale on OpenBSD</title>
 <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Installing%20headscale%20on%20OpenBSD">Installing headscale on OpenBSD</h1>
+<h1 id="installing-headscale-on-openbsd">Installing headscale on OpenBSD</h1>
 
-<p>In this post I&#39;ll detail the steps I took to install and configure
+<p>In this post I&#8217;ll detail the steps I took to install and configure
 <a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
 
 <p>Code blocks prefixed with <code>#</code> imply that the command should be run as a privileged user&#47;root.</p>
 
-<p>If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
+<p>If you get stuck, it&#8217;ll be probably worthwhile to have a read of headscale&#8217;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
 
-<h2 id="Compilation">Compilation</h2>
+<h2 id="compilation">Compilation</h2>
 
 <p>Since my server is on OpenBSD-stable, headscale is only available via <code>pkg_add</code> on -current, I need to compile the headscale binary by hand and upload it to the server.
-I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+I&#8217;m doing this on an OpenBSD machine, so compiling and uploading it to the server
 should be a breeze.</p>
 
 <pre><code>$ git clone git@github.com:juanfont&#47;headscale.git
@@ -42,11 +141,11 @@ $ doas -s
 # chown root:bin &#47;usr&#47;local&#47;bin&#47;headscale
 </code></pre>
 
-<h2 id="Configuration">Configuration</h2>
+<h2 id="configuration">Configuration</h2>
 
 <p>Next we need to setup:</p>
 
-<ol start="1">
+<ol>
 <li>a <code>_headscale</code> daemon user that headscale will run as.</li>
 <li>directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions&#47;owner).</li>
 <li>copy the example config from GitHub, and edit it to our liking</li>
@@ -76,7 +175,7 @@ $ touch &#47;var&#47;headscale&#47;db.sqlite
 # # change sock location to &#47;var&#47;headscale&#47;headscale.sock 
 </code></pre>
 
-<p>I&#39;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to
+<p>I&#8217;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#8217;t need to
 configure any TLS-related stuff.</p>
 
 <p>Run <code>headscale serve</code> to see if the config works, and all the directories and permissions are correct:</p>
@@ -89,7 +188,7 @@ configure any TLS-related stuff.</p>
 
 <h2 id="rc.d">rc.d</h2>
 
-<p>I&#39;ve made an init script to making stopping&#47;starting and running at boot
+<p>I&#8217;ve made an init script to making stopping&#47;starting and running at boot
 a lot easier. Drop this simple script into <code>&#47;etc&#47;rc.d&#47;headscale</code>:</p>
 
 <pre><code>#!&#47;bin&#47;ksh
@@ -113,13 +212,13 @@ rc_cmd $1
 headscale(ok)
 </code></pre>
 
-<h2 id="Clients">Clients</h2>
+<h2 id="clients">Clients</h2>
 
-<p>So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
+<p>So here&#8217;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
 
-<h3 id="OpenBSD%20client">OpenBSD client</h3>
+<h3 id="openbsd-client">OpenBSD client</h3>
 
-<p>It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
+<p>It&#8217;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
 
 <pre><code># pkg_add tailscale
 # rcctl enable tailscaled; rcctl start tailscaled
@@ -129,13 +228,13 @@ headscale(ok)
 
 <p>Where <code>https:&#47;&#47;headscale.example.com:443</code> is your control server URL.</p>
 
-<h3 id="Android%20client">Android client</h3>
+<h3 id="android-client">Android client</h3>
 
 <p>You can find the instructions for patching and building the custom APK <a href="https://github.com/juanfont/headscale/issues/58#issuecomment-950386833">here</a>.</p>
 
-<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
+<p>I didn&#8217;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#8217;t be bothered to move all the junk I&#8217;ve accumulated in my WSL distro&#8217;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
 
-<p>Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
+<p>Quite frankly this was painful, but it isn&#8217;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
 
 <p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
 </description>
@@ -145,15 +244,15 @@ headscale(ok)
 <title>My stagit setup</title>
 <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
 <description>
-<h1 id="stagit%20setup%20on%20OpenBSD">stagit setup on OpenBSD</h1>
+<h1 id="stagit-setup-on-openbsd">stagit setup on OpenBSD</h1>
 
-<p><a href="https://codemadness.org/stagit.html">stagit</a> is a static page generator for git repos. It&#39;s very minimal - which I like.</p>
+<p><a href="https://codemadness.org/stagit.html">stagit</a> is a static page generator for git repos. It&#8217;s very minimal - which I like.</p>
 
-<p>In this post I&#39;ll detail how I set up <a href="https://git.zakaria.org/">git.zakaria.org</a> on my OpenBSD server.</p>
+<p>In this post I&#8217;ll detail how I set up <a href="https://git.zakaria.org/">git.zakaria.org</a> on my OpenBSD server.</p>
 
-<p>The majority of my setup is based upon a post by <code>poptart</code>. Be sure to check out the original post here: <a href="https://hosakacorp.net/p/stagit-server.html">https:&#47;&#47;hosakacorp.net&#47;p&#47;stagit-server.html</a>. It&#39;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). <code>poptart</code> has some other great OpenBSD-related posts on there as well.</p>
+<p>The majority of my setup is based upon a post by <code>poptart</code>. Be sure to check out the original post here: <a href="https://hosakacorp.net/p/stagit-server.html">https:&#47;&#47;hosakacorp.net&#47;p&#47;stagit-server.html</a>. It&#8217;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). <code>poptart</code> has some other great OpenBSD-related posts on there as well.</p>
 
-<h2 id="Setup">Setup</h2>
+<h2 id="setup">Setup</h2>
 
 <p>On the server install <code>git</code>, create the <code>_git</code> user, and make some directories:</p>
 
@@ -171,7 +270,7 @@ server# chown _git:_git &#47;var&#47;git&#47;repos
 <li><code>&#47;var&#47;git&#47;template</code> will contain the template for new repositories.</li>
 </ul>
 
-<p>The next steps are only if like me you&#39;ve made source changes to stagit and you&#39;d like to use your custom version. If you want to use plain stagit, install it on the server with <code>pkg_add stagit</code>.<br/>
+<p>The next steps are only if like me you&#8217;ve made source changes to stagit and you&#8217;d like to use your custom version. If you want to use plain stagit, install it on the server with <code>pkg_add stagit</code>.<br/>
 On another machine, compile stagit and <code>sftp</code> it over to the server:</p>
 
 <pre><code>laptop$ make
@@ -206,9 +305,9 @@ could not get static compilation to work&#8230;
 So I gave up and installed stagit via <code>pkg_add stagit</code> on the server :P</p>
 </blockquote>
 
-<h2 id="Scripts">Scripts</h2>
+<h2 id="scripts">Scripts</h2>
 
-<p>Next we&#39;ll configure a few scripts:</p>
+<p>Next we&#8217;ll configure a few scripts:</p>
 
 <ul>
 <li><code>&#47;var&#47;git&#47;repos&#47;template&#47;post-receive</code><br/>
@@ -331,7 +430,7 @@ mkdir "${WWW_HOME}&#47;${REPO}"
 <p>At the end of this script we call our <code>stagit-gen-index</code> helper script to regenerate
 the <code>index.html</code>.</p>
 
-<p>The last script is a simple wrapper that will allow us to change a repo&#39;s description:</p>
+<p>The last script is a simple wrapper that will allow us to change a repo&#8217;s description:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 # Author: zakaria &#47; zakaria.org
@@ -383,9 +482,9 @@ permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-gen-index
 permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-chdesc
 </code></pre>
 
-<p>I&#39;ve made a git repository for these scripts (and maybe a few more) available on <a href="https://github.com/e-zk/stagit-scripts">GitHub</a> which is mirrored on <a href="https://git.zakaria.org/stagit-scripts/log.html">git.zakaria.org</a></p>
+<p>I&#8217;ve made a git repository for these scripts (and maybe a few more) available on <a href="https://github.com/e-zk/stagit-scripts">GitHub</a> which is mirrored on <a href="https://git.zakaria.org/stagit-scripts/log.html">git.zakaria.org</a></p>
 
-<h2 id="httpd%20config">httpd config</h2>
+<h2 id="httpd-config">httpd config</h2>
 
 <p>To actually serve the generated static files we need to configure <a href="https://man.openbsd.org/httpd">httpd(8)</a>. In <a href="https://man.openbsd.org/httpd.conf"><code>&#47;etc&#47;httpd.conf</code></a>:</p>
 
@@ -406,7 +505,7 @@ server "git.zakaria.org" {
 ...snip...
 </code></pre>
 
-<p>I use <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to configure TLS certs in httpd.conf.</p>
+<p>I use <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#8217;t need to configure TLS certs in httpd.conf.</p>
 </description>
 </item>
 <item>
@@ -414,21 +513,21 @@ server "git.zakaria.org" {
 <title>Temporary web browsing</title>
 <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Temporary%20web%20browsing">Temporary web browsing</h1>
+<h1 id="temporary-web-browsing">Temporary web browsing</h1>
 
-<p>Here&#39;s a few ways of scripting an ephemeral browser environment.</p>
+<p>Here&#8217;s a few ways of scripting an ephemeral browser environment.</p>
 
 <p>The idea is that the entire state of the browser is ephemeral - on exit
 everything should be removed from storage including cookies, history
 bookmarks, etc. This is more aggressive than your standard incognito mode
 as it directly removes all files associated with the browser instance.</p>
 
-<p>I use this all the time because for some things I don&#39;t find it necessary
+<p>I use this all the time because for some things I don&#8217;t find it necessary
 for history, bookmarks, etc to be saved (a quick web search, logging into 
 personal, sensitive services like online banking). Some might find it 
 over-the-top but I think its a useful scripting exercise if anything.</p>
 
-<h2 id="1.%20Temporary%20profile">1. Temporary profile</h2>
+<h2 id="1.-temporary-profile">1. Temporary profile</h2>
 
 <p>Browsers typically have a user &#8220;profile&#8221;, where all bookmarks, history, and
 other required state is stored.<br/>
@@ -441,7 +540,7 @@ by proxy) support this via the <code>--user-data-dir=&#60;path&#62;</code>, whic
 
 <p>This feature can be used to create a fresh, new profile in a custom directory.
 On exit this directory can be aggressively removed by a simple <code>rm -rf &#60;path&#62;</code>
-command. Here&#39;s a short script to facilitate all this for Firefox:</p>
+command. Here&#8217;s a short script to facilitate all this for Firefox:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 
@@ -459,16 +558,16 @@ cleanup
 
 <p>First the script creates a temporary directory via <code>mktemp</code>, where the profile
 will be. Next we define a cleanup function to be run after Firefox, so that on
-exit the profile is simply <code>rm -rf</code>&#39;d. Then <code>firefox-esr</code> is run (replace this
-with <code>firefox</code> if you don&#39;t use the ESR variant), and the profile directory is 
+exit the profile is simply <code>rm -rf</code>&#8217;d. Then <code>firefox-esr</code> is run (replace this
+with <code>firefox</code> if you don&#8217;t use the ESR variant), and the profile directory is 
 specified with <code>--profile</code>.</p>
 
-<p>I also included the <code>--new-instance</code> flag to make sure Firefox didn&#39;t just
+<p>I also included the <code>--new-instance</code> flag to make sure Firefox didn&#8217;t just
 open a tab in an already running instance, and <code>--no-remote</code> to dissallow 
 remote commands. </p>
 
 <p>Additional arguments can be passed to the script - these will be directly added to
-<code>firefox-esr</code>&#39;s arguments.</p>
+<code>firefox-esr</code>&#8217;s arguments.</p>
 
 <p>I also like to add a <code>trap</code> to the script, so if it ever exits unexpectedly,
 the clean-up process will still take place. This is what that looks like:</p>
@@ -507,25 +606,25 @@ chromium --user-data-dir="$PROFILE_DIR" "$@"
 cleanup
 </code></pre>
 
-<h2 id="2.%20Temporary%20home%20directory">2. Temporary home directory</h2>
+<h2 id="2.-temporary-home-directory">2. Temporary home directory</h2>
 
 <p>Instead of specifying a custom profile, then removing it, why not create an
 entire ephemeral home directory, then remove <em>that</em>?</p>
 
 <p>This trick is fairly simple and works on <em>any program</em>, not just browsers.
 Just re-define the <code>$HOME</code> environment variable to <code>$FAKEHOME</code>, and any program that runs 
-after that will &#8220;think&#8221; that&#39;s the real home directory:</p>
+after that will &#8220;think&#8221; that&#8217;s the real home directory:</p>
 
 <pre><code>$ FAKEHOME=&#47;tmp&#47;firefox
 $ HOME=$FAKEHOME firefox [...] https:&#47;&#47;zakaria.org&#47;
 </code></pre>
 
 <p>Note this method means removing <code>$FAKEHOME&#47;Downloads</code> and <em>any</em> directory the 
-program creates in its dedicated home directory on exit. If you&#39;ve downloaded
-something you&#39;d like to keep you&#39;ll need to copy it out of <code>$FAKEHOME&#47;Downloads</code> 
+program creates in its dedicated home directory on exit. If you&#8217;ve downloaded
+something you&#8217;d like to keep you&#8217;ll need to copy it out of <code>$FAKEHOME&#47;Downloads</code> 
 <em>BEFORE</em> closing the browser.<br/>
-Since the program runs in a new home directory, if you use X11 it won&#39;t have 
-access to <code>~&#47;.Xauthority</code>, so it won&#39;t be able to actually be graphically useful. 
+Since the program runs in a new home directory, if you use X11 it won&#8217;t have 
+access to <code>~&#47;.Xauthority</code>, so it won&#8217;t be able to actually be graphically useful. 
 To fix this simply symlink <code>~&#47;.Xauthority</code> to <code>$FAKEHOME&#47;.Xauthority</code> before running.</p>
 
 <p>A script that does all this, plus some more:</p>
@@ -562,7 +661,7 @@ firefox-esr --new-instance --no-remote "$@"
 cleanup
 </code></pre>
 
-<h2 id="Extra%20stuff">Extra stuff</h2>
+<h2 id="extra-stuff">Extra stuff</h2>
 
 <p>To add to these scripts, one could also:</p>
 
@@ -574,7 +673,7 @@ before actually running the Firefox command</li>
 
 <p>My personal scripts do just that, for <a href="https://git.zakaria.org/bin-obsd/file/tmpchrome.html">Chromium</a> and <a href="https://git.zakaria.org/bin-obsd/file/tmpfox.html" title="maybe uses outdated user.js flags">Firefox</a>. </p>
 
-<h2 id="Other%20methods">Other methods</h2>
+<h2 id="other-methods">Other methods</h2>
 
 <p>Some other methods to look into include:</p>
 
@@ -584,22 +683,22 @@ profile
 
 <ul>
 <li>OpenBSD does not support mounting filesystems as non-root
-users, so this isn&#39;t ideal for my setup.</li>
+users, so this isn&#8217;t ideal for my setup.</li>
 </ul></li>
 <li>Ephemeral <strong>containers</strong>
 
 <ul>
 <li>While the security aspects of Linux containers are overrated IMO, using
-one as the basis for an ephemeral browser instance doesn&#39;t sound like an awful
+one as the basis for an ephemeral browser instance doesn&#8217;t sound like an awful
 idea.</li>
 </ul></li>
 <li>Dedicated <strong>virtual machine</strong>
 
 <ul>
-<li>I&#39;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#39;s 
+<li>I&#8217;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#8217;s 
 <a href="https://man.openbsd.org/vmd">vmd(8)</a> and X11 forwarding. But I never fleshed out
 any scripts for making it truly ephemeral - that might be the focus of a future blog post. 
-<a href="/static/img/linuxwebvm.png">Here&#39;s</a> an old screenshot of that running on OpenBSD 6.7. </li>
+<a href="/static/img/linuxwebvm.png">Here&#8217;s</a> an old screenshot of that running on OpenBSD 6.7. </li>
 </ul></li>
 </ul>
 </description>
@@ -609,16 +708,16 @@ any scripts for making it truly ephemeral - that might be the focus of a future 
 <title>Breaking promises with LD_PRELOAD</title>
 <pubDate>Tue, 07 Dec 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Breaking%20promises%20with%20LD_PRELOAD">Breaking promises with LD_PRELOAD</h1>
+<h1 id="breaking-promises-with-ld_preload">Breaking promises with LD_PRELOAD</h1>
 
-<p>In this post I show how to simply <a href="https://wikipedia.org/wiki/NOP_(code)">noop</a> calls to OpenBSD&#39;s <a href="https://man.openbsd.org/pledge">pledge(1)</a> using LD_PRELOAD.</p>
+<p>In this post I show how to simply <a href="https://wikipedia.org/wiki/NOP_(code)">noop</a> calls to OpenBSD&#8217;s <a href="https://man.openbsd.org/pledge">pledge(1)</a> using LD_PRELOAD.</p>
 
-<p>I only focus on pledge(2), only because that&#39;s what I first tried this out on.
+<p>I only focus on pledge(2), only because that&#8217;s what I first tried this out on.
 But this will also work for <a href="https://man.openbsd.org/unveil">unveil(2)</a>, and any syscall you want for that matter.</p>
 
-<p>Before we get into it, this doesn&#39;t actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn&#39;t pass on the fantastic opportunity for some word play+clickbait.</p>
+<p>Before we get into it, this doesn&#8217;t actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn&#8217;t pass on the fantastic opportunity for some word play+clickbait.</p>
 
-<h2 id="Crafting%20a%20shared%20object">Crafting a shared object</h2>
+<h2 id="crafting-a-shared-object">Crafting a shared object</h2>
 
 <p>LD_PRELOAD works by loading a shared object file that can essentially re-define whatever C function or syscall you like before running the actual program.</p>
 
@@ -631,7 +730,7 @@ pledge(const char *promises, const char *execpromises)
 
 </code></pre>
 
-<p>Next, we want to make sure when called pledge(2) does absolutely nothing and returns success every time it&#39;s called. Alternatively, you could add additional <a href="https://man.openbsd.org/pledge">promises</a>, or remove specific promises, but I think its more jarring to make it do absolutely nothing.</p>
+<p>Next, we want to make sure when called pledge(2) does absolutely nothing and returns success every time it&#8217;s called. Alternatively, you could add additional <a href="https://man.openbsd.org/pledge">promises</a>, or remove specific promises, but I think its more jarring to make it do absolutely nothing.</p>
 
 <pre><code class="language-c">&#47;&#47; pledge_override.c
 #include &#60;unistd.h&#62; 
@@ -648,12 +747,12 @@ pledge(const char *promises, const char *execpromises) {
 <pre><code class="language-console">$ cc -shared -fPIC -o override.so pledge_override.c
 </code></pre>
 
-<p>Now, with this shared object file, you can run anything you want ignoring it&#39;s pledge(2) promises:</p>
+<p>Now, with this shared object file, you can run anything you want ignoring it&#8217;s pledge(2) promises:</p>
 
 <pre><code class="language-console">$ LD_PRELOAD=$PWD&#47;override.so &#60;program&#62;
 </code></pre>
 
-<h2 id="Testing%20it%20out">Testing it out</h2>
+<h2 id="testing-it-out">Testing it out</h2>
 
 <p>Here we have an example use of pledge(2) (yes, I should be checking return values).</p>
 
@@ -677,7 +776,7 @@ main(void) {
 </code></pre>
 
 <p>When run normally the program should abort at the second call to printf(3) since after the
-first one we&#39;ve revoked the privilege to call <code>stdio</code> functions.</p>
+first one we&#8217;ve revoked the privilege to call <code>stdio</code> functions.</p>
 
 <pre><code class="language-console">$ .&#47;a.out
 Hello! I will abort now :3
@@ -691,21 +790,21 @@ Hello! I will abort now :3
 You should not be seeing this :O
 </code></pre>
 
-<h2 id="When%20this%20won&amp;#39;t%20work">When this won&#39;t work</h2>
+<h2 id="when-this-wont-work">When this won&#8217;t work</h2>
 
-<p>Using LD_PRELOAD like this to get around pledge doesn&#39;t work when:</p>
+<p>Using LD_PRELOAD like this to get around pledge doesn&#8217;t work when:</p>
 
-<ol start="1">
+<ol>
 <li>You statically link your binary
 
 <ul>
 <li>If you statically link your binary, LD_PRELOAD does not have any effect.</li>
-<li>To test this out, compile the above example program with <code>-static</code>, then try and do the LD_PRELOAD trick again. It&#39;ll always abort at the correct printf(3) call.</li>
+<li>To test this out, compile the above example program with <code>-static</code>, then try and do the LD_PRELOAD trick again. It&#8217;ll always abort at the correct printf(3) call.</li>
 </ul></li>
 <li>SUID &#47; SGID
 
 <ul>
-<li>SUID or SGID binaries aren&#39;t affected by LD_PRELOAD according to the OpenBSD <a href="https://man.openbsd.org/ld.so#LD_PRELOAD">man page</a>.<br/>
+<li>SUID or SGID binaries aren&#8217;t affected by LD_PRELOAD according to the OpenBSD <a href="https://man.openbsd.org/ld.so#LD_PRELOAD">man page</a>.<br/>
 The Linux <a href="https://linux.die.net/man/8/ld.so">man page</a> is less clear about this, but I assume its the same.</li>
 <li>Simply put, your doas(1) and sudo(1) are safe.</li>
 </ul></li>
@@ -717,27 +816,27 @@ The Linux <a href="https://linux.die.net/man/8/ld.so">man page</a> is less clear
 <title>Windows Sandbox</title>
 <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Windows%20Sandbox">Windows Sandbox</h1>
+<h1 id="windows-sandbox">Windows Sandbox</h1>
 
 <p>If you[&#8216;re forced to] use Windows this might be useful for compartmentalisation.  </p>
 
 <p>Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.</p>
 
-<h2 id="Enabling">Enabling</h2>
+<h2 id="enabling">Enabling</h2>
 
-<p>Windows Sandbox isn&#39;t enabled by default. To enable it follow these steps:</p>
+<p>Windows Sandbox isn&#8217;t enabled by default. To enable it follow these steps:</p>
 
-<ol start="1">
+<ol>
 <li>Open &#8220;Control Panel&#8221; and click the upside down caret next to the back&#47;forward buttons</li>
 <li>Click &#8220;All Control Panel Items&#8221;</li>
 <li>Navigate to &#8220;Programs and Features&#8221;</li>
 <li>On the left click &#8220;Turn Windows features on or off&#8221;</li>
-<li>Scroll down and tick the box next to &#8220;Windows Sandbox&#8221; if it isn&#39;t already ticked</li>
+<li>Scroll down and tick the box next to &#8220;Windows Sandbox&#8221; if it isn&#8217;t already ticked</li>
 </ol>
 
 <p>From the start menu search for &#8220;Windows Sandbox&#8221;. Hit enter and a fresh Sandbox window will appear.</p>
 
-<h2 id="Configuring">Configuring</h2>
+<h2 id="configuring">Configuring</h2>
 
 <p>Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.<br/>
 This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.</p>
@@ -746,9 +845,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>I highly suggest reading through the documentation for the <code>.wsb</code> file format. There are some good examples and interesting features.</p>
 
-<h3 id="Example:%20Zoom">Example: Zoom</h3>
+<h3 id="example-zoom">Example: Zoom</h3>
 
-<p>Zoom is a very popular group call&#47;video conference software (I won&#39;t bore you with the details I&#39;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#39;re paranoid like me you may feel uneasy just seeing it&#39;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
+<p>Zoom is a very popular group call&#47;video conference software (I won&#8217;t bore you with the details I&#8217;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#8217;re paranoid like me you may feel uneasy just seeing it&#8217;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
 
 <pre><code class="language-xml">&#60;Configuration&#62;
     &#60;MappedFolders&#62;
@@ -770,9 +869,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>It maps the local <code>C:\Sandbox\Installers</code> directory (where I store <code>ZoomInstaller.exe</code>) to <code>C:\Installers</code> in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.</p>
 
-<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#39;t reboot a sandbox without deleting everything).</p>
+<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#8217;t reboot a sandbox without deleting everything).</p>
 
-<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#39;d rather install on an ephemeral virtual machine than my main OS.</p>
+<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#8217;d rather install on an ephemeral virtual machine than my main OS.</p>
 
 <div class="footnotes">
 <hr/>
@@ -791,38 +890,38 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 <title>Feb 2021 Update: Git Server + Hidden Service</title>
 <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Update%20Feb%202021:%20git%20server%20+%20hidden%20service">Update Feb 2021: git server + hidden service</h1>
+<h1 id="update-feb-2021-git-server-hidden-service">Update Feb 2021: git server + hidden service</h1>
 
-<p>Here&#39;s a little site update.</p>
+<p>Here&#8217;s a little site update.</p>
 
-<h2 id="CSS%20changes">CSS changes</h2>
+<h2 id="css-changes">CSS changes</h2>
 
-<p>As usual the CSS of this website is ever-changing. I&#39;ve changed it to be more monochrome, with blue highlights on link hover&#47;focus and text selection. Headings are now all <code>1em</code>.</p>
+<p>As usual the CSS of this website is ever-changing. I&#8217;ve changed it to be more monochrome, with blue highlights on link hover&#47;focus and text selection. Headings are now all <code>1em</code>.</p>
 
-<h2 id="Git%20server">Git server</h2>
+<h2 id="git-server">Git server</h2>
 
-<p>I&#39;ve set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It&#39;s a very well written guide for setting up stagit on OpenBSD.<br/>
+<p>I&#8217;ve set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. It&#8217;s a very well written guide for setting up stagit on OpenBSD.<br/>
 I modified some of the scripts provided to suit my workflow.</p>
 
-<p>I plan to move most of my projects that don&#39;t require an issue tracker over there. Namely personal configs&#47;programs.</p>
+<p>I plan to move most of my projects that don&#8217;t require an issue tracker over there. Namely personal configs&#47;programs.</p>
 
-<h2 id="Hidden%20service">Hidden service</h2>
+<h2 id="hidden-service">Hidden service</h2>
 
 <p>During January I made this site accessible over Tor via a <a href="https://wikipedia.org/wiki/Tor_(anonymity_network)#Onion_services">hidden service&#47;onion service</a>. I had some (layer 8) issues with the service provider and had to reset the server and so the service URL has changed a few times. The canonical onion service URL can be found on the <a href="/about.html">about page</a> or in the footer.</p>
 
 <p>Why have I setup an onion service? Three reasons:</p>
 
-<ol start="1">
+<ol>
 <li>Tor is a technology that interests me</li>
 <li>I wanted to see how difficult it would be to setup a hidden service (it was not difficult<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>)</li>
-<li>It&#39;s fun</li>
+<li>It&#8217;s fun</li>
 </ol>
 
-<p>Because onion services can&#39;t have subdomains, I&#39;ve setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>&#47;git&#47;</code> endpoint (this is only available on the hidden service).</p>
+<p>Because onion services can&#8217;t have subdomains, I&#8217;ve setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>&#47;git&#47;</code> endpoint (this is only available on the hidden service).</p>
 
-<h2 id="Other">Other</h2>
+<h2 id="other">Other</h2>
 
-<p>Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#39;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.  </p>
+<p>Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#8217;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.  </p>
 
 <div class="footnotes">
 <hr/>
@@ -833,7 +932,7 @@ I modified some of the scripts provided to suit my workflow.</p>
 </li>
 
 <li id="fn2">
-<p>I referred to these two guides: <a href="https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c">https:&#47;&#47;medium.com&#47;@sarala.saraswati&#47;tor-hidden-services-on-openbsd-with-httpd-52852f49358c</a>, <a href="https://dataswamp.org/%7Esolene/2018-10-11-tor-hidden-service.html">https:&#47;&#47;dataswamp.org&#47;~solene&#47;2018-10-11-tor-hidden-service.html</a>  &#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+<p>I referred to these two guides: <a href="https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c">https:&#47;&#47;medium.com&#47;@sarala.saraswati&#47;tor-hidden-services-on-openbsd-with-httpd-52852f49358c</a>, <a href="https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html">https:&#47;&#47;dataswamp.org&#47;~solene&#47;2018-10-11-tor-hidden-service.html</a>  &#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
 </li>
 
 </ol>
@@ -845,11 +944,11 @@ I modified some of the scripts provided to suit my workflow.</p>
 <title>Usbkill the OpenBSD Way</title>
 <pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="%3Ccode%3Eusbkill%3C/code%3E%20the%20OpenBSD%20way"><code>usbkill</code> the OpenBSD way</h1>
+<h1 id="the-openbsd-way"><code>usbkill</code> the OpenBSD way</h1>
 
 <p><a href="https://github.com/hephaest0s/usbkill"><code>usbkill</code></a> is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of <code>lsusb</code> and when there is a change it runs <code>shutdown -h now</code>.</p>
 
-<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD&#39;s base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
+<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD&#8217;s base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
 
 <h2 id="hotplugd">hotplugd</h2>
 
@@ -884,7 +983,7 @@ logger -t hotplug "$DEVCLASS:$DEVNAME attached"
 <pre><code>$ tail -f &#47;var&#47;log&#47;messages
 </code></pre>
 
-<p>Then connect a USB device to your machine and you should see messages tagged &#8216;hotplug&#8217;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#39;t use):</p>
+<p>Then connect a USB device to your machine and you should see messages tagged &#8216;hotplug&#8217;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#8217;t use):</p>
 
 <pre><code>Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
 Jan 11 11:48:32 x1 hotplug: 5:wsmouse2 attached
@@ -902,11 +1001,11 @@ Jan 11 11:48:32 x1 hotplug: 0:uhid5 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhid6 attached
 </code></pre>
 
-<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#39;s a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
+<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#8217;s a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
 
-<h2 id="The%20&amp;#8216;kill&amp;#8217;%20part">The &#8216;kill&#8217; part</h2>
+<h2 id="the-kill-part">The &#8216;kill&#8217; part</h2>
 
-<p>Now that we&#39;ve seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br/>
+<p>Now that we&#8217;ve seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br/>
 We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the <em>kill</em> part, since I might need to plug something in once in a while. Make the <code>&#47;etc&#47;hotplug&#47;attach</code> script as so:</p>
 
 <pre><code>#!&#47;bin&#47;sh
@@ -925,9 +1024,9 @@ else
 fi
 </code></pre>
 
-<p>If the <code>&#47;tmp&#47;arm_usbkill</code> file exists then the machine will shutdown, if it doesn&#39;t exist it will just add a log entry to syslog.</p>
+<p>If the <code>&#47;tmp&#47;arm_usbkill</code> file exists then the machine will shutdown, if it doesn&#8217;t exist it will just add a log entry to syslog.</p>
 
-<p><code>hotplug</code> also supports running a different script, <code>&#47;etc&#47;hotplug&#47;detach</code> on detach events. Since both scripts are exactly the same I&#39;ve symlinked the attach script to the location of the detach script.</p>
+<p><code>hotplug</code> also supports running a different script, <code>&#47;etc&#47;hotplug&#47;detach</code> on detach events. Since both scripts are exactly the same I&#8217;ve symlinked the attach script to the location of the detach script.</p>
 
 <pre><code># ln -s &#47;etc&#47;hotplug&#47;attach &#47;etc&#47;hotplug&#47;detach
 </code></pre>
@@ -969,11 +1068,11 @@ else
 fi
 </code></pre>
 
-<p>But this is not really useful to me since I use a laptop and I&#39;m not attaching and detaching network devices or disk drives.</p>
+<p>But this is not really useful to me since I use a laptop and I&#8217;m not attaching and detaching network devices or disk drives.</p>
 
 <p>One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with <code>usbkill</code>. This could be acheived through a much more complicated script using <code>usbdevs</code> to get USB IDs, but as of yet I have no need for that.</p>
 
-<h2 id="Arming%20and%20disarming">Arming and disarming</h2>
+<h2 id="arming-and-disarming">Arming and disarming</h2>
 
 <p>To arm and disarm this script all you have to do is create or remove the <code>$arm_file</code> respectively. Here are some shell functions to add to your shell rc to make it easier:</p>
 
@@ -986,20 +1085,20 @@ disarm() {
 }
 </code></pre>
 
-<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#39;t the case for <code>usbkill</code>, which requires root to run).<br/>
-Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn&#39;t cleared from <code>&#47;tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
+<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#8217;t the case for <code>usbkill</code>, which requires root to run).<br/>
+Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn&#8217;t cleared from <code>&#47;tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
 
-<h2 id="Why?">Why?</h2>
+<h2 id="why">Why?</h2>
 
 <p>So why do all this? Why not just <code>pkg_add usbutils</code>, download + run <code>usbkill</code> and be done?<br/>
-Well for starters that isn&#39;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
+Well for starters that isn&#8217;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
 
-<h2 id="SEE%20ALSO">SEE ALSO</h2>
+<h2 id="see-also">SEE ALSO</h2>
 
 <ul>
 <li>OpenBSD <code>hotplug(4)</code> pseudo-device man page: <a href="https://man.openbsd.org/hotplug">https:&#47;&#47;man.openbsd.org&#47;hotplug</a> .</li>
 <li>OpenBSD includes the <code>usbdevs(8)</code> tool in base that lists connected USB devices and their IDs: <a href="https://man.openbsd.org/usbdevs">https:&#47;&#47;man.openbsd.org&#47;usbdevs</a> <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</li>
-<li>OpenWRT has it&#39;s own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https:&#47;&#47;openwrt.org&#47;docs&#47;guide-user&#47;base-system&#47;hotplug</a>. But it&#39;s slightly different to OpenBSD&#39;s.</li>
+<li>OpenWRT has it&#8217;s own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https:&#47;&#47;openwrt.org&#47;docs&#47;guide-user&#47;base-system&#47;hotplug</a>. But it&#8217;s slightly different to OpenBSD&#8217;s.</li>
 <li>A couple of years ago I wrote <a href="https://github.com/e-zk/hidlock">a hotplug script</a> that instead runs <a href="https://man.openbsd.org/xlock"><code>xlock(1)</code></a> on all running X displays after a HID is attached. In theory this would to thwart HID&#47;badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.</li>
 </ul>
 
@@ -1024,48 +1123,48 @@ Well for starters that isn&#39;t as fun. The main reason is that all this works 
 <title>My xenodm setup</title>
 <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
 <description>
-<h1 id="My%20xenodm%20setup">My xenodm setup</h1>
+<h1 id="my-xenodm-setup">My xenodm setup</h1>
 
 <p>OpenBSD uses the <a href="https://man.openbsd.org/xenodm"><code>xenodm(1)</code></a> display manager, which is a fork of xdm.<br/>
-Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> articles<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> on themeing xenodm I&#39;ve come up with my own setup.</p>
+Xenodm looks quite ugly by default, and after reading a couple<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> articles<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> on themeing xenodm I&#8217;ve come up with my own setup.</p>
 
-<p>Before we get into the configs, here&#39;s what it actually looks like:</p>
+<p>Before we get into the configs, here&#8217;s what it actually looks like:</p>
 
 <p><a href="/static/img/xenodm.png"><img src="/static/img/xenodm.png" alt="themed xenodm" /></a></p>
 
 <p><em>(The text might be small, click to view the image file)</em></p>
 
-<p>Clean and simple. Now that you&#39;ve seen what it looks like you can close this tab if that&#39;s all you came here to see. If you want to see how this is accomplished then continue reading.</p>
+<p>Clean and simple. Now that you&#8217;ve seen what it looks like you can close this tab if that&#8217;s all you came here to see. If you want to see how this is accomplished then continue reading.</p>
 
-<h2 id="Files">Files</h2>
+<h2 id="files">Files</h2>
 
-<p>xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll have to deal with are:</p>
+<p>xenodm uses multiple files for configuration. It&#8217;s quite inconvenient, and I was very confused at first I admit. The files we&#8217;ll have to deal with are:</p>
 
 <pre><code>&#47;etc&#47;X11&#47;xenodm&#47;Xresources
 &#47;etc&#47;X11&#47;xenodm&#47;Xsetup_0
 &#47;etc&#47;X11&#47;xenodm&#47;Xsession
 </code></pre>
 
-<p>The last one is for an optional non-cosmetic change that I&#39;ll cover later. All these files require root access, so it&#39;d be wise to <code>doas -s</code> before continuing on.</p>
+<p>The last one is for an optional non-cosmetic change that I&#8217;ll cover later. All these files require root access, so it&#8217;d be wise to <code>doas -s</code> before continuing on.</p>
 
-<h2 id="Xresources">Xresources</h2>
+<h2 id="xresources">Xresources</h2>
 
-<p>If you&#39;ve ever dabbled in trying to rice your Unix-like operating system there&#39;s a good change you&#39;ve come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &#8220;resource database&#8221; as a &#8216;unified&#8217; way to store configuration data.</p>
+<p>If you&#8217;ve ever dabbled in trying to rice your Unix-like operating system there&#8217;s a good change you&#8217;ve come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &#8220;resource database&#8221; as a &#8216;unified&#8217; way to store configuration data.</p>
 
 <p>xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.</p>
 
-<p>First off, I&#39;d like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
+<p>First off, I&#8217;d like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
 
 <pre><code>xlogin.Login.echoPasswd: true
 </code></pre>
 
-<p>Next I don&#39;t want to be &#8216;greeted&#8217;, and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
+<p>Next I don&#8217;t want to be &#8216;greeted&#8217;, and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
 
 <pre><code>xlogin.Login.fail: ya dun goofed
 xlogin.Login.greeting:
 </code></pre>
 
-<p>Now I&#39;ll configure the dimensions and positioning of the login box:</p>
+<p>Now I&#8217;ll configure the dimensions and positioning of the login box:</p>
 
 <pre><code>xlogin.Login.height:            200
 xlogin.Login.width:             400
@@ -1085,7 +1184,7 @@ xlogin.Login.hiColor:           #000000
 xlogin.Login.shdColor:          #000000
 </code></pre>
 
-<p>And finally let&#39;s use a nice bitmap font to complete the look:</p>
+<p>And finally let&#8217;s use a nice bitmap font to complete the look:</p>
 
 <pre><code>xlogin.Login.face:              Dina-11
 xlogin.Login.failFace:          Dina-11
@@ -1094,11 +1193,11 @@ xlogin.Login.promptFace:        Dina-11
 
 <p>Note that last step requires the Dina font to be installed (it does not come with OpenBSD).</p>
 
-<h2 id="Xsetup_0">Xsetup_0</h2>
+<h2 id="xsetup_0">Xsetup_0</h2>
 
 <p>Next is the Xsetup file. Why is this called Xsetup_<em>0</em>? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out <code>&#47;etc&#47;X11&#47;xenodm&#47;xenodm-config</code>).</p>
 
-<p>This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
+<p>This file is fairly simple. It&#8217;s a shell script that xenodm runs. That&#8217;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 
@@ -1125,11 +1224,11 @@ done | &#47;home&#47;zzz&#47;bin&#47;lemonbar -d -g 1920x40+0+0 -f &#39;Dina:sty
 
 <p>The date, time, battery percent are all piped into lemonbar. Additionally the &#8216;r&#8217; and &#8216;p&#8217; text in red allow me to reboot or power off my machine respectively.</p>
 
-<p>It should be noted that I probably shouldn&#39;t be using a binary that&#39;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and&#47;or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
+<p>It should be noted that I probably shouldn&#8217;t be using a binary that&#8217;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and&#47;or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
 
-<h2 id="Xsession%20extra">Xsession extra</h2>
+<h2 id="xsession-extra">Xsession extra</h2>
 
-<p>Here&#39;s the optional bit. I&#39;m a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME&#47;</code> as possible. Moving <code>~&#47;.Xresources</code> was easy - just source a different file from <code>~&#47;.xsession</code>. But an annoyance is <code>~&#47;.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>!</p>
+<p>Here&#8217;s the optional bit. I&#8217;m a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME&#47;</code> as possible. Moving <code>~&#47;.Xresources</code> was easy - just source a different file from <code>~&#47;.xsession</code>. But an annoyance is <code>~&#47;.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>&#47;etc&#47;X11&#47;xenodm&#47;Xsession</code>!</p>
 
 <p>Look for the line that says:</p>
 
@@ -1141,7 +1240,7 @@ done | &#47;home&#47;zzz&#47;bin&#47;lemonbar -d -g 1920x40+0+0 -f &#39;Dina:sty
 <pre><code>startup=${HOME}&#47;etc&#47;x&#47;xsession
 </code></pre>
 
-<p>Also, if you&#39;ve themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
+<p>Also, if you&#8217;ve themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
 
 <p>Look for this part of the script:</p>
 
@@ -1190,11 +1289,11 @@ this article is the basis for my configuration, stylistically and config-wise.&#
 <title>OpenBSD Notes</title>
 <pubDate>Tue, 08 Dec 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="OpenBSD%20notes">OpenBSD notes</h1>
+<h1 id="openbsd-notes">OpenBSD notes</h1>
 
 <p>Random notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
 
-<h2 id="Table%20of%20Contents">Table of Contents</h2>
+<h2 id="table-of-contents">Table of Contents</h2>
 
 <ul>
 <li><a href="#Power%2fBattery">Power&#47;Battery</a>
@@ -1220,16 +1319,16 @@ this article is the basis for my configuration, stylistically and config-wise.&#
 <li><a href="#Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</a></li>
 </ul>
 
-<h2 id="Power&amp;#47;Battery">Power&#47;Battery</h2>
+<h2 id="powerbattery">Power&#47;Battery</h2>
 
-<h3 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h3>
+<h3 id="hibernate-on-low-battery">Hibernate on low battery</h3>
 
 <p>To hibernate at 5% remaining battery add in <code>&#47;etc&#47;rc.conf.local</code>:</p>
 
 <pre><code class="language-bash">apmd_flags=-A -Z 5
 </code></pre>
 
-<h3 id="User%20power%20commands">User power commands</h3>
+<h3 id="user-power-commands">User power commands</h3>
 
 <p>In <code>&#47;etc&#47;doas.conf</code>:</p>
 
@@ -1239,9 +1338,9 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Multimedia">Multimedia</h2>
+<h2 id="multimedia">Multimedia</h2>
 
-<h3 id="Microphone%20setup">Microphone setup</h3>
+<h3 id="microphone-setup">Microphone setup</h3>
 
 <p>I have a fancy microphone that has a headphone passthrough. So it is both USB &#8220;speaker&#8221; and a USB microphone. Good news, that makes using it with sndio a <em>bit</em> easier.</p>
 
@@ -1257,13 +1356,13 @@ permit nopass :staff as root cmd shutdown args -p now
 outputs.hp_source: dac-0:1 -&#62; dac-2:3
 </code></pre>
 
-<p>To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (<code>dac-0:1</code>).</p>
+<p>To switch back, remove the sndiod flag, and change the source back to it&#8217;s original value (<code>dac-0:1</code>).</p>
 
-<h2 id="X">X</h2>
+<h2 id="x">X</h2>
 
 <p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for xenodm themeing.</p>
 
-<h2 id="PF">PF</h2>
+<h2 id="pf">PF</h2>
 
 <p>Packet Filter (firewall). General stuff to remember:</p>
 
@@ -1272,7 +1371,7 @@ outputs.hp_source: dac-0:1 -&#62; dac-2:3
 <li><code>egress</code> = interface(s) that hold the default route(s)</li>
 </ul>
 
-<h3 id="Standard%20preamble">Standard preamble</h3>
+<h3 id="standard-preamble">Standard preamble</h3>
 
 <pre><code># options 
 set block-policy drop
@@ -1286,16 +1385,16 @@ antispoof for egress
 antispoof for $vm_int
 </code></pre>
 
-<h3 id="Allow%20NTP">Allow NTP</h3>
+<h3 id="allow-ntp">Allow NTP</h3>
 
 <p>In rare cases ntp can use tcp apparently&#8230;</p>
 
 <pre><code>pass quick inet proto { tcp, udp } to port ntp
 </code></pre>
 
-<h3 id="VMs">VMs</h3>
+<h3 id="vms">VMs</h3>
 
-<p>Don&#39;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
+<p>Don&#8217;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
 
 <pre><code># where:
 # vm_int        = vm interface (vether[0-9])
@@ -1317,9 +1416,9 @@ pass in on $vm_int proto tcp to port { www, https }
 pass in on $vm_int proto tcp to port 6000:6010
 </code></pre>
 
-<h2 id="Misc">Misc</h2>
+<h2 id="misc">Misc</h2>
 
-<h3 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h3>
+<h3 id="manual-pages-as-beautifully-typeset-pdfs">Manual pages as beautifully typeset PDFs</h3>
 
 <pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
 </code></pre>
@@ -1330,27 +1429,27 @@ pass in on $vm_int proto tcp to port 6000:6010
 <title>How I (almost) fixed my fonts</title>
 <pubDate>Sat, 05 Dec 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="How%20I%20(almost)%20fixed%20my%20fonts">How I (almost) fixed my fonts</h1>
+<h1 id="how-i-almost-fixed-my-fonts">How I (almost) fixed my fonts</h1>
 
-<p>This site goes through CSS changes daily. Yes, daily. I can&#39;t stop changing the CSS. It&#39;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it. </p>
+<p>This site goes through CSS changes daily. Yes, daily. I can&#8217;t stop changing the CSS. It&#8217;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it. </p>
 
 <p>I like web fonts. But I also like simplicity and straightforwardness. Sadly, getting webfonts and CSS to work together flawlessly is no simple task. </p>
 
-<h2 id="Google%20Fonts">Google Fonts</h2>
+<h2 id="google-fonts">Google Fonts</h2>
 
 <p>At first I just used Google Fonts: click, click, right click, copy, paste <code>@import</code> URL. Done. Fixed. &#8230;or so I thought.</p>
 
-<p>Using Google fonts has the unfortunate side-effect that I now depend on a 3rd-party CDN for my site to look nice. That CDN is obviously Google - that&#39;s not ideal for me.</p>
+<p>Using Google fonts has the unfortunate side-effect that I now depend on a 3rd-party CDN for my site to look nice. That CDN is obviously Google - that&#8217;s not ideal for me.</p>
 
-<h2 id="Self-hosting%20Google%20Fonts">Self-hosting Google Fonts</h2>
+<h2 id="self-hosting-google-fonts">Self-hosting Google Fonts</h2>
 
 <p>So I decided to just host the fonts on this webserver. I came across this gem: <a href="https://github.com/majodev/google-webfonts-helper/">google-webfonts-helper</a>. You choose your Google fonts, it generates a zip file containing the font files, and some CSS to put on your page. Perfect! &#8230;or so I thought.</p>
 
-<h2 id="Inline%20stylesheets">Inline stylesheets</h2>
+<h2 id="inline-stylesheets">Inline stylesheets</h2>
 
-<p>Wait. Now my fonts flash for a second. Oh, this is the fabled FOUT I&#39;ve been hearing about. Google Fonts didn&#39;t seem to have this issue, though I suppose their server is far more responsive than mine, and they do some CDN tricks or something. Here&#39;s a CSS-Tricks article I read: <a href="https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/">https:&#47;&#47;css-tricks.com&#47;how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy&#47;</a>. I don&#39;t recall whether it helped me in this endeavour or not since the solution requires JavaScript (eugh).</p>
+<p>Wait. Now my fonts flash for a second. Oh, this is the fabled FOUT I&#8217;ve been hearing about. Google Fonts didn&#8217;t seem to have this issue, though I suppose their server is far more responsive than mine, and they do some CDN tricks or something. Here&#8217;s a CSS-Tricks article I read: <a href="https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/">https:&#47;&#47;css-tricks.com&#47;how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy&#47;</a>. I don&#8217;t recall whether it helped me in this endeavour or not since the solution requires JavaScript (eugh).</p>
 
-<p>I decided to just inline the stylesheet to fetch the fonts and apply them since it took the browser a bit extra to download <code>styles.css</code> and since the fonts would be loaded with the webpage it shouldn&#39;t look to bad. I added <code>font-display: fallback</code> for some extra peace of mind. </p>
+<p>I decided to just inline the stylesheet to fetch the fonts and apply them since it took the browser a bit extra to download <code>styles.css</code> and since the fonts would be loaded with the webpage it shouldn&#8217;t look to bad. I added <code>font-display: fallback</code> for some extra peace of mind. </p>
 
 <pre><code class="language-css">@font-face {
     font-family: &#39;Charter Regular&#39;;
@@ -1378,9 +1477,9 @@ html, body {
 
 </code></pre>
 
-<p>This still didn&#39;t give the desired result. There were still weird loading times and odd font flashes.</p>
+<p>This still didn&#8217;t give the desired result. There were still weird loading times and odd font flashes.</p>
 
-<h2 id="The%20fix%20(sort%20of&amp;#8230;%20not%20really)">The fix (sort of&#8230; not really)</h2>
+<h2 id="the-fix-sort-of-not-really">The fix (sort of&#8230; not really)</h2>
 
 <p><em>I give up</em>.</p>
 
@@ -1389,7 +1488,7 @@ html, body {
 }
 </code></pre>
 
-<p>Chances are whenever you&#39;re reading this the site has already been changed to reflect this change.<br/>
+<p>Chances are whenever you&#8217;re reading this the site has already been changed to reflect this change.<br/>
 Sans-serif looks better for this site anyways :P  </p>
 </description>
 </item>
@@ -1398,9 +1497,9 @@ Sans-serif looks better for this site anyways :P  </p>
 <title>Malthusian Belt</title>
 <pubDate>Sat, 07 Nov 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Malthusian%20Belt">Malthusian Belt</h1>
+<h1 id="malthusian-belt">Malthusian Belt</h1>
 
-<p>I&#39;m reading Aldous Huxtley&#39;s Brave New World and as with most books I read I&#39;ve come accross many words and phrases that I don&#39;t understand. One of which was Lenina&#39;s &#8220;Malthusian belt&#8221;. At first I thought &#8220;Malthusian&#8221; refered to the belt&#39;s geographical origin (Malta? No, that would be <em>Maltese</em>), but the word didn&#39;t fit any place I knew of so naturally I looked it up.  </p>
+<p>I&#8217;m reading Aldous Huxtley&#8217;s Brave New World and as with most books I read I&#8217;ve come accross many words and phrases that I don&#8217;t understand. One of which was Lenina&#8217;s &#8220;Malthusian belt&#8221;. At first I thought &#8220;Malthusian&#8221; refered to the belt&#8217;s geographical origin (Malta? No, that would be <em>Maltese</em>), but the word didn&#8217;t fit any place I knew of so naturally I looked it up.  </p>
 
 <p>I was surprised to find this<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> Wikipedia article on <em>Malthusianism</em>:  </p>
 
@@ -1410,9 +1509,9 @@ Sans-serif looks better for this site anyways :P  </p>
 
 <p>Since everyone in the brave new world is born from artificial embryos, suppression of normal human conception is clearly important. The Malthusian belt must actually be some sort of birth control device that women generally wear.</p>
 
-<p>It&#39;s a very interesting conceptual device and it makes me wonder about how on Earth Huxley came up with this idea. </p>
+<p>It&#8217;s a very interesting conceptual device and it makes me wonder about how on Earth Huxley came up with this idea. </p>
 
-<p>While this may have been obvious to some from the name of it, or perhaps even the context in the book, it wasn&#39;t obvious to me. Not understanding the phrase prompted me to look it up. And hey, now I have a lot about Malthusiamism to read about. </p>
+<p>While this may have been obvious to some from the name of it, or perhaps even the context in the book, it wasn&#8217;t obvious to me. Not understanding the phrase prompted me to look it up. And hey, now I have a lot about Malthusiamism to read about. </p>
 
 <div class="footnotes">
 <hr/>
@@ -1431,10 +1530,10 @@ Sans-serif looks better for this site anyways :P  </p>
 <title>Quick setup script with tmux</title>
 <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
+<h1 id="quick-setup-script-with-">Quick setup script with <code>tmux</code></h1>
 
 <p>In my network security class we ssh into a handful of VMs pretty often.<br/>
-Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&#39;d load up my Kali Linux VM:</p>
+Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&#8217;d load up my Kali Linux VM:</p>
 
 <pre><code>tmux
 C-b c
@@ -1445,7 +1544,7 @@ C-b c
 ssh edgerouter
 </code></pre>
 
-<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#39;s what I came up with:</p>
+<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#8217;s what I came up with:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 
@@ -1461,7 +1560,7 @@ tmux attach-session -d
 
 <p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
 
-<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#39;m ready to start hacking away at my messy nftables configs.</p>
+<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#8217;m ready to start hacking away at my messy nftables configs.</p>
 </description>
 </item>
 <item>
@@ -1469,16 +1568,16 @@ tmux attach-session -d
 <title>M4 Troubles</title>
 <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="M4%20Troubles&amp;#8230;">M4 Troubles&#8230;</h1>
+<h1 id="m4-troubles">M4 Troubles&#8230;</h1>
 
 <p>In my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> I wrote about mostly M4 templates.
-Well, it turns out I&#39;ve run into some issues.</p>
+Well, it turns out I&#8217;ve run into some issues.</p>
 
-<h2 id="Chapter%20I:%20The%20Problem">Chapter I: The Problem</h2>
+<h2 id="chapter-i-the-problem">Chapter I: The Problem</h2>
 
 <p>I ran my blog script to convert my markdown into a nice HTML webpage, but then something happened. Nothing. Nothing happened. The script just sat there, stuck. This was odd because the script usually runs in under a second, so something had to have gone wrong&#8230;</p>
 
-<h2 id="Chapter%20II:%20The%20Quick%20Fix">Chapter II: The Quick Fix</h2>
+<h2 id="chapter-ii-the-quick-fix">Chapter II: The Quick Fix</h2>
 
 <p>I turned on tracing in my <code>head.m4</code> by adding <code>traceon</code> to the start of the file then I ran the script again. I knew instantly what had gone wrong&#8230; M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.</p>
 
@@ -1487,9 +1586,9 @@ Well, it turns out I&#39;ve run into some issues.</p>
 <pre><code>m4: unexpected end of input, unclosed parenthesis:
 </code></pre>
 
-<h2 id="Chapter%20III:%20The%20Root%20of%20All%20Evil">Chapter III: The Root of All Evil</h2>
+<h2 id="chapter-iii-the-root-of-all-evil">Chapter III: The Root of All Evil</h2>
 
-<p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#39;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#39;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
+<p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#8217;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#8217;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
 
 <p>As a crappy bandaid I added a couple of <code>sed</code>s to my script:</p>
 
@@ -1498,11 +1597,11 @@ Well, it turns out I&#39;ve run into some issues.</p>
 
 <p>Because I only wrote <code>define</code> and <code>include</code> in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too).</p>
 
-<p>I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.</p>
+<p>I may have to rethink using M4 completely because I won&#8217;t lie I have no idea what I&#8217;m doing - it seems like I&#8217;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#8217;t be that messy. We&#8217;ll have to see what I come up with.</p>
 
-<h2 id="Chapter%20IV:%20Going%20Forward">Chapter IV: Going Forward</h2>
+<h2 id="chapter-iv-going-forward">Chapter IV: Going Forward</h2>
 
-<p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).</p>
+<p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#8217;t even been a part II yet!).</p>
 </description>
 </item>
 <item>
@@ -1510,10 +1609,10 @@ Well, it turns out I&#39;ve run into some issues.</p>
 <title>The /bin/sh blog</title>
 <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
 <description>
-<h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#39;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#39;s Templates</h1>
+<h1 id="the-binsh-blog.-part-i-timmys-templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#8217;s Templates</h1>
 
-<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#39;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
-Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#39;s another way of running a bunch of commands?</p>
+<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#8217;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
+Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#8217;s another way of running a bunch of commands?</p>
 
 <blockquote>
 <p>Oh! I know!</p>
@@ -1525,11 +1624,11 @@ Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.
 <p>Why, shell scripts of course!</p>
 </blockquote>
 
-<p>Woah, thanks Timmy, why that&#39;s correct.</p>
+<p>Woah, thanks Timmy, why that&#8217;s correct.</p>
 
 <blockquote>
-<p>But how will you ever manage a website&#39;s HTML layout all in a shell script?
-Wouldn&#39;t that get messy?</p>
+<p>But how will you ever manage a website&#8217;s HTML layout all in a shell script?
+Wouldn&#8217;t that get messy?</p>
 </blockquote>
 
 <p>Why yes Timmy, it would get pretty messy. What we need is some kind of &#8220;template&#8221; which can take some input and output HTML which we can serve&#8230;</p>
@@ -1546,7 +1645,7 @@ Wouldn&#39;t that get messy?</p>
 
 <p>Okay Timmy, no need to be rude now. We have guests, remember?</p>
 
-<p>Ignoring Timmy&#39;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#39;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
+<p>Ignoring Timmy&#8217;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#8217;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
 
 <pre><code>define(`_HTMLHEAD&#39;, `&#60;head&#62;   
 &#60;title&#62;My Blog Lol&#60;&#47;title&#62;
@@ -1554,7 +1653,7 @@ Wouldn&#39;t that get messy?</p>
 &#60;&#47;head&#62;&#39;)
 </code></pre>
 
-<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#39;s title and a link to our stylesheet will be printed. There&#39;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
+<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#8217;s title and a link to our stylesheet will be printed. There&#8217;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;, `&#60;head&#62;
 &#60;title&#62;$1 - My Blog Lol&#60;&#47;title&#62;
@@ -1567,7 +1666,7 @@ Wouldn&#39;t that get messy?</p>
 </blockquote>
 
 <p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br/>
-In M4, macros can have arguments that can be placed into the macro&#39;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
+In M4, macros can have arguments that can be placed into the macro&#8217;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
 
 <pre><code class="language-HTML">&#60;head&#62;
 &#60;title&#62;This is a post - My Blog Lol&#60;&#47;title&#62;
@@ -1575,7 +1674,7 @@ In M4, macros can have arguments that can be placed into the macro&#39;s content
 &#60;&#47;head&#62;
 </code></pre>
 
-<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#39;s navigation links:</p>
+<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#8217;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#8217;s navigation links:</p>
 
 <pre><code class="language-m4">define(`_HTMLHEAD&#39;,`&#60;head&#62;
 &#60;meta http-equiv="content-type" content="text&#47;html; charset=utf-8"&#62;
@@ -1591,8 +1690,8 @@ define(`_HTMLNAV&#39;, `&#60;nav&#62;
 )
 </code></pre>
 
-<p>For the sake of neatness, I&#39;ve placed this code in <code>head.m4</code>. 
-For our individual posts, we need to write more M4. Here&#39;s a simple post template, we&#39;ll call it <code>post.m4</code>:</p>
+<p>For the sake of neatness, I&#8217;ve placed this code in <code>head.m4</code>. 
+For our individual posts, we need to write more M4. Here&#8217;s a simple post template, we&#8217;ll call it <code>post.m4</code>:</p>
 
 <pre><code class="language-m4">include(m4&#47;head.m4)dnl
 &#60;!DOCTYPE html&#62;
@@ -1607,11 +1706,11 @@ POSTCONTENT
 &#60;&#47;html&#62;
 </code></pre>
 
-<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#39;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
+<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#8217;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
 Moving on-</p>
 
 <blockquote>
-<p>I&#39;m confused</p>
+<p>I&#8217;m confused</p>
 </blockquote>
 
 <p>About what, Timmy?</p>
@@ -1620,7 +1719,7 @@ Moving on-</p>
 <p>Those strange upper-case words littered throughout the file: <code>POSTTILE</code> and <code>POSTCONTENT</code>.</p>
 </blockquote>
 
-<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#39;t defined in any of the M4 files we&#39;re using. That&#39;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
+<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#8217;t defined in any of the M4 files we&#8217;re using. That&#8217;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
 
 <pre><code class="language-console">$ m4 -DPOSTTILE="Hello?" post.m4
 </code></pre>
@@ -1634,7 +1733,7 @@ Moving on-</p>
 
 <p>Now that we have a (an?) M4 template set up, instead of <code>echo</code>ing a bunch of <code>&#60;html&#62;</code> in our script, now all we have to do is call <code>m4</code> and pass arguments to it for our content to show up in the resulting HTML.</p>
 
-<p>Don&#39;t be mad. But that&#39;s the end of this post. <em>I know, I know</em> we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.<br/>
+<p>Don&#8217;t be mad. But that&#8217;s the end of this post. <em>I know, I know</em> we didn&#8217;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#8217;s for another time.<br/>
 Stay tuned for part II.</p>
 </description>
 </item>
