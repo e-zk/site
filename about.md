@@ -1,6 +1,6 @@
 # About me
 
-I am Zakaria. You can call me Zak if you like. If you're ever crediting me somewhere important, I'd appreciate if you used my full name, Zakaria Khamissa. Jump to [contact](#Contact) if you'd like to contact me.
+I am Zakaria. My friends call me Zak. If you're ever crediting me somewhere important, I'd appreciate if you used my full name, Zakaria Khamissa. Jump to [contact](#Contact) if you'd like to contact me.
 
 I'm a CS graduate with an interest in information security, digital privacy, and cryptography.
 
