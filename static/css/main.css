@@ -1,6 +1,6 @@
 ::selection { background-color: lemonchiffon; color: #000 }
 html { height: 100%; font-size: 14px; scroll-behavior: smooth; font-family: "Menlo", "Consolas", monospace }
-body { line-height: calc(14px * 1.618); max-width: 50rem; margin: 1rem auto; color: #333; padding: 0 2rem 2rem 2rem; background: #fff }
+body { line-height: calc(14px * 1.618); max-width: 50rem; margin: 1rem auto; color: #333; padding: 0 2rem 2rem 2rem; background: #fff; word-break: break-word }
 img,video { max-width: 100% } 
 h1,h2,h3,h4,h5,h6 { text-transform: uppercase; font-size: 1em; line-height: 1.2; font-weight: normal; color: #000 }
 h1::after { content: ' \00AC ' }
