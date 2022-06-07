@@ -1,15 +1,19 @@
 # hello, friend...
 
-user-agent: *
 # Don't allow indexing of /static and /html directories:
+user-agent: *
 disallow: /static
 disallow: /html
 
+# Don't allow indexing of about.html:
 user-agent: *
-# Don't allow indexing of plaintext/md files:
-disallow: /.md$
-# Don't allow indexing of .meta metadata files:
-disallow: /.meta$
+disallow: /about.html
+
+# Don't allow indexing of plaintext/md files
+# and .meta metadata files:
+user-agent: *
+disallow: /*.md
+disallow: /*.meta
 
 user-agent: *
 # Don't allow indexing of .git directories
