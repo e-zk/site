@@ -1,0 +1,29 @@
+# hello, friend...
+
+user-agent: *
+# Don't allow indexing of /static and /html directories:
+disallow: /static
+disallow: /html
+
+user-agent: *
+# Don't allow indexing of plaintext/md files:
+disallow: /.md$
+# Don't allow indexing of .meta metadata files:
+disallow: /.meta$
+
+user-agent: *
+# Don't allow indexing of .git directories
+# (which should be blocked by httpd regardless)
+disallow: /*.git
+disallow: /*.gitignore
+
+# Don't allow Turnitin to index my shit:
+user-Agent: TurnitinBot
+disallow: /
+
+# Don't allow intellectual property (IP) bots:
+user-Agent: NPBot
+disallow: /
+user-Agent: SlySearch
+disallow: /
+
