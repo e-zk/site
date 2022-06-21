@@ -45,7 +45,17 @@ gen_index_head() {
 	cat "${html_dir}/index_head.html"
 }
 gen_index_tail() {
-	cat "${html_dir}/index_tail.html"
+        printf '<footer>\n<br><hr>\n'
+
+        if [ -n "$onion" ]; then
+        	printf '<p>[&nbsp;'
+                printf '<a href="%s/posts/">view on hidden service</a>' "${onion}"
+        	printf '&nbsp;]</p>\n'
+        fi
+
+        cat "${site_root}/${html_dir}/footer.html"
+
+        printf '</footer>\n'
 }
 
 gen_index() {
@@ -100,7 +110,7 @@ gen_index() {
 	gen_index_head
 	printf '<ul>'
 	sort -r "$tmp" | while IFS='|' read -r post_date post_title post_url; do
-		printf '<li><a href="%s"><span class="postdate">%s</span>%s</a></li>\n' "$post_url" "$post_date" "$post_title"
+		printf '<li>%s <a href="%s">%s</a></li>\n' "$post_date" "$post_url" "$post_title"
 	done
 	printf '</ul>'
 	gen_index_tail
