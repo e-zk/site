@@ -19,21 +19,21 @@
 </nav>
 </header>
 <main>
-<h1 id="Temporary%20web%20browsing">Temporary web browsing</h1>
+<h1 id="temporary-web-browsing">Temporary web browsing</h1>
 
-<p>Here&#39;s a few ways of scripting an ephemeral browser environment.</p>
+<p>Here&#8217;s a few ways of scripting an ephemeral browser environment.</p>
 
 <p>The idea is that the entire state of the browser is ephemeral - on exit
 everything should be removed from storage including cookies, history
 bookmarks, etc. This is more aggressive than your standard incognito mode
 as it directly removes all files associated with the browser instance.</p>
 
-<p>I use this all the time because for some things I don&#39;t find it necessary
+<p>I use this all the time because for some things I don&#8217;t find it necessary
 for history, bookmarks, etc to be saved (a quick web search, logging into 
 personal, sensitive services like online banking). Some might find it 
 over-the-top but I think its a useful scripting exercise if anything.</p>
 
-<h2 id="1.%20Temporary%20profile">1. Temporary profile</h2>
+<h2 id="1.-temporary-profile">1. Temporary profile</h2>
 
 <p>Browsers typically have a user &#8220;profile&#8221;, where all bookmarks, history, and
 other required state is stored.<br/>
@@ -46,7 +46,7 @@ by proxy) support this via the <code>--user-data-dir=&#60;path&#62;</code>, whic
 
 <p>This feature can be used to create a fresh, new profile in a custom directory.
 On exit this directory can be aggressively removed by a simple <code>rm -rf &#60;path&#62;</code>
-command. Here&#39;s a short script to facilitate all this for Firefox:</p>
+command. Here&#8217;s a short script to facilitate all this for Firefox:</p>
 
 <pre><code>#!&#47;bin&#47;sh
 
@@ -64,16 +64,16 @@ cleanup
 
 <p>First the script creates a temporary directory via <code>mktemp</code>, where the profile
 will be. Next we define a cleanup function to be run after Firefox, so that on
-exit the profile is simply <code>rm -rf</code>&#39;d. Then <code>firefox-esr</code> is run (replace this
-with <code>firefox</code> if you don&#39;t use the ESR variant), and the profile directory is 
+exit the profile is simply <code>rm -rf</code>&#8217;d. Then <code>firefox-esr</code> is run (replace this
+with <code>firefox</code> if you don&#8217;t use the ESR variant), and the profile directory is 
 specified with <code>--profile</code>.</p>
 
-<p>I also included the <code>--new-instance</code> flag to make sure Firefox didn&#39;t just
+<p>I also included the <code>--new-instance</code> flag to make sure Firefox didn&#8217;t just
 open a tab in an already running instance, and <code>--no-remote</code> to dissallow 
 remote commands. </p>
 
 <p>Additional arguments can be passed to the script - these will be directly added to
-<code>firefox-esr</code>&#39;s arguments.</p>
+<code>firefox-esr</code>&#8217;s arguments.</p>
 
 <p>I also like to add a <code>trap</code> to the script, so if it ever exits unexpectedly,
 the clean-up process will still take place. This is what that looks like:</p>
@@ -112,25 +112,25 @@ chromium --user-data-dir="$PROFILE_DIR" "$@"
 cleanup
 </code></pre>
 
-<h2 id="2.%20Temporary%20home%20directory">2. Temporary home directory</h2>
+<h2 id="2.-temporary-home-directory">2. Temporary home directory</h2>
 
 <p>Instead of specifying a custom profile, then removing it, why not create an
 entire ephemeral home directory, then remove <em>that</em>?</p>
 
 <p>This trick is fairly simple and works on <em>any program</em>, not just browsers.
 Just re-define the <code>$HOME</code> environment variable to <code>$FAKEHOME</code>, and any program that runs 
-after that will &#8220;think&#8221; that&#39;s the real home directory:</p>
+after that will &#8220;think&#8221; that&#8217;s the real home directory:</p>
 
 <pre><code>$ FAKEHOME=&#47;tmp&#47;firefox
 $ HOME=$FAKEHOME firefox [...] https:&#47;&#47;zakaria.org&#47;
 </code></pre>
 
 <p>Note this method means removing <code>$FAKEHOME&#47;Downloads</code> and <em>any</em> directory the 
-program creates in its dedicated home directory on exit. If you&#39;ve downloaded
-something you&#39;d like to keep you&#39;ll need to copy it out of <code>$FAKEHOME&#47;Downloads</code> 
+program creates in its dedicated home directory on exit. If you&#8217;ve downloaded
+something you&#8217;d like to keep you&#8217;ll need to copy it out of <code>$FAKEHOME&#47;Downloads</code> 
 <em>BEFORE</em> closing the browser.<br/>
-Since the program runs in a new home directory, if you use X11 it won&#39;t have 
-access to <code>~&#47;.Xauthority</code>, so it won&#39;t be able to actually be graphically useful. 
+Since the program runs in a new home directory, if you use X11 it won&#8217;t have 
+access to <code>~&#47;.Xauthority</code>, so it won&#8217;t be able to actually be graphically useful. 
 To fix this simply symlink <code>~&#47;.Xauthority</code> to <code>$FAKEHOME&#47;.Xauthority</code> before running.</p>
 
 <p>A script that does all this, plus some more:</p>
@@ -167,7 +167,7 @@ firefox-esr --new-instance --no-remote "$@"
 cleanup
 </code></pre>
 
-<h2 id="Extra%20stuff">Extra stuff</h2>
+<h2 id="extra-stuff">Extra stuff</h2>
 
 <p>To add to these scripts, one could also:</p>
 
@@ -179,7 +179,7 @@ before actually running the Firefox command</li>
 
 <p>My personal scripts do just that, for <a href="https://git.zakaria.org/bin-obsd/file/tmpchrome.html">Chromium</a> and <a href="https://git.zakaria.org/bin-obsd/file/tmpfox.html" title="maybe uses outdated user.js flags">Firefox</a>. </p>
 
-<h2 id="Other%20methods">Other methods</h2>
+<h2 id="other-methods">Other methods</h2>
 
 <p>Some other methods to look into include:</p>
 
@@ -189,26 +189,29 @@ profile
 
 <ul>
 <li>OpenBSD does not support mounting filesystems as non-root
-users, so this isn&#39;t ideal for my setup.</li>
+users, so this isn&#8217;t ideal for my setup.</li>
 </ul></li>
 <li>Ephemeral <strong>containers</strong>
 
 <ul>
 <li>While the security aspects of Linux containers are overrated IMO, using
-one as the basis for an ephemeral browser instance doesn&#39;t sound like an awful
+one as the basis for an ephemeral browser instance doesn&#8217;t sound like an awful
 idea.</li>
 </ul></li>
 <li>Dedicated <strong>virtual machine</strong>
 
 <ul>
-<li>I&#39;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#39;s 
+<li>I&#8217;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#8217;s 
 <a href="https://man.openbsd.org/vmd">vmd(8)</a> and X11 forwarding. But I never fleshed out
 any scripts for making it truly ephemeral - that might be the focus of a future blog post. 
-<a href="/static/img/linuxwebvm.png">Here&#39;s</a> an old screenshot of that running on OpenBSD 6.7. </li>
+<a href="/static/img/linuxwebvm.png">Here&#8217;s</a> an old screenshot of that running on OpenBSD 6.7. </li>
 </ul></li>
 </ul>
 </main>
 <footer>
-Temporary web browsing&nbsp;&sdot;&nbsp;2021-12-13&nbsp;&sdot;&nbsp;<a href="/posts/temporarybrowsing.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/temporarybrowsing.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+<br><hr>
+<p>2021-12-13</p>
+<p>[&nbsp;<a href="/posts/temporarybrowsing.md">view plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/temporarybrowsing.html">view on hidden service</a>&nbsp;]</p>
+<p>&copy; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
 </body>
 </html>

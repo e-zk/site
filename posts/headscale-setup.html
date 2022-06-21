@@ -19,19 +19,19 @@
 </nav>
 </header>
 <main>
-<h1 id="Installing%20headscale%20on%20OpenBSD">Installing headscale on OpenBSD</h1>
+<h1 id="installing-headscale-on-openbsd">Installing headscale on OpenBSD</h1>
 
-<p>In this post I&#39;ll detail the steps I took to install and configure
+<p>In this post I&#8217;ll detail the steps I took to install and configure
 <a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
 
 <p>Code blocks prefixed with <code>#</code> imply that the command should be run as a privileged user&#47;root.</p>
 
-<p>If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
+<p>If you get stuck, it&#8217;ll be probably worthwhile to have a read of headscale&#8217;s documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https:&#47;&#47;github.com&#47;juanfont&#47;headscale&#47;tree&#47;main&#47;docs</a> .</p>
 
-<h2 id="Compilation">Compilation</h2>
+<h2 id="compilation">Compilation</h2>
 
 <p>Since my server is on OpenBSD-stable, headscale is only available via <code>pkg_add</code> on -current, I need to compile the headscale binary by hand and upload it to the server.
-I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+I&#8217;m doing this on an OpenBSD machine, so compiling and uploading it to the server
 should be a breeze.</p>
 
 <pre><code>$ git clone git@github.com:juanfont&#47;headscale.git
@@ -53,11 +53,11 @@ $ doas -s
 # chown root:bin &#47;usr&#47;local&#47;bin&#47;headscale
 </code></pre>
 
-<h2 id="Configuration">Configuration</h2>
+<h2 id="configuration">Configuration</h2>
 
 <p>Next we need to setup:</p>
 
-<ol start="1">
+<ol>
 <li>a <code>_headscale</code> daemon user that headscale will run as.</li>
 <li>directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions&#47;owner).</li>
 <li>copy the example config from GitHub, and edit it to our liking</li>
@@ -87,7 +87,7 @@ $ touch &#47;var&#47;headscale&#47;db.sqlite
 # # change sock location to &#47;var&#47;headscale&#47;headscale.sock 
 </code></pre>
 
-<p>I&#39;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#39;t need to
+<p>I&#8217;m currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don&#8217;t need to
 configure any TLS-related stuff.</p>
 
 <p>Run <code>headscale serve</code> to see if the config works, and all the directories and permissions are correct:</p>
@@ -100,7 +100,7 @@ configure any TLS-related stuff.</p>
 
 <h2 id="rc.d">rc.d</h2>
 
-<p>I&#39;ve made an init script to making stopping&#47;starting and running at boot
+<p>I&#8217;ve made an init script to making stopping&#47;starting and running at boot
 a lot easier. Drop this simple script into <code>&#47;etc&#47;rc.d&#47;headscale</code>:</p>
 
 <pre><code>#!&#47;bin&#47;ksh
@@ -124,13 +124,13 @@ rc_cmd $1
 headscale(ok)
 </code></pre>
 
-<h2 id="Clients">Clients</h2>
+<h2 id="clients">Clients</h2>
 
-<p>So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
+<p>So here&#8217;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
 
-<h3 id="OpenBSD%20client">OpenBSD client</h3>
+<h3 id="openbsd-client">OpenBSD client</h3>
 
-<p>It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
+<p>It&#8217;s pretty easy to get the Tailscale client on OpenBSD to use your control server. </p>
 
 <pre><code># pkg_add tailscale
 # rcctl enable tailscaled; rcctl start tailscaled
@@ -140,17 +140,20 @@ headscale(ok)
 
 <p>Where <code>https:&#47;&#47;headscale.example.com:443</code> is your control server URL.</p>
 
-<h3 id="Android%20client">Android client</h3>
+<h3 id="android-client">Android client</h3>
 
 <p>You can find the instructions for patching and building the custom APK <a href="https://github.com/juanfont/headscale/issues/58#issuecomment-950386833">here</a>.</p>
 
-<p>I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
+<p>I didn&#8217;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#8217;t be bothered to move all the junk I&#8217;ve accumulated in my WSL distro&#8217;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
 
-<p>Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
+<p>Quite frankly this was painful, but it isn&#8217;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
 
 <p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
 </main>
 <footer>
-Installing Headscale on OpenBSD&nbsp;&sdot;&nbsp;2022-02-15&nbsp;&sdot;&nbsp;<a href="/posts/headscale-setup.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/headscale-setup.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+<br><hr>
+<p>2022-02-15</p>
+<p>[&nbsp;<a href="/posts/headscale-setup.md">view plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/headscale-setup.html">view on hidden service</a>&nbsp;]</p>
+<p>&copy; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
 </body>
 </html>

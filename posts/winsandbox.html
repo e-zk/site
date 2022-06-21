@@ -19,27 +19,27 @@
 </nav>
 </header>
 <main>
-<h1 id="Windows%20Sandbox">Windows Sandbox</h1>
+<h1 id="windows-sandbox">Windows Sandbox</h1>
 
 <p>If you[&#8216;re forced to] use Windows this might be useful for compartmentalisation.  </p>
 
 <p>Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.</p>
 
-<h2 id="Enabling">Enabling</h2>
+<h2 id="enabling">Enabling</h2>
 
-<p>Windows Sandbox isn&#39;t enabled by default. To enable it follow these steps:</p>
+<p>Windows Sandbox isn&#8217;t enabled by default. To enable it follow these steps:</p>
 
-<ol start="1">
+<ol>
 <li>Open &#8220;Control Panel&#8221; and click the upside down caret next to the back&#47;forward buttons</li>
 <li>Click &#8220;All Control Panel Items&#8221;</li>
 <li>Navigate to &#8220;Programs and Features&#8221;</li>
 <li>On the left click &#8220;Turn Windows features on or off&#8221;</li>
-<li>Scroll down and tick the box next to &#8220;Windows Sandbox&#8221; if it isn&#39;t already ticked</li>
+<li>Scroll down and tick the box next to &#8220;Windows Sandbox&#8221; if it isn&#8217;t already ticked</li>
 </ol>
 
 <p>From the start menu search for &#8220;Windows Sandbox&#8221;. Hit enter and a fresh Sandbox window will appear.</p>
 
-<h2 id="Configuring">Configuring</h2>
+<h2 id="configuring">Configuring</h2>
 
 <p>Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.<br/>
 This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.</p>
@@ -48,9 +48,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>I highly suggest reading through the documentation for the <code>.wsb</code> file format. There are some good examples and interesting features.</p>
 
-<h3 id="Example:%20Zoom">Example: Zoom</h3>
+<h3 id="example-zoom">Example: Zoom</h3>
 
-<p>Zoom is a very popular group call&#47;video conference software (I won&#39;t bore you with the details I&#39;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#39;re paranoid like me you may feel uneasy just seeing it&#39;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
+<p>Zoom is a very popular group call&#47;video conference software (I won&#8217;t bore you with the details I&#8217;m sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#8217;re paranoid like me you may feel uneasy just seeing it&#8217;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
 
 <pre><code class="language-xml">&#60;Configuration&#62;
     &#60;MappedFolders&#62;
@@ -72,9 +72,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 
 <p>It maps the local <code>C:\Sandbox\Installers</code> directory (where I store <code>ZoomInstaller.exe</code>) to <code>C:\Installers</code> in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.</p>
 
-<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#39;t reboot a sandbox without deleting everything).</p>
+<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#8217;t reboot a sandbox without deleting everything).</p>
 
-<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#39;d rather install on an ephemeral virtual machine than my main OS.</p>
+<p>I make use of a couple of these <code>.wsb</code> files for different programs I&#8217;d rather install on an ephemeral virtual machine than my main OS.</p>
 
 <div class="footnotes">
 <hr/>
@@ -88,6 +88,9 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 </div>
 </main>
 <footer>
-Windows Sandbox&nbsp;&sdot;&nbsp;2021-08-08&nbsp;&sdot;&nbsp;<a href="/posts/winsandbox.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/winsandbox.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+<br><hr>
+<p>2021-08-08</p>
+<p>[&nbsp;<a href="/posts/winsandbox.md">view plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/winsandbox.html">view on hidden service</a>&nbsp;]</p>
+<p>&copy; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
 </body>
 </html>

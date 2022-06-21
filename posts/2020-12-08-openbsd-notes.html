@@ -19,11 +19,11 @@
 </nav>
 </header>
 <main>
-<h1 id="OpenBSD%20notes">OpenBSD notes</h1>
+<h1 id="openbsd-notes">OpenBSD notes</h1>
 
 <p>Random notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
 
-<h2 id="Table%20of%20Contents">Table of Contents</h2>
+<h2 id="table-of-contents">Table of Contents</h2>
 
 <ul>
 <li><a href="#Power%2fBattery">Power&#47;Battery</a>
@@ -49,16 +49,16 @@
 <li><a href="#Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</a></li>
 </ul>
 
-<h2 id="Power&amp;#47;Battery">Power&#47;Battery</h2>
+<h2 id="powerbattery">Power&#47;Battery</h2>
 
-<h3 id="Hibernate%20on%20low%20battery">Hibernate on low battery</h3>
+<h3 id="hibernate-on-low-battery">Hibernate on low battery</h3>
 
 <p>To hibernate at 5% remaining battery add in <code>&#47;etc&#47;rc.conf.local</code>:</p>
 
 <pre><code class="language-bash">apmd_flags=-A -Z 5
 </code></pre>
 
-<h3 id="User%20power%20commands">User power commands</h3>
+<h3 id="user-power-commands">User power commands</h3>
 
 <p>In <code>&#47;etc&#47;doas.conf</code>:</p>
 
@@ -68,9 +68,9 @@ permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
 </code></pre>
 
-<h2 id="Multimedia">Multimedia</h2>
+<h2 id="multimedia">Multimedia</h2>
 
-<h3 id="Microphone%20setup">Microphone setup</h3>
+<h3 id="microphone-setup">Microphone setup</h3>
 
 <p>I have a fancy microphone that has a headphone passthrough. So it is both USB &#8220;speaker&#8221; and a USB microphone. Good news, that makes using it with sndio a <em>bit</em> easier.</p>
 
@@ -86,13 +86,13 @@ permit nopass :staff as root cmd shutdown args -p now
 outputs.hp_source: dac-0:1 -&#62; dac-2:3
 </code></pre>
 
-<p>To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (<code>dac-0:1</code>).</p>
+<p>To switch back, remove the sndiod flag, and change the source back to it&#8217;s original value (<code>dac-0:1</code>).</p>
 
-<h2 id="X">X</h2>
+<h2 id="x">X</h2>
 
 <p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for xenodm themeing.</p>
 
-<h2 id="PF">PF</h2>
+<h2 id="pf">PF</h2>
 
 <p>Packet Filter (firewall). General stuff to remember:</p>
 
@@ -101,7 +101,7 @@ outputs.hp_source: dac-0:1 -&#62; dac-2:3
 <li><code>egress</code> = interface(s) that hold the default route(s)</li>
 </ul>
 
-<h3 id="Standard%20preamble">Standard preamble</h3>
+<h3 id="standard-preamble">Standard preamble</h3>
 
 <pre><code># options 
 set block-policy drop
@@ -115,16 +115,16 @@ antispoof for egress
 antispoof for $vm_int
 </code></pre>
 
-<h3 id="Allow%20NTP">Allow NTP</h3>
+<h3 id="allow-ntp">Allow NTP</h3>
 
 <p>In rare cases ntp can use tcp apparently&#8230;</p>
 
 <pre><code>pass quick inet proto { tcp, udp } to port ntp
 </code></pre>
 
-<h3 id="VMs">VMs</h3>
+<h3 id="vms">VMs</h3>
 
-<p>Don&#39;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
+<p>Don&#8217;t forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
 
 <pre><code># where:
 # vm_int        = vm interface (vether[0-9])
@@ -146,14 +146,17 @@ pass in on $vm_int proto tcp to port { www, https }
 pass in on $vm_int proto tcp to port 6000:6010
 </code></pre>
 
-<h2 id="Misc">Misc</h2>
+<h2 id="misc">Misc</h2>
 
-<h3 id="Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</h3>
+<h3 id="manual-pages-as-beautifully-typeset-pdfs">Manual pages as beautifully typeset PDFs</h3>
 
 <pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
 </code></pre>
 </main>
 <footer>
-OpenBSD Notes&nbsp;&sdot;&nbsp;2020-12-08&nbsp;&sdot;&nbsp;<a href="/posts/2020-12-08-openbsd-notes.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-12-08-openbsd-notes.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+<br><hr>
+<p>2020-12-08</p>
+<p>[&nbsp;<a href="/posts/2020-12-08-openbsd-notes.md">view plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-12-08-openbsd-notes.html">view on hidden service</a>&nbsp;]</p>
+<p>&copy; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
 </body>
 </html>

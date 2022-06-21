@@ -19,11 +19,11 @@
 </nav>
 </header>
 <main>
-<h1 id="%3Ccode%3Eusbkill%3C/code%3E%20the%20OpenBSD%20way"><code>usbkill</code> the OpenBSD way</h1>
+<h1 id="the-openbsd-way"><code>usbkill</code> the OpenBSD way</h1>
 
 <p><a href="https://github.com/hephaest0s/usbkill"><code>usbkill</code></a> is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of <code>lsusb</code> and when there is a change it runs <code>shutdown -h now</code>.</p>
 
-<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD&#39;s base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
+<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD&#8217;s base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
 
 <h2 id="hotplugd">hotplugd</h2>
 
@@ -58,7 +58,7 @@ logger -t hotplug "$DEVCLASS:$DEVNAME attached"
 <pre><code>$ tail -f &#47;var&#47;log&#47;messages
 </code></pre>
 
-<p>Then connect a USB device to your machine and you should see messages tagged &#8216;hotplug&#8217;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#39;t use):</p>
+<p>Then connect a USB device to your machine and you should see messages tagged &#8216;hotplug&#8217;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#8217;t use):</p>
 
 <pre><code>Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
 Jan 11 11:48:32 x1 hotplug: 5:wsmouse2 attached
@@ -76,11 +76,11 @@ Jan 11 11:48:32 x1 hotplug: 0:uhid5 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhid6 attached
 </code></pre>
 
-<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#39;s a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
+<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#8217;s a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
 
-<h2 id="The%20&amp;#8216;kill&amp;#8217;%20part">The &#8216;kill&#8217; part</h2>
+<h2 id="the-kill-part">The &#8216;kill&#8217; part</h2>
 
-<p>Now that we&#39;ve seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br/>
+<p>Now that we&#8217;ve seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br/>
 We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the <em>kill</em> part, since I might need to plug something in once in a while. Make the <code>&#47;etc&#47;hotplug&#47;attach</code> script as so:</p>
 
 <pre><code>#!&#47;bin&#47;sh
@@ -99,9 +99,9 @@ else
 fi
 </code></pre>
 
-<p>If the <code>&#47;tmp&#47;arm_usbkill</code> file exists then the machine will shutdown, if it doesn&#39;t exist it will just add a log entry to syslog.</p>
+<p>If the <code>&#47;tmp&#47;arm_usbkill</code> file exists then the machine will shutdown, if it doesn&#8217;t exist it will just add a log entry to syslog.</p>
 
-<p><code>hotplug</code> also supports running a different script, <code>&#47;etc&#47;hotplug&#47;detach</code> on detach events. Since both scripts are exactly the same I&#39;ve symlinked the attach script to the location of the detach script.</p>
+<p><code>hotplug</code> also supports running a different script, <code>&#47;etc&#47;hotplug&#47;detach</code> on detach events. Since both scripts are exactly the same I&#8217;ve symlinked the attach script to the location of the detach script.</p>
 
 <pre><code># ln -s &#47;etc&#47;hotplug&#47;attach &#47;etc&#47;hotplug&#47;detach
 </code></pre>
@@ -143,11 +143,11 @@ else
 fi
 </code></pre>
 
-<p>But this is not really useful to me since I use a laptop and I&#39;m not attaching and detaching network devices or disk drives.</p>
+<p>But this is not really useful to me since I use a laptop and I&#8217;m not attaching and detaching network devices or disk drives.</p>
 
 <p>One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with <code>usbkill</code>. This could be acheived through a much more complicated script using <code>usbdevs</code> to get USB IDs, but as of yet I have no need for that.</p>
 
-<h2 id="Arming%20and%20disarming">Arming and disarming</h2>
+<h2 id="arming-and-disarming">Arming and disarming</h2>
 
 <p>To arm and disarm this script all you have to do is create or remove the <code>$arm_file</code> respectively. Here are some shell functions to add to your shell rc to make it easier:</p>
 
@@ -160,20 +160,20 @@ disarm() {
 }
 </code></pre>
 
-<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#39;t the case for <code>usbkill</code>, which requires root to run).<br/>
-Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn&#39;t cleared from <code>&#47;tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
+<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#8217;t the case for <code>usbkill</code>, which requires root to run).<br/>
+Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn&#8217;t cleared from <code>&#47;tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
 
-<h2 id="Why?">Why?</h2>
+<h2 id="why">Why?</h2>
 
 <p>So why do all this? Why not just <code>pkg_add usbutils</code>, download + run <code>usbkill</code> and be done?<br/>
-Well for starters that isn&#39;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
+Well for starters that isn&#8217;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
 
-<h2 id="SEE%20ALSO">SEE ALSO</h2>
+<h2 id="see-also">SEE ALSO</h2>
 
 <ul>
 <li>OpenBSD <code>hotplug(4)</code> pseudo-device man page: <a href="https://man.openbsd.org/hotplug">https:&#47;&#47;man.openbsd.org&#47;hotplug</a> .</li>
 <li>OpenBSD includes the <code>usbdevs(8)</code> tool in base that lists connected USB devices and their IDs: <a href="https://man.openbsd.org/usbdevs">https:&#47;&#47;man.openbsd.org&#47;usbdevs</a> <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</li>
-<li>OpenWRT has it&#39;s own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https:&#47;&#47;openwrt.org&#47;docs&#47;guide-user&#47;base-system&#47;hotplug</a>. But it&#39;s slightly different to OpenBSD&#39;s.</li>
+<li>OpenWRT has it&#8217;s own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https:&#47;&#47;openwrt.org&#47;docs&#47;guide-user&#47;base-system&#47;hotplug</a>. But it&#8217;s slightly different to OpenBSD&#8217;s.</li>
 <li>A couple of years ago I wrote <a href="https://github.com/e-zk/hidlock">a hotplug script</a> that instead runs <a href="https://man.openbsd.org/xlock"><code>xlock(1)</code></a> on all running X displays after a HID is attached. In theory this would to thwart HID&#47;badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.</li>
 </ul>
 
@@ -193,6 +193,9 @@ Well for starters that isn&#39;t as fun. The main reason is that all this works 
 </div>
 </main>
 <footer>
-Usbkill the OpenBSD Way&nbsp;&sdot;&nbsp;2021-01-11&nbsp;&sdot;&nbsp;<a href="/posts/2021-01-11-usbkiller.md">Plaintext</a>&nbsp;&sdot;&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2021-01-11-usbkiller.html" title="Tor">Onion</a>&nbsp;&sdot;&nbsp;&copy; Zakaria <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></footer>
+<br><hr>
+<p>2021-01-11</p>
+<p>[&nbsp;<a href="/posts/2021-01-11-usbkiller.md">view plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2021-01-11-usbkiller.html">view on hidden service</a>&nbsp;]</p>
+<p>&copy; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p></footer>
 </body>
 </html>
