@@ -1,4 +1,4 @@
-:root { --fz: 14px }
+:root { --fz: 16px }
 ::selection { background-color: lemonchiffon; color: #000 }
 html { height: 100%; font-size: var(--fz); scroll-behavior: smooth; font-family: sans-serif }
 body { line-height: calc(var(--fz) * 1.618); max-width: 52rem; margin: 1rem auto; color: #333; padding: 0 2rem 2rem 2rem; background: #fff; word-break: break-word }
