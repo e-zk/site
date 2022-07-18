@@ -28,9 +28,24 @@ But this will also work for <a href="https://man.openbsd.org/unveil">unveil(2)</
 
 <p>Before we get into it, this doesn&#8217;t actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn&#8217;t pass on the fantastic opportunity for some word play+clickbait.</p>
 
+<h2 id="what-is-pledge">What is pledge?</h2>
+
+<p><a href="https://man.openbsd.org/pledge">pledge(2)</a> is a system call created for OpenBSD for the purpose of application sandboxing.
+When called, pledge(2) &#8220;promises&#8221; that the current process will only make use of certain system calls - if the process violates these promises after pledge(2) has been called the process is killed with a SIGABT signal.
+Using this system call appropriately facilitates the <a href="https://wikipedia.org/wiki/Principle_of_least_privilege">security principle of least privilege</a>; only allowing the process access to the parts of the system it needs to operate, and denying it access to functionality it does not need.</p>
+
+<p>Subsequent calls to pledge(2) can reduce the abilities of a program further, but abilities cannot be regained.<br/>
+This can be useful when writing daemon programs - during initialisation system daemons often need access to a lot of the more &#8220;priviledged&#8221; system calls, but after initialisation access to these abilities is no longer required. So typically daemon programs on OpenBSD call pledge(2) multiple times. Once to allow access to the initial system calls, then again, once the process is initialised, to deny access to ever use those system calls again.</p>
+
+<h2 id="what-is-the-ld_preload-trick">What is the LD_PRELOAD trick?</h2>
+
+<p>I reccommend reading this article by baeldung to understand what LD_PRELOAD is: <a href="https://www.baeldung.com/linux/ld_preload-trick-what-is">What is the LD_PRELOAD Trick?</a>.</p>
+
+<p>Simply put, LD_PRELOAD influences the &#8220;linkage&#8221; of shared libraries and resolution of functions at runtime. This can be useful for debugging, reversing, and profiling dynamically linked programs.</p>
+
 <h2 id="crafting-a-shared-object">Crafting a shared object</h2>
 
-<p>LD_PRELOAD works by loading a shared object file that can essentially re-define whatever C function or syscall you like before running the actual program.</p>
+<p>LD_PRELOAD works by loading a shared object file that can essentially re-define whatever dynamically linked C function or syscall during the running of the program.</p>
 
 <p>To craft our shared object to use with LD_PRELOAD first we have to look up the function signature of pledge(2) in the <a href="https://man.openbsd.org/pledge">man page</a> and plop it into a .c file:</p>
 
@@ -65,7 +80,7 @@ pledge(const char *promises, const char *execpromises) {
 
 <h2 id="testing-it-out">Testing it out</h2>
 
-<p>Here we have an example use of pledge(2) (yes, I should be checking return values).</p>
+<p>Here we have an example use of pledge(2) (yes, I should be checking return values, but this is just an example).</p>
 
 <pre><code class="language-c">&#47;&#47; test.c
 #include &#60;stdio.h&#62;
@@ -110,7 +125,7 @@ You should not be seeing this :O
 
 <ul>
 <li>If you statically link your binary, LD_PRELOAD does not have any effect.</li>
-<li>To test this out, compile the above example program with <code>-static</code>, then try and do the LD_PRELOAD trick again. It&#8217;ll always abort at the correct printf(3) call.</li>
+<li>To test this out, compile the above example program with <code>-static</code>, then try and do the LD_PRELOAD trick again. It&#8217;ll always abort at the correct <code>printf(3)</code> call.</li>
 </ul></li>
 <li>SUID &#47; SGID
 
@@ -120,6 +135,12 @@ The Linux <a href="https://linux.die.net/man/8/ld.so">man page</a> is less clear
 <li>Simply put, your doas(1) and sudo(1) are safe.</li>
 </ul></li>
 </ol>
+
+<h2 id="changelog">Changelog</h2>
+
+<ul>
+<li>18-07-2022: Added &#8220;What is pledge?&#8221; and &#8220;What is LD_PRELOAD&#8221; sections.</li>
+</ul>
 </main>
 <footer>
 <br><hr>
