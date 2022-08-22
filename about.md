@@ -20,8 +20,7 @@ A list of all of my programming projects can be found on the [projects page](/pr
 
 ## Contact
 
-You can contact me via email at `contact [at} zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).
-
+You can contact me via email at `contact [at} zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).  
 I can be reached via Matrix at `zk:envs.net`.
 
 # About this website
