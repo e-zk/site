@@ -15,11 +15,15 @@ user-agent: *
 disallow: /*.md
 disallow: /*.meta
 
-user-agent: *
 # Don't allow indexing of .git directories
 # (which should be blocked by httpd regardless)
+user-agent: *
 disallow: /*.git
 disallow: /*.gitignore
+
+# *wink*
+user-agent: *
+disallow: /a_security_analysis_of_tinyjambu.pdf
 
 # Don't allow Turnitin to index my shit:
 user-Agent: TurnitinBot
