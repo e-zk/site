@@ -1,4 +1,21 @@
-# hello, friend...
+#   HeLlO, FrIeNd ...
+#
+#      ,.::::://        \\:::::.,       
+#                                       
+#                                       
+#      \.\.\....        ..../././       
+#      :   o    :      :   o    :       
+#       :`:`:```        ```:.:`:        
+#         .  .           :  .           
+#                           .           
+#                 _  _                  
+#                                       
+#                                       
+#             `..::..::..'              
+#               ' v  v '                
+#               `:....:'                
+#                                       
+#   WHaT do YoU ThiNk you'RE DoInG ?
 
 # Don't allow indexing of /static and /html directories:
 user-agent: *
