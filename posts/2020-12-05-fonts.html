@@ -18,23 +18,23 @@
 </nav>
 </header>
 <main>
-<h1 id="how-i-almost-fixed-my-fonts">How I (almost) fixed my fonts</h1>
+<h1 id="How%20I%20(almost)%20fixed%20my%20fonts">How I (almost) fixed my fonts</h1>
 
 <p>This site goes through CSS changes daily. Yes, daily. I can&#8217;t stop changing the CSS. It&#8217;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it. </p>
 
 <p>I like web fonts. But I also like simplicity and straightforwardness. Sadly, getting webfonts and CSS to work together flawlessly is no simple task. </p>
 
-<h2 id="google-fonts">Google Fonts</h2>
+<h2 id="Google%20Fonts">Google Fonts</h2>
 
 <p>At first I just used Google Fonts: click, click, right click, copy, paste <code>@import</code> URL. Done. Fixed. &#8230;or so I thought.</p>
 
 <p>Using Google fonts has the unfortunate side-effect that I now depend on a 3rd-party CDN for my site to look nice. That CDN is obviously Google - that&#8217;s not ideal for me.</p>
 
-<h2 id="self-hosting-google-fonts">Self-hosting Google Fonts</h2>
+<h2 id="Self-hosting%20Google%20Fonts">Self-hosting Google Fonts</h2>
 
 <p>So I decided to just host the fonts on this webserver. I came across this gem: <a href="https://github.com/majodev/google-webfonts-helper/">google-webfonts-helper</a>. You choose your Google fonts, it generates a zip file containing the font files, and some CSS to put on your page. Perfect! &#8230;or so I thought.</p>
 
-<h2 id="inline-stylesheets">Inline stylesheets</h2>
+<h2 id="Inline%20stylesheets">Inline stylesheets</h2>
 
 <p>Wait. Now my fonts flash for a second. Oh, this is the fabled FOUT I&#8217;ve been hearing about. Google Fonts didn&#8217;t seem to have this issue, though I suppose their server is far more responsive than mine, and they do some CDN tricks or something. Here&#8217;s a CSS-Tricks article I read: <a href="https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/">https:&#47;&#47;css-tricks.com&#47;how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy&#47;</a>. I don&#8217;t recall whether it helped me in this endeavour or not since the solution requires JavaScript (eugh).</p>
 
@@ -68,7 +68,7 @@ html, body {
 
 <p>This still didn&#8217;t give the desired result. There were still weird loading times and odd font flashes.</p>
 
-<h2 id="the-fix-sort-of-not-really">The fix (sort of&#8230; not really)</h2>
+<h2 id="The%20fix%20(sort%20of&amp;#8230;%20not%20really)">The fix (sort of&#8230; not really)</h2>
 
 <p><em>I give up</em>.</p>
 

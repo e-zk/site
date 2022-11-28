@@ -19,7 +19,7 @@
 </nav>
 </header>
 <main>
-<h1 id="temporary-web-browsing">Temporary web browsing</h1>
+<h1 id="Temporary%20web%20browsing">Temporary web browsing</h1>
 
 <p>Here&#8217;s a few ways of scripting an ephemeral browser environment.</p>
 
@@ -33,7 +33,7 @@ for history, bookmarks, etc to be saved (a quick web search, logging into
 personal, sensitive services like online banking). Some might find it 
 over-the-top but I think its a useful scripting exercise if anything.</p>
 
-<h2 id="1.-temporary-profile">1. Temporary profile</h2>
+<h2 id="1.%20Temporary%20profile">1. Temporary profile</h2>
 
 <p>Browsers typically have a user &#8220;profile&#8221;, where all bookmarks, history, and
 other required state is stored.<br/>
@@ -112,7 +112,7 @@ chromium --user-data-dir="$PROFILE_DIR" "$@"
 cleanup
 </code></pre>
 
-<h2 id="2.-temporary-home-directory">2. Temporary home directory</h2>
+<h2 id="2.%20Temporary%20home%20directory">2. Temporary home directory</h2>
 
 <p>Instead of specifying a custom profile, then removing it, why not create an
 entire ephemeral home directory, then remove <em>that</em>?</p>
@@ -167,7 +167,7 @@ firefox-esr --new-instance --no-remote "$@"
 cleanup
 </code></pre>
 
-<h2 id="extra-stuff">Extra stuff</h2>
+<h2 id="Extra%20stuff">Extra stuff</h2>
 
 <p>To add to these scripts, one could also:</p>
 
@@ -179,7 +179,7 @@ before actually running the Firefox command</li>
 
 <p>My personal scripts do just that, for <a href="https://git.zakaria.org/bin-obsd/file/tmpchrome.html">Chromium</a> and <a href="https://git.zakaria.org/bin-obsd/file/tmpfox.html" title="maybe uses outdated user.js flags">Firefox</a>. </p>
 
-<h2 id="other-methods">Other methods</h2>
+<h2 id="Other%20methods">Other methods</h2>
 
 <p>Some other methods to look into include:</p>
 

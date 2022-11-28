@@ -19,16 +19,16 @@
 </nav>
 </header>
 <main>
-<h1 id="m4-troubles">M4 Troubles&#8230;</h1>
+<h1 id="M4%20Troubles&amp;#8230;">M4 Troubles&#8230;</h1>
 
 <p>In my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> I wrote about mostly M4 templates.
 Well, it turns out I&#8217;ve run into some issues.</p>
 
-<h2 id="chapter-i-the-problem">Chapter I: The Problem</h2>
+<h2 id="Chapter%20I:%20The%20Problem">Chapter I: The Problem</h2>
 
 <p>I ran my blog script to convert my markdown into a nice HTML webpage, but then something happened. Nothing. Nothing happened. The script just sat there, stuck. This was odd because the script usually runs in under a second, so something had to have gone wrong&#8230;</p>
 
-<h2 id="chapter-ii-the-quick-fix">Chapter II: The Quick Fix</h2>
+<h2 id="Chapter%20II:%20The%20Quick%20Fix">Chapter II: The Quick Fix</h2>
 
 <p>I turned on tracing in my <code>head.m4</code> by adding <code>traceon</code> to the start of the file then I ran the script again. I knew instantly what had gone wrong&#8230; M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.</p>
 
@@ -37,7 +37,7 @@ Well, it turns out I&#8217;ve run into some issues.</p>
 <pre><code>m4: unexpected end of input, unclosed parenthesis:
 </code></pre>
 
-<h2 id="chapter-iii-the-root-of-all-evil">Chapter III: The Root of All Evil</h2>
+<h2 id="Chapter%20III:%20The%20Root%20of%20All%20Evil">Chapter III: The Root of All Evil</h2>
 
 <p>In my search for answers I came across this post: <a href="http://silas.net.br/tech/devel/m4.html">http:&#47;&#47;silas.net.br&#47;tech&#47;devel&#47;m4.html</a>. While the particular issue in on the webpage wasn&#8217;t <em>my</em> issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#8217;s text. Eventually I figured out that M4 was trying to run all the <code>define()</code> and <code>include()</code> statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues&#8230;</p>
 
@@ -50,7 +50,7 @@ Well, it turns out I&#8217;ve run into some issues.</p>
 
 <p>I may have to rethink using M4 completely because I won&#8217;t lie I have no idea what I&#8217;m doing - it seems like I&#8217;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just <code>echo</code> a bunch of HTML in my script instead, surely it can&#8217;t be that messy. We&#8217;ll have to see what I come up with.</p>
 
-<h2 id="chapter-iv-going-forward">Chapter IV: Going Forward</h2>
+<h2 id="Chapter%20IV:%20Going%20Forward">Chapter IV: Going Forward</h2>
 
 <p>For now, consider my <a href="https://zakaria.org/posts/2020-08-01-shblog">previous post</a> to be non-cannon in the <code>&#47;bin&#47;sh</code> blog series (if you can really call it a series - there hasn&#8217;t even been a part II yet!).</p>
 </main>

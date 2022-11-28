@@ -19,13 +19,13 @@
 </nav>
 </header>
 <main>
-<h1 id="yubikey-resident-ssh-keys-on-windowswsl">YubiKey resident SSH keys on Windows+WSL</h1>
+<h1 id="YubiKey%20resident%20SSH%20keys%20on%20Windows+WSL">YubiKey resident SSH keys on Windows+WSL</h1>
 
 <p>This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via <code>npiperelay</code> and <code>socat</code>.</p>
 
 <p>It&#8217;s important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn&#8217;t notice any functional differences.</p>
 
-<h2 id="download-openssh">Download OpenSSH</h2>
+<h2 id="Download%20OpenSSH">Download OpenSSH</h2>
 
 <p>As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via <code>ssh-add</code> or <code>ssh-keygen</code>. So first we need to update OpenSSH for Windows:</p>
 
@@ -43,7 +43,7 @@
 <li>Find &#8220;OpenSSH Authentication Agent&#8221;, right click and select &#8220;Restart&#8221;.</li>
 </ol>
 
-<h2 id="configuring-wsl2">Configuring WSL2</h2>
+<h2 id="Configuring%20WSL2">Configuring WSL2</h2>
 
 <ol>
 <li><p>Install <code>socat</code> using your package manager (e.g. <code>sudo apt install socat</code>).</p></li>
@@ -65,7 +65,7 @@ ssh-add ~&#47;.ssh&#47;id_ed25519 ~&#47;.ssh&#47;id_rsa
 </code></pre></li>
 </ol>
 
-<h2 id="importing-resident-ssh-keys">Importing resident SSH keys</h2>
+<h2 id="Importing%20resident%20SSH%20keys">Importing resident SSH keys</h2>
 
 <p>Importing resident ssh private keys from the YubiKey via <code>ssh-keygen -K</code> isn&#8217;t supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:</p>
 
@@ -85,7 +85,7 @@ ssh-add ~&#47;.ssh&#47;id_ed25519 ~&#47;.ssh&#47;id_rsa
 <li>Copy&#47;download the file onto your Windows machine, and add it to the authentication agent via <code>ssh-add c:\path\to\file</code>.</li>
 </ol>
 
-<h2 id="adding-keys-to-the-agent">Adding keys to the agent</h2>
+<h2 id="Adding%20keys%20to%20the%20agent">Adding keys to the agent</h2>
 
 <p>Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the <code>ssh-add</code> command. </p>
 
@@ -99,7 +99,7 @@ ssh-add ~&#47;.ssh&#47;id_ed25519 ~&#47;.ssh&#47;id_rsa
 <pre><code>PS C:\Windows\system32&#62; ssh-add C:\path\to\file
 </code></pre>
 
-<h3 id="automating">Automating</h3>
+<h3 id="Automating">Automating</h3>
 
 <p>If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won&#8217;t load your keys on startup, we can write a simple PowerShell one-liner that runs at login:</p>
 

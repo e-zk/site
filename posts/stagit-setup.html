@@ -19,7 +19,7 @@
 </nav>
 </header>
 <main>
-<h1 id="stagit-setup-on-openbsd">stagit setup on OpenBSD</h1>
+<h1 id="stagit%20setup%20on%20OpenBSD">stagit setup on OpenBSD</h1>
 
 <p><a href="https://codemadness.org/stagit.html">stagit</a> is a static page generator for git repos. It&#8217;s very minimal - which I like.</p>
 
@@ -27,7 +27,7 @@
 
 <p>The majority of my setup is based upon a post by <code>poptart</code>. Be sure to check out the original post here: <a href="https://hosakacorp.net/p/stagit-server.html">https:&#47;&#47;hosakacorp.net&#47;p&#47;stagit-server.html</a>. It&#8217;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). <code>poptart</code> has some other great OpenBSD-related posts on there as well.</p>
 
-<h2 id="setup">Setup</h2>
+<h2 id="Setup">Setup</h2>
 
 <p>On the server install <code>git</code>, create the <code>_git</code> user, and make some directories:</p>
 
@@ -80,7 +80,7 @@ could not get static compilation to work&#8230;
 So I gave up and installed stagit via <code>pkg_add stagit</code> on the server :P</p>
 </blockquote>
 
-<h2 id="scripts">Scripts</h2>
+<h2 id="Scripts">Scripts</h2>
 
 <p>Next we&#8217;ll configure a few scripts:</p>
 
@@ -259,7 +259,7 @@ permit nopass mite as _git cmd &#47;usr&#47;local&#47;bin&#47;stagit-chdesc
 
 <p>I&#8217;ve made a git repository for these scripts (and maybe a few more) available on <a href="https://github.com/e-zk/stagit-scripts">GitHub</a> which is mirrored on <a href="https://git.zakaria.org/stagit-scripts/log.html">git.zakaria.org</a></p>
 
-<h2 id="httpd-config">httpd config</h2>
+<h2 id="httpd%20config">httpd config</h2>
 
 <p>To actually serve the generated static files we need to configure <a href="https://man.openbsd.org/httpd">httpd(8)</a>. In <a href="https://man.openbsd.org/httpd.conf"><code>&#47;etc&#47;httpd.conf</code></a>:</p>
 
