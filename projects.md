@@ -129,13 +129,13 @@ server that essentially just redirects go-get requests to git repos. It powers
 
 ## sghs
 
-[Shitty Go HTTP Server](https://github.com/e-zk/sghs) - a super simple Go HTTP fileserver for just serving 
+[**Shitty Go HTTP Server**](https://github.com/e-zk/sghs) - a super simple Go HTTP fileserver for just serving 
 files. Supports TLS too, if you've got the cert files for it.
 
 ## shite
 
-A [shell script](https://github.com/e-zk/shite) used to generate this static site.
-It uses standard Unix stuff like `find`, `sed`, and uses [lowdown]() to convert
+A collection of [**shell scripts**](https://github.com/e-zk/shite) used to generate this static site.
+It uses standard Unix stuff like `find`, `sed`, and uses [lowdown](https://kristaps.bsd.lv/lowdown/) to convert
 Markdown into HTML.
 
 Very opinionated, you probably don't want to use it `:P`.
@@ -144,7 +144,7 @@ Very opinionated, you probably don't want to use it `:P`.
 
 [**Secure Time Sync Daemon**](https://github.com/e-zk/stsd). A system daemon 
 that uses HTTP date headers over TLS (HTTPS) to set system date as opposed to NTP.
-Why not NTP? See the [README](https://github.com/e-zk/stsd/blob/main/README.md).
+Why not NTP? See the [README](https://raw.githubusercontent.com/e-zk/stsd/trunk/README).
 
 ## subc
 
