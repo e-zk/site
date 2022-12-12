@@ -27,6 +27,11 @@ table tr th { border-bottom: 1px solid #ddd; color: #000; font-weight: normal; t
 .postlink { line-height: 1.25; white-space: pre-line }
 .postdate { white-space: nowrap; vertical-align: baseline }
 header, footer { font-size: 14px }
+.right { float: right }
+.qrbox { display: flex; width: 100%; flex-wrap: wrap }
+.qrbox .qr { flex-grow: 1; margin-bottom: 1em }
+.qr svg rect { fill: #ffffff }
+.qr svg path { stroke: #000000 }
 @media(prefers-color-scheme:dark) {
 body { background-color: #101010; color: #a0aaaf }
 nav a, nav a:visited { color: #d0dadf; }
@@ -40,4 +45,6 @@ code, pre code { background-color: #202325a0; color: #a0aaaf; border: none }
 h1,h2,h3,h4,h5,h6,table tr th { color: #d0dadf }
 h1,h2 { border-color: #808a8f50 }
 ::selection { color: #101010; background-color: #a0aaaf } 
+.qr svg rect { fill: #101010 }
+.qr svg path { stroke: #d0dadf !important }
 }
