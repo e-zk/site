@@ -1,6 +1,7 @@
 # Projects
 
-Select list of personal projects in alphabetical order.  
+Select list of personal projects in alphabetical order.   
+Click any of the project names to jump to their sections.   
 
   * [after](#after)       - Echo string after process death \(C) (OpenBSD).
   * [hidlock](#hidlock)   - Lock screen on HID attach (Shell) (OpenBSD).
@@ -114,7 +115,7 @@ A super small command-line program to pledge(2) arbitrary programs on OpenBSD.
 See the [README](https://github.com/e-zk/pledgeme) for more info.
 
 
-## regreg
+## recreg
 
 [**recreg**](https://github.com/e-zk/recreg) is a small [ffmpeg](https://ffmpeg.org/) 
 script that makes recording a specific region of an X11 screen a little less painful:
