@@ -1,0 +1,15 @@
+<!--{{define "title"}}Blog{{end}}-->
+{{define "body"}}
+<h1>{{ .Title }}</h1>
+{{ .Before }}
+<table width="100%">
+{{range .List }}
+<tr>
+<td class="postdate">{{.Date}}</td>
+<td class="postlink"><a href="{{.Rellink}}">{{.Title}}</a></td>
+</tr>
+{{end}}
+</table>
+{{ .After }}
+{{end}}
+{{define "footer" }}{{ .Footer }}{{end}}
