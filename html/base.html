@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<link href="/style.css" rel="stylesheet" type="text/css">
+<link href="/static/fonts/inter.css" rel="stylesheet" type="text/css">
+<link href="/rss.xml" rel="alternate" type="application/rss+xml">
+<title>{{ template "title" . }}</title>
+</head>
+<body>
+<header>
+<nav>
+<p>
+<a href="/" class="index">zakaria.org</a> <a href="/posts">Blog</a> <a href="/projects.html">Projects</a> <a href="/about.html">About</a>
+</p>
+</nav>
+</header>
+<main>
+{{ template "body" . }}
+</main>
+<footer>
+<hr>
+{{ template "footer" . }}
+</footer>
+</body>
+</html>

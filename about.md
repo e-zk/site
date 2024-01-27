@@ -1,10 +1,8 @@
 # About me
 
-I am Zakaria. My friends call me Zak. Jump to [contact](#Contact).
+I am Zakaria. My friends call me Zak. Jump to [contact](#contact).
 
 I'm a CS graduate with an interest in information security, digital privacy, and cryptography.
-
-22 &bullet; He/Him &bullet; Australia
 
 - [zk](https://lobste.rs/u/zk) @ Lobste.rs.
 - [e-zk](https://github.com/e-zk/) @ GitHub.
@@ -28,7 +26,7 @@ I can be reached via Matrix at `zk:envs.net`, though, I will almost definitely b
 
 Hosting of this server is provided by [Vultr](https://vultr.com/).
 
-The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown by [shite](https://git.zakaria.org/shite/file/README.html) (which I wrote).  
+The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown. Source for the custom site generation program can be found [here](https://github.com/e-zk/site-gen "site-gen"), and the site's content is managed on git [here](https://github.com/e-zk/site "site").
 
 A hidden service mirror of this site can be accessed through Tor here: http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion.
 

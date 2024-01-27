@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width,initial-scale=1" name="viewport">
-<meta content="#101010" name="theme-color"/>
-<link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
-<link href="/favicon.ico" rel="alternate icon">
-<link href="/static/css/main.css" rel="stylesheet">
-<meta http-equiv="onion-location" content="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-09-09-tmux.html">
+<link href="/style.css" rel="stylesheet" type="text/css">
+<link href="/static/fonts/inter.css" rel="stylesheet" type="text/css">
+<link href="/rss.xml" rel="alternate" type="application/rss+xml">
 <title>Quick setup script with tmux</title>
-<meta property="og:title" content="Quick setup script with tmux">
-<meta property="og:description" content="Scripting a tmux workspace">
 </head>
 <body>
 <header>
 <nav>
-<a href="/">zakaria.org</a><a href="/posts/">posts</a><a href="/projects.html">code</a><a href="/about.html">about</a></nav>
+<p>
+<a href="/" class="index">zakaria.org</a> <a href="/posts">Blog</a> <a href="/projects.html">Projects</a> <a href="/about.html">About</a>
+</p>
+</nav>
 </header>
 <main>
-<h1 id="Quick%20setup%20script%20with%20%3Ccode%3Etmux%3C/code%3E">Quick setup script with <code>tmux</code></h1>
 
-<p>In my network security class we ssh into a handful of VMs pretty often.<br/>
-Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&#8217;d load up my Kali Linux VM:</p>
+<h1 id="quick-setup-script-with-tmux">Quick setup script with <code>tmux</code></h1>
+
+<p>In my network security class we ssh into a handful of VMs pretty often.<br>
+Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with <code>C-b {1,2,3,etc}</code> when necessary. I found myself doing this every time I&rsquo;d load up my Kali Linux VM:</p>
 
 <pre><code>tmux
 C-b c
@@ -32,44 +32,29 @@ C-b c
 ssh edgerouter
 </code></pre>
 
-<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#8217;s what I came up with:</p>
+<p>But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&rsquo;s what I came up with:</p>
 
-<pre><code>#!&#47;bin&#47;sh
+<pre><code>#!/bin/sh
 
 tmux new-session -d
-tmux new-window -n "bastion" ssh bastion
-tmux new-window -n "proxyserver" ssh proxyserver
-tmux new-window -n "appserver" ssh appserver
-tmux new-window -n "edgerouter" ssh edgerouter
+tmux new-window -n &quot;bastion&quot; ssh bastion
+tmux new-window -n &quot;proxyserver&quot; ssh proxyserver
+tmux new-window -n &quot;appserver&quot; ssh appserver
+tmux new-window -n &quot;edgerouter&quot; ssh edgerouter
 tmux selectw -t 0
 
 tmux attach-session -d
 </code></pre>
 
-<p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.  </p>
+<p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.</p>
 
-<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&#8217;m ready to start hacking away at my messy nftables configs.</p>
+<p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&rsquo;m ready to start hacking away at my messy nftables configs.</p>
+
+
 </main>
 <footer>
-<br><hr>
-<p>posted: [&nbsp;2020-09-09&nbsp;]</p>
-<p>view: [&nbsp;<a href="/posts/2020-09-09-tmux.md">plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-09-09-tmux.html">hidden service</a>&nbsp;]</p>
-<div class="qrbox">
-<details class="qr"><summary>show qr: [ clear net ]</summary> <svg width="3.92cm" height="3.92cm" viewBox="0 0 37 37" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-	<g id="QRcode">
-		<rect x="0" y="0" width="37" height="37" fill="#ffffff"/>
-		<path style="stroke:#000000" transform="translate(4,4.5)" d="M0,0h7M8,0h1M11,0h2M14,0h1M16,0h2M22,0h7M0,1h1M6,1h1M9,1h2M16,1h4M22,1h1M28,1h1M0,2h1M2,2h3M6,2h1M10,2h1M12,2h1M15,2h2M20,2h1M22,2h1M24,2h3M28,2h1M0,3h1M2,3h3M6,3h1M12,3h1M14,3h1M16,3h2M19,3h2M22,3h1M24,3h3M28,3h1M0,4h1M2,4h3M6,4h1M9,4h1M11,4h1M13,4h3M17,4h1M19,4h1M22,4h1M24,4h3M28,4h1M0,5h1M6,5h1M10,5h1M12,5h1M14,5h4M22,5h1M28,5h1M0,6h7M8,6h1M10,6h1M12,6h1M14,6h1M16,6h1M18,6h1M20,6h1M22,6h7M8,7h1M10,7h2M16,7h1M18,7h3M0,8h2M3,8h2M6,8h1M9,8h3M17,8h1M19,8h2M22,8h1M28,8h1M0,9h1M2,9h2M7,9h1M9,9h1M12,9h4M19,9h1M21,9h1M23,9h2M26,9h2M0,10h2M3,10h1M5,10h4M10,10h2M13,10h1M15,10h2M18,10h1M21,10h1M24,10h1M26,10h1M1,11h1M3,11h1M7,11h7M15,11h3M19,11h2M23,11h3M28,11h1M6,12h2M9,12h1M11,12h2M14,12h2M18,12h1M20,12h1M22,12h2M28,12h1M0,13h4M7,13h3M14,13h1M16,13h1M18,13h1M20,13h1M22,13h7M4,14h3M8,14h1M11,14h2M14,14h2M18,14h4M23,14h1M26,14h1M28,14h1M2,15h1M5,15h1M8,15h2M11,15h1M15,15h2M18,15h2M21,15h2M26,15h1M28,15h1M2,16h1M5,16h3M9,16h1M12,16h1M14,16h3M20,16h1M23,16h1M25,16h1M0,17h1M2,17h1M4,17h2M9,17h4M15,17h1M17,17h4M24,17h1M26,17h2M0,18h2M3,18h2M6,18h2M9,18h1M11,18h3M16,18h1M19,18h4M24,18h2M28,18h1M0,19h2M3,19h3M9,19h2M12,19h1M16,19h2M20,19h2M24,19h3M0,20h2M4,20h3M8,20h3M12,20h5M18,20h10M8,21h2M12,21h3M16,21h1M19,21h2M24,21h2M0,22h7M9,22h1M15,22h1M17,22h4M22,22h1M24,22h2M0,23h1M6,23h1M9,23h1M11,23h1M14,23h1M17,23h1M19,23h2M24,23h1M27,23h2M0,24h1M2,24h3M6,24h1M8,24h3M12,24h14M27,24h1M0,25h1M2,25h3M6,25h1M8,25h1M10,25h3M14,25h2M18,25h1M27,25h1M0,26h1M2,26h3M6,26h1M10,26h2M14,26h1M16,26h1M18,26h1M20,26h2M23,26h2M26,26h3M0,27h1M6,27h1M8,27h2M13,27h2M16,27h1M18,27h1M21,27h1M25,27h2M28,27h1M0,28h7M8,28h1M12,28h1M14,28h2M17,28h1M19,28h5M25,28h1"/>
-	</g>
-</svg> </details>
-<details class="qr"><summary>show qr: [ onion url ]</summary> <!-- Created with qrencode 4.1.1 (https://fukuchi.org/works/qrencode/index.html) -->
-<svg width="4.76cm" height="4.76cm" viewBox="0 0 45 45" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-	<g id="QRcode">
-		<rect x="0" y="0" width="45" height="45" fill="#ffffff"/>
-		<path style="stroke:#000000" transform="translate(4,4.5)" d="M0,0h7M10,0h1M12,0h2M17,0h5M23,0h1M25,0h1M28,0h1M30,0h7M0,1h1M6,1h1M8,1h1M10,1h1M13,1h5M20,1h3M24,1h2M27,1h1M30,1h1M36,1h1M0,2h1M2,2h3M6,2h1M12,2h2M15,2h1M18,2h5M24,2h1M28,2h1M30,2h1M32,2h3M36,2h1M0,3h1M2,3h3M6,3h1M8,3h3M12,3h1M15,3h1M17,3h3M22,3h2M25,3h4M30,3h1M32,3h3M36,3h1M0,4h1M2,4h3M6,4h1M9,4h1M13,4h1M15,4h1M17,4h7M26,4h1M28,4h1M30,4h1M32,4h3M36,4h1M0,5h1M6,5h1M8,5h2M11,5h2M14,5h1M17,5h1M20,5h1M24,5h4M30,5h1M36,5h1M0,6h7M8,6h1M10,6h1M12,6h1M14,6h1M16,6h1M18,6h1M20,6h1M22,6h1M24,6h1M26,6h1M28,6h1M30,6h7M9,7h3M13,7h4M21,7h1M23,7h2M26,7h1M0,8h5M6,8h4M11,8h1M13,8h1M16,8h2M19,8h1M22,8h2M25,8h5M31,8h1M33,8h1M35,8h1M0,9h3M5,9h1M7,9h4M12,9h2M16,9h1M19,9h3M23,9h1M25,9h1M28,9h2M31,9h1M34,9h1M1,10h4M6,10h1M8,10h1M13,10h4M18,10h1M26,10h3M30,10h3M34,10h1M36,10h1M0,11h1M3,11h2M7,11h1M9,11h2M12,11h2M18,11h4M23,11h1M28,11h3M33,11h1M2,12h1M6,12h2M12,12h2M15,12h3M19,12h1M22,12h1M25,12h3M29,12h2M32,12h3M0,13h1M3,13h3M9,13h2M13,13h1M15,13h11M28,13h1M31,13h1M34,13h2M0,14h1M2,14h2M5,14h4M11,14h7M20,14h1M22,14h1M27,14h5M34,14h1M36,14h1M2,15h2M5,15h1M7,15h5M14,15h1M19,15h3M26,15h2M29,15h2M33,15h1M36,15h1M2,16h3M6,16h1M9,16h3M15,16h3M19,16h1M22,16h9M32,16h1M34,16h1M36,16h1M1,17h4M9,17h1M12,17h1M16,17h1M19,17h3M23,17h1M25,17h1M28,17h2M31,17h1M35,17h1M0,18h1M2,18h1M6,18h1M9,18h2M14,18h1M17,18h2M22,18h1M24,18h5M30,18h1M32,18h5M0,19h1M7,19h1M10,19h1M12,19h5M19,19h4M24,19h1M26,19h1M28,19h1M32,19h2M36,19h1M1,20h1M4,20h1M6,20h2M9,20h2M12,20h1M14,20h2M17,20h1M19,20h1M22,20h2M25,20h2M30,20h1M32,20h1M34,20h3M0,21h2M3,21h1M9,21h2M13,21h1M15,21h1M19,21h1M23,21h1M25,21h1M28,21h2M31,21h1M35,21h1M1,22h1M3,22h2M6,22h1M11,22h2M14,22h2M22,22h1M27,22h7M35,22h2M0,23h3M7,23h1M9,23h1M11,23h1M14,23h3M18,23h1M20,23h2M26,23h1M28,23h2M31,23h1M36,23h1M5,24h3M10,24h2M15,24h1M17,24h1M22,24h5M29,24h4M34,24h3M0,25h4M7,25h1M9,25h2M12,25h2M19,25h2M23,25h1M25,25h2M28,25h2M31,25h1M35,25h1M0,26h1M3,26h6M13,26h2M17,26h2M20,26h1M22,26h1M25,26h1M27,26h1M31,26h1M34,26h3M0,27h1M3,27h2M12,27h2M15,27h1M21,27h3M28,27h1M36,27h1M0,28h1M2,28h7M12,28h1M15,28h1M17,28h3M22,28h1M24,28h9M34,28h1M8,29h3M13,29h1M15,29h2M18,29h6M25,29h1M28,29h1M32,29h1M0,30h7M8,30h5M14,30h2M18,30h1M21,30h1M24,30h1M26,30h1M28,30h1M30,30h1M32,30h5M0,31h1M6,31h1M9,31h3M13,31h3M18,31h5M24,31h1M26,31h3M32,31h2M35,31h1M0,32h1M2,32h3M6,32h1M8,32h1M11,32h3M15,32h1M17,32h1M22,32h11M34,32h1M0,33h1M2,33h3M6,33h1M8,33h1M12,33h2M15,33h1M18,33h3M23,33h1M25,33h1M27,33h1M30,33h4M36,33h1M0,34h1M2,34h3M6,34h1M8,34h2M12,34h1M14,34h4M20,34h2M25,34h2M29,34h1M31,34h1M33,34h4M0,35h1M6,35h1M8,35h3M12,35h4M17,35h1M21,35h1M23,35h1M26,35h6M36,35h1M0,36h7M8,36h2M12,36h1M15,36h2M18,36h1M22,36h1M25,36h1M29,36h3M34,36h3"/>
-	</g>
-</svg> </details>
-</div>
-(C) <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+<hr>
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="./2020-09-09-tmux.md">plaintext</a> <a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-09-09-tmux.html">onion</a></p>
 </footer>
 </body>
 </html>

@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width,initial-scale=1" name="viewport">
-<meta content="#101010" name="theme-color"/>
-<link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
-<link href="/favicon.ico" rel="alternate icon">
-<link href="/static/css/main.css" rel="stylesheet">
-<meta http-equiv="onion-location" content="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-08-01-shblog.html">
+<link href="/style.css" rel="stylesheet" type="text/css">
+<link href="/static/fonts/inter.css" rel="stylesheet" type="text/css">
+<link href="/rss.xml" rel="alternate" type="application/rss+xml">
 <title>The /bin/sh blog</title>
-<meta property="og:title" content="The /bin/sh blog">
-<meta property="og:description" content="How to use m4 (badly)">
 </head>
 <body>
 <header>
 <nav>
-<a href="/">zakaria.org</a><a href="/posts/">posts</a><a href="/projects.html">code</a><a href="/about.html">about</a></nav>
+<p>
+<a href="/" class="index">zakaria.org</a> <a href="/posts">Blog</a> <a href="/projects.html">Projects</a> <a href="/about.html">About</a>
+</p>
+</nav>
 </header>
 <main>
-<h1 id="The%20&amp;#47;bin&amp;#47;sh%20Blog.%20Part%20I:%20Timmy&amp;#8217;s%20Templates">The &#47;bin&#47;sh Blog. Part I: Timmy&#8217;s Templates</h1>
 
-<p>I love Unix shell scripting, in fact I may enjoy it more than &#8220;actual&#8221; programming. I say &#8220;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&#8221;, as opposed to &#8220;bash scripts&#8221;, simply because I don&#8217;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br/>
-Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&#8217;s another way of running a bunch of commands?</p>
+<h1 id="the-bin-sh-blog-part-i-timmy-s-templates">The /bin/sh Blog. Part I: Timmy&rsquo;s Templates</h1>
+
+<p>I love Unix shell scripting, in fact I may enjoy it more than &ldquo;actual&rdquo; programming. I say &ldquo;<a href="https://wikipedia.org/wiki/Shell_script">shell scripts</a>&rdquo;, as opposed to &ldquo;bash scripts&rdquo;, simply because I don&rsquo;t use bash for my scripts. The reason why is not relevant to this post. What <em>is</em> relevant is <em>why</em> make a blog using shell scripts?<br>
+Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.rs/s/0skwhg/idea_makefile_blog">thing</a> that <a href="https://github.com/MaskRay/makefile-blog">exist</a>, and Makefiles are just one way of running commands to do <em>something</em>. Hmm. I wonder, what&rsquo;s another way of running a bunch of commands?</p>
 
 <blockquote>
 <p>Oh! I know!</p>
@@ -33,93 +33,93 @@ Well, <em>why not</em>? After all, Makefile blogs are a <a href="https://lobste.
 <p>Why, shell scripts of course!</p>
 </blockquote>
 
-<p>Woah, thanks Timmy, why that&#8217;s correct.</p>
+<p>Woah, thanks Timmy, why that&rsquo;s correct.</p>
 
 <blockquote>
-<p>But how will you ever manage a website&#8217;s HTML layout all in a shell script?
-Wouldn&#8217;t that get messy?</p>
+<p>But how will you ever manage a website&rsquo;s HTML layout all in a shell script?
+Wouldn&rsquo;t that get messy?</p>
 </blockquote>
 
-<p>Why yes Timmy, it would get pretty messy. What we need is some kind of &#8220;template&#8221; which can take some input and output HTML which we can serve&#8230;</p>
+<p>Why yes Timmy, it would get pretty messy. What we need is some kind of &ldquo;template&rdquo; which can take some input and output HTML which we can serve&hellip;</p>
 
 <blockquote>
 <p>What about that old M4 thing?</p>
 </blockquote>
 
-<p>&#8220;M4&#8221;, Timmy? What on earth is that?</p>
+<p>&ldquo;M4&rdquo;, Timmy? What on earth is that?</p>
 
 <blockquote>
-<p>RFTM dude: <a href="https://en.wikipedia.org/wiki/M4_(computer_language)">https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;M4_(computer_language)</a>, <a href="https://man.openbsd.org/m4">https:&#47;&#47;man.openbsd.org&#47;m4</a></p>
+<p>RFTM dude: <a href="https://en.wikipedia.org/wiki/M4_(computer_language">https://en.wikipedia.org/wiki/M4_(computer_language</a>), <a href="https://man.openbsd.org/m4">https://man.openbsd.org/m4</a></p>
 </blockquote>
 
 <p>Okay Timmy, no need to be rude now. We have guests, remember?</p>
 
-<p>Ignoring Timmy&#8217;s rude nature, we now have a way of making &#8220;templates&#8221; of sorts, to make building the HTML a little easier. First, we&#8217;ll start with something (almost) every HTML document on the web has, a <code>&#60;head&#62;</code>:</p>
+<p>Ignoring Timmy&rsquo;s rude nature, we now have a way of making &ldquo;templates&rdquo; of sorts, to make building the HTML a little easier. First, we&rsquo;ll start with something (almost) every HTML document on the web has, a <code>&lt;head&gt;</code>:</p>
 
-<pre><code>define(`_HTMLHEAD&#39;, `&#60;head&#62;   
-&#60;title&#62;My Blog Lol&#60;&#47;title&#62;
-&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
-&#60;&#47;head&#62;&#39;)
+<pre><code>define(`_HTMLHEAD', `&lt;head&gt;   
+&lt;title&gt;My Blog Lol&lt;/title&gt;
+&lt;link rel=&quot;stylsheet&quot; href=&quot;/style.css&quot;/&gt;
+&lt;/head&gt;')
 </code></pre>
 
-<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&#60;head&#62;</code> containing our blog&#8217;s title and a link to our stylesheet will be printed. There&#8217;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&#60;title&#62;</code> to be the title of our post. With M4 this is a piece of cake:</p>
+<p>Okay so now we have a <code>_HTMLHEAD</code> macro defined. In our m4 file, whenever we type <code>_HTMLHEAD</code>, the <code>&lt;head&gt;</code> containing our blog&rsquo;s title and a link to our stylesheet will be printed. There&rsquo;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our <code>&lt;title&gt;</code> to be the title of our post. With M4 this is a piece of cake:</p>
 
-<pre><code class="language-m4">define(`_HTMLHEAD&#39;, `&#60;head&#62;
-&#60;title&#62;$1 - My Blog Lol&#60;&#47;title&#62;
-&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
-&#60;&#47;head&#62;&#39;)
+<pre><code class="language-m4">define(`_HTMLHEAD', `&lt;head&gt;
+&lt;title&gt;$1 - My Blog Lol&lt;/title&gt;
+&lt;link rel=&quot;stylsheet&quot; href=&quot;/style.css&quot;/&gt;
+&lt;/head&gt;')
 </code></pre>
 
 <blockquote>
 <p>Well, what changed?</p>
 </blockquote>
 
-<p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br/>
-In M4, macros can have arguments that can be placed into the macro&#8217;s content. Now, if we call <code>_HTMLHEAD(`This is a post&#39;)</code>, the resulting HTML will be:</p>
+<p>See Timmy, on the second line, there is now a <code>$1 -</code> before the rest of the blog title.<br>
+In M4, macros can have arguments that can be placed into the macro&rsquo;s content. Now, if we call <code>_HTMLHEAD(`This is a post')</code>, the resulting HTML will be:</p>
 
-<pre><code class="language-HTML">&#60;head&#62;
-&#60;title&#62;This is a post - My Blog Lol&#60;&#47;title&#62;
-&#60;link rel="stylsheet" href="&#47;style.css"&#47;&#62;
-&#60;&#47;head&#62;
+<pre><code class="language-HTML">&lt;head&gt;
+&lt;title&gt;This is a post - My Blog Lol&lt;/title&gt;
+&lt;link rel=&quot;stylsheet&quot; href=&quot;/style.css&quot;/&gt;
+&lt;/head&gt;
 </code></pre>
 
-<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#8217;s a simple one that includes a <code>&#60;head&#62;</code> and also a <code>&#60;nav&#62;</code> block containing our site&#8217;s navigation links:</p>
+<p>The <code>$1</code> has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&rsquo;s a simple one that includes a <code>&lt;head&gt;</code> and also a <code>&lt;nav&gt;</code> block containing our site&rsquo;s navigation links:</p>
 
-<pre><code class="language-m4">define(`_HTMLHEAD&#39;,`&#60;head&#62;
-&#60;meta http-equiv="content-type" content="text&#47;html; charset=utf-8"&#62;
-&#60;meta name="viewport" content="width=device-width, initial-scale=1"&#62;
-&#60;title&#62;$1 - zakaria.org&#60;&#47;title&#62;
-&#60;link rel="stylesheet" href="&#47;style.css"&#47;&#62;
-&#60;&#47;head&#62;&#39;
+<pre><code class="language-m4">define(`_HTMLHEAD',`&lt;head&gt;
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;$1 - zakaria.org&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/style.css&quot;/&gt;
+&lt;/head&gt;'
 )
 
-define(`_HTMLNAV&#39;, `&#60;nav&#62;
-&#60;p&#62;&#60;a href="&#47;"&#62;zakaria.org&#60;&#47;a&#62;&#60;br&#47;&#62;&#60;a href="&#47;posts&#47;"&#62;blog&#60;&#47;a&#62; &#47; &#60;a href="&#47;rss.xml"&#62;rss&#60;&#47;a&#62; &#47; &#60;a href="https:&#47;&#47;github.com&#47;e-zk&#47;"&#62;gh&#60;&#47;a&#62;&#60;&#47;p&#62; 
-&#60;&#47;nav&#62;&#39;
+define(`_HTMLNAV', `&lt;nav&gt;
+&lt;p&gt;&lt;a href=&quot;/&quot;&gt;zakaria.org&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;/posts/&quot;&gt;blog&lt;/a&gt; / &lt;a href=&quot;/rss.xml&quot;&gt;rss&lt;/a&gt; / &lt;a href=&quot;https://github.com/e-zk/&quot;&gt;gh&lt;/a&gt;&lt;/p&gt; 
+&lt;/nav&gt;'
 )
 </code></pre>
 
-<p>For the sake of neatness, I&#8217;ve placed this code in <code>head.m4</code>. 
-For our individual posts, we need to write more M4. Here&#8217;s a simple post template, we&#8217;ll call it <code>post.m4</code>:</p>
+<p>For the sake of neatness, I&rsquo;ve placed this code in <code>head.m4</code>.
+For our individual posts, we need to write more M4. Here&rsquo;s a simple post template, we&rsquo;ll call it <code>post.m4</code>:</p>
 
-<pre><code class="language-m4">include(m4&#47;head.m4)dnl
-&#60;!DOCTYPE html&#62;
-&#60;html&#62;
+<pre><code class="language-m4">include(m4/head.m4)dnl
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
 _HTMLHEAD(POSTTILE)
-&#60;body&#62;
+&lt;body&gt;
 _HTMLNAV
-&#60;main&#62;
+&lt;main&gt;
 POSTCONTENT
-&#60;&#47;main&#62;
-&#60;&#47;body&#62;
-&#60;&#47;html&#62;
+&lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
 
-<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &#8220;call&#8221; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&#8217;re defined as, in our case our <code>&#60;head&#62;</code> and <code>&#60;nav&#62;</code> blocks of HTML. Neat? Right?<br/>
+<p>On the first line, we include the macros in our <code>head.m4</code>, then on line 4 we &ldquo;call&rdquo; our <code>_HTMLHEAD</code> macro, then shortly after we call our <code>_HTMLNAV</code> macro. M4 fills in these macros with whatever they&rsquo;re defined as, in our case our <code>&lt;head&gt;</code> and <code>&lt;nav&gt;</code> blocks of HTML. Neat? Right?<br>
 Moving on-</p>
 
 <blockquote>
-<p>I&#8217;m confused</p>
+<p>I&rsquo;m confused</p>
 </blockquote>
 
 <p>About what, Timmy?</p>
@@ -128,43 +128,28 @@ Moving on-</p>
 <p>Those strange upper-case words littered throughout the file: <code>POSTTILE</code> and <code>POSTCONTENT</code>.</p>
 </blockquote>
 
-<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&#8217;t defined in any of the M4 files we&#8217;re using. That&#8217;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
+<p>Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our <code>_HTMLNAV</code> and <code>_HTMLHEAD</code> ones, but they aren&rsquo;t defined in any of the M4 files we&rsquo;re using. That&rsquo;s because we define these macros when we <em>run</em> <code>m4</code> itself:</p>
 
-<pre><code class="language-console">$ m4 -DPOSTTILE="Hello?" post.m4
+<pre><code class="language-console">$ m4 -DPOSTTILE=&quot;Hello?&quot; post.m4
 </code></pre>
 
 <p>The <code>-D</code> argument defines a symbol to have some value. In this case <code>POSTTILE</code> now becomes <code>Hello?</code> after M4 is done running. Try running:</p>
 
-<pre><code class="language-console">$ m4 -DPOSTTILE="Test" -DPOSTCONTENT="&#60;h1&#62;Test :P&#60;&#47;h1&#62;" post.m4
+<pre><code class="language-console">$ m4 -DPOSTTILE=&quot;Test&quot; -DPOSTCONTENT=&quot;&lt;h1&gt;Test :P&lt;/h1&gt;&quot; post.m4
 </code></pre>
 
-<p>M4 should output a &#8220;complete&#8221; HTML document, with the title &#8220;Test&#8221; and with a single heading reading &#8220;Test :P&#8221;. </p>
+<p>M4 should output a &ldquo;complete&rdquo; HTML document, with the title &ldquo;Test&rdquo; and with a single heading reading &ldquo;Test :P&rdquo;.</p>
 
-<p>Now that we have a (an?) M4 template set up, instead of <code>echo</code>ing a bunch of <code>&#60;html&#62;</code> in our script, now all we have to do is call <code>m4</code> and pass arguments to it for our content to show up in the resulting HTML.</p>
+<p>Now that we have a (an?) M4 template set up, instead of <code>echo</code>ing a bunch of <code>&lt;html&gt;</code> in our script, now all we have to do is call <code>m4</code> and pass arguments to it for our content to show up in the resulting HTML.</p>
 
-<p>Don&#8217;t be mad. But that&#8217;s the end of this post. <em>I know, I know</em> we didn&#8217;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#8217;s for another time.<br/>
+<p>Don&rsquo;t be mad. But that&rsquo;s the end of this post. <em>I know, I know</em> we didn&rsquo;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&rsquo;s for another time.<br>
 Stay tuned for part II.</p>
+
+
 </main>
 <footer>
-<br><hr>
-<p>posted: [&nbsp;2020-08-01&nbsp;]</p>
-<p>view: [&nbsp;<a href="/posts/2020-08-01-shblog.md">plaintext</a>&nbsp;|&nbsp;<a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-08-01-shblog.html">hidden service</a>&nbsp;]</p>
-<div class="qrbox">
-<details class="qr"><summary>show qr: [ clear net ]</summary> <svg width="3.92cm" height="3.92cm" viewBox="0 0 37 37" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-	<g id="QRcode">
-		<rect x="0" y="0" width="37" height="37" fill="#ffffff"/>
-		<path style="stroke:#000000" transform="translate(4,4.5)" d="M0,0h7M11,0h2M14,0h1M17,0h1M22,0h7M0,1h1M6,1h1M9,1h2M13,1h2M16,1h3M20,1h1M22,1h1M28,1h1M0,2h1M2,2h3M6,2h1M12,2h1M15,2h1M19,2h2M22,2h1M24,2h3M28,2h1M0,3h1M2,3h3M6,3h1M8,3h1M12,3h2M16,3h2M19,3h2M22,3h1M24,3h3M28,3h1M0,4h1M2,4h3M6,4h1M8,4h2M13,4h1M15,4h1M19,4h2M22,4h1M24,4h3M28,4h1M0,5h1M6,5h1M11,5h2M14,5h2M22,5h1M28,5h1M0,6h7M8,6h1M10,6h1M12,6h1M14,6h1M16,6h1M18,6h1M20,6h1M22,6h7M10,7h2M14,7h1M16,7h1M18,7h1M0,8h2M5,8h3M9,8h1M11,8h2M17,8h1M20,8h1M24,8h2M2,9h1M5,9h1M7,9h3M12,9h5M19,9h1M21,9h1M23,9h2M26,9h2M0,10h4M6,10h1M8,10h1M10,10h1M12,10h1M14,10h1M17,10h2M20,10h2M23,10h2M0,11h3M4,11h2M7,11h3M12,11h1M19,11h2M22,11h1M24,11h2M0,12h1M2,12h1M4,12h6M11,12h3M15,12h1M18,12h1M20,12h1M22,12h2M28,12h1M0,13h1M2,13h1M5,13h1M7,13h1M12,13h2M16,13h1M18,13h2M22,13h3M27,13h2M4,14h3M8,14h2M11,14h1M14,14h3M18,14h1M20,14h4M25,14h2M0,15h1M3,15h1M8,15h3M13,15h1M15,15h2M18,15h2M21,15h2M26,15h1M28,15h1M1,16h1M3,16h1M6,16h1M9,16h1M11,16h2M15,16h3M25,16h2M0,17h1M4,17h2M8,17h6M15,17h2M18,17h3M22,17h3M26,17h3M0,18h2M3,18h2M6,18h1M10,18h1M13,18h1M15,18h2M19,18h4M24,18h2M28,18h1M0,19h1M4,19h2M7,19h1M9,19h2M13,19h2M16,19h2M19,19h1M21,19h1M24,19h1M0,20h1M2,20h1M4,20h1M6,20h1M11,20h5M18,20h1M20,20h5M26,20h3M8,21h1M12,21h3M16,21h1M19,21h2M24,21h2M0,22h7M8,22h5M14,22h2M18,22h3M22,22h1M24,22h3M0,23h1M6,23h1M8,23h2M11,23h1M13,23h1M16,23h1M19,23h2M24,23h1M27,23h1M0,24h1M2,24h3M6,24h1M10,24h1M12,24h1M15,24h11M27,24h1M0,25h1M2,25h3M6,25h1M9,25h2M12,25h1M15,25h1M18,25h3M25,25h3M0,26h1M2,26h3M6,26h1M10,26h1M14,26h1M18,26h10M0,27h1M6,27h1M8,27h3M13,27h1M16,27h1M18,27h1M21,27h1M25,27h2M28,27h1M0,28h7M8,28h2M11,28h2M14,28h2M19,28h1M21,28h2M25,28h2"/>
-	</g>
-</svg> </details>
-<details class="qr"><summary>show qr: [ onion url ]</summary> <!-- Created with qrencode 4.1.1 (https://fukuchi.org/works/qrencode/index.html) -->
-<svg width="4.76cm" height="4.76cm" viewBox="0 0 45 45" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-	<g id="QRcode">
-		<rect x="0" y="0" width="45" height="45" fill="#ffffff"/>
-		<path style="stroke:#000000" transform="translate(4,4.5)" d="M0,0h7M10,0h1M12,0h2M16,0h6M23,0h1M25,0h1M28,0h1M30,0h7M0,1h1M6,1h1M8,1h1M10,1h1M13,1h5M20,1h3M24,1h2M27,1h1M30,1h1M36,1h1M0,2h1M2,2h3M6,2h1M12,2h1M15,2h1M18,2h5M24,2h1M28,2h1M30,2h1M32,2h3M36,2h1M0,3h1M2,3h3M6,3h1M8,3h3M12,3h4M17,3h3M22,3h2M25,3h4M30,3h1M32,3h3M36,3h1M0,4h1M2,4h3M6,4h1M9,4h1M13,4h1M15,4h1M17,4h7M26,4h1M28,4h1M30,4h1M32,4h3M36,4h1M0,5h1M6,5h1M8,5h2M11,5h2M14,5h1M17,5h1M20,5h1M24,5h4M30,5h1M36,5h1M0,6h7M8,6h1M10,6h1M12,6h1M14,6h1M16,6h1M18,6h1M20,6h1M22,6h1M24,6h1M26,6h1M28,6h1M30,6h7M9,7h3M14,7h3M21,7h1M23,7h2M26,7h1M0,8h5M6,8h4M11,8h1M17,8h1M19,8h1M22,8h2M25,8h5M31,8h1M33,8h1M35,8h1M0,9h3M5,9h1M9,9h2M12,9h2M19,9h3M23,9h1M25,9h1M28,9h2M31,9h1M34,9h1M1,10h1M4,10h1M6,10h1M14,10h1M18,10h1M26,10h3M30,10h3M34,10h1M36,10h1M0,11h2M7,11h1M10,11h1M12,11h1M15,11h1M18,11h4M23,11h1M28,11h3M33,11h1M0,12h2M3,12h2M6,12h4M12,12h1M14,12h4M19,12h1M22,12h1M25,12h3M29,12h2M32,12h3M0,13h2M3,13h3M7,13h4M13,13h1M15,13h11M28,13h1M31,13h1M34,13h2M0,14h4M5,14h3M9,14h4M14,14h4M20,14h1M22,14h1M27,14h5M34,14h1M36,14h1M0,15h2M5,15h1M7,15h1M9,15h1M11,15h1M13,15h2M19,15h3M26,15h2M29,15h2M33,15h1M36,15h1M0,16h1M2,16h1M6,16h1M8,16h1M10,16h2M15,16h3M19,16h1M22,16h9M32,16h1M34,16h1M36,16h1M1,17h2M7,17h1M10,17h1M12,17h2M16,17h1M19,17h3M23,17h1M25,17h1M28,17h2M31,17h1M35,17h1M0,18h1M2,18h2M6,18h1M8,18h2M14,18h2M17,18h2M22,18h1M24,18h5M30,18h1M32,18h5M0,19h3M4,19h1M7,19h3M12,19h5M19,19h4M24,19h1M26,19h1M28,19h1M32,19h2M36,19h1M1,20h1M6,20h2M9,20h2M12,20h4M17,20h1M19,20h1M22,20h2M25,20h2M30,20h1M32,20h1M34,20h3M0,21h3M7,21h1M10,21h1M13,21h1M15,21h1M19,21h1M23,21h1M25,21h1M28,21h2M31,21h1M35,21h1M2,22h1M4,22h3M8,22h2M11,22h2M14,22h2M22,22h1M27,22h7M35,22h2M1,23h2M4,23h2M8,23h1M11,23h1M13,23h1M15,23h2M18,23h1M20,23h2M26,23h1M28,23h2M31,23h1M36,23h1M0,24h1M2,24h1M4,24h1M6,24h1M8,24h1M11,24h5M17,24h1M22,24h5M29,24h4M34,24h3M0,25h3M4,25h1M7,25h1M9,25h1M12,25h1M19,25h2M23,25h1M25,25h2M28,25h2M31,25h1M35,25h1M0,26h1M4,26h1M6,26h2M10,26h1M12,26h1M14,26h1M17,26h2M20,26h1M22,26h1M25,26h1M27,26h1M31,26h1M34,26h3M0,27h1M2,27h2M5,27h1M8,27h1M10,27h1M12,27h4M21,27h3M28,27h1M36,27h1M0,28h1M2,28h1M5,28h2M9,28h1M12,28h1M14,28h2M17,28h3M22,28h1M24,28h9M34,28h1M8,29h1M10,29h1M12,29h2M15,29h2M18,29h6M25,29h1M28,29h1M32,29h1M0,30h7M8,30h4M14,30h2M18,30h1M21,30h1M24,30h1M26,30h1M28,30h1M30,30h1M32,30h5M0,31h1M6,31h1M14,31h2M18,31h5M24,31h1M26,31h3M32,31h2M35,31h1M0,32h1M2,32h3M6,32h1M8,32h2M11,32h2M15,32h1M17,32h1M22,32h11M34,32h1M0,33h1M2,33h3M6,33h1M8,33h1M11,33h3M15,33h1M18,33h3M23,33h1M25,33h1M27,33h1M30,33h4M36,33h1M0,34h1M2,34h3M6,34h1M8,34h2M11,34h1M13,34h5M20,34h2M25,34h2M29,34h1M31,34h1M33,34h4M0,35h1M6,35h1M8,35h1M13,35h1M15,35h1M17,35h1M21,35h1M23,35h1M26,35h6M36,35h1M0,36h7M8,36h5M15,36h2M18,36h1M22,36h1M25,36h1M29,36h3M34,36h3"/>
-	</g>
-</svg> </details>
-</div>
-(C) <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+<hr>
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="./2020-08-01-shblog.md">plaintext</a> <a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/2020-08-01-shblog.html">onion</a></p>
 </footer>
 </body>
 </html>
