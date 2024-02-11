@@ -8,26 +8,15 @@
 }
 ::selection { color: var(--fg2); background: #e1ff00 }
 @media(prefers-color-scheme:dark) {
-	/*
 	:root {
-		--bg0: #101010;
-		--bg1: #2f2f2f;
-		--bg2: #afafaf;
-		--fg0: #e0e0e0;
-		--fg1: #f5f5f5;
-		--fg2: #ffffff;
+		--bg0: #000000;
+		--bg1: #222222;
+		--bg2: #555555;
+		--fg0: #ffffffa0;
+		--fg1: #ffffffdf;
+		--fg2: #fffffffa;
 	}
-	::selection { color: #f0aeaf; background: #ffffff0a }
-	*/
-	:root {
-		--bg0: #122023;
-		--bg1: #254249;
-		--bg2: #a3c1c3;
-		--fg0: #c2d0d3;
-		--fg1: #d2e0e3;
-		--fg2: #f0fbff;
-	}
-	::selection { color: #f0aeaf; background: #f0fbff0a }
+	::selection { color: var(--bg0); background: #e1ff00f0 }
 }
 :root {
 	--ff-body: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
@@ -39,12 +28,6 @@
 	--border-color: var(--bg1);
 	--body-sz: 18px;
 	--spacing: 0.5rem;
-
-	/* TODO: separate spacing+padding. separate vert/horiz */
-	--spacing-v: 0.5rem;
-	--spacing-h: 0.5rem;
-	--padding-v: 0.5rem;
-	--padding-h: 1.5rem;
 }
 html {
 	height: 100%;
@@ -64,7 +47,7 @@ h1,h2,h3,h4,h5,h6 {
 	color: var(--heading-color);
 }
 p { font-size: 1rem }
-h1 { font-size: 2.027rem; font-weight: 700 }
+h1 { font-size: 2.027rem }
 h2 { font-size: 1.802rem }
 h3 { font-size: 1.602rem }
 h4 { font-size: 1.424rem }
@@ -103,20 +86,10 @@ body > header, body > footer { margin: calc(var(--spacing) * 4) 0 }
 nav p a { margin: 0 var(--spacing) }
 body footer p { float: right }
 body footer p a { margin: 0 var(--spacing) }
+body header a { font-weight: 600; border-bottom: none; text-transform: lowercase }
+body header a:hover { border-bottom: none }
 .index {
 	margin-left: 0;
-	display: inline-block;
-	/*background: #e1ff00;
-	color: #122023;*/
-	background: var(--fg2);
-	color: var(--bg0);
-	padding: 0 var(--spacing);
-	border-radius: 4px;
-	border: none;
-}
-.index:hover {
-	border-bottom: none;
-	color: var(--bg0);
 }
 table { border-collapse: collapse; max-width: 100%; overflow-x: auto; }
 table tr td,table tr th { padding: 0.3rem 1ch }
