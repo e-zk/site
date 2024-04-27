@@ -9,6 +9,7 @@
 	--e: Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
 
 }
+::selection { color: var(--d); background: #e1ff00 }
 @media(prefers-color-scheme:dark) {
 	:root {
 		--a: #000;
@@ -16,6 +17,7 @@
 		--c: #aaa;
 		--d: #eee;
 	}
+	::selection { color: var(--a); background: #e1ff00f0 }
 }
 
 html {
