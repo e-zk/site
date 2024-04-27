@@ -1,110 +1,146 @@
 :root {
-	--bg0: #ffffff;
-	--bg1: #f5f5f5;
-	--bg2: #e0e0e0;
-	--fg0: #5f5f5f;
-	--fg1: #3f3f3f;
-	--fg2: #000000;
+	--a: #fff;
+	--b: #ddd;
+	--c: #333;
+	--d: #000;
+	--s: 2rem;
+	--t: 1rem;
+	--f: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+	--e: Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
+
 }
-::selection { color: var(--fg2); background: #e1ff00 }
 @media(prefers-color-scheme:dark) {
 	:root {
-		--bg0: #000000;
-		--bg1: #222222;
-		--bg2: #555555;
-		--fg0: #ffffffa0;
-		--fg1: #ffffffdf;
-		--fg2: #fffffffa;
+		--a: #000;
+		--b: #333;
+		--c: #aaa;
+		--d: #eee;
 	}
-	::selection { color: var(--bg0); background: #e1ff00f0 }
 }
-:root {
-	--ff-body: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-	--ff-head: "InterDisplay","Inter",-apple-system,BlinkMacSystemFont,"San Francisco","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-	--ff-mono: Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
-	--ff-special: "Georgia","Times New Roman",serif;
-	--body-color: var(--fg0);
-	--heading-color: var(--fg2);
-	--border-color: var(--bg1);
-	--body-sz: 18px;
-	--spacing: 0.5rem;
-}
+
 html {
 	height: 100%;
-	font-size var(--body-sz);
 	scroll-behavior: smooth;
-	font-family: var(--ff-body);
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
 }
 body {
-	word-break: break-word; line-height: calc(var(--body-sz) * 1.5);
-	max-width: 640px; margin: 1rem auto; padding: 0 2rem 2rem;
-	background: var(--bg0); color: var(--body-color);
+	word-break: break-word;
+	max-width: 640px;
+	height: 100%;
+	margin: var(--t) auto; padding: 0 var(--s) var(--s);
+	font-family: var(--f);
+	font-size: 16px;
+	font-weight: 350;
+	line-height: 1.6;
+	background: var(--a);
+	color: var(--c);
 }
+
+/*text styles*/
 h1,h2,h3,h4,h5,h6 {
-	font-family: var(--ff-head);
+	font-weight: 500;
 	line-height: 1.3;
-	font-weight: 600;
-	color: var(--heading-color);
+	color: var(--d);
 }
+h1 { font-size: 1.476rem }
+h2 { font-size: 1.383rem }
+h3 { font-size: 1.296rem }
+h4 { font-size: 1.215rem }
+h5 { font-size: 1.138rem }
+h6 { font-size: 1.067rem }
 p { font-size: 1rem }
-h1 { font-size: 2.027rem }
-h2 { font-size: 1.802rem }
-h3 { font-size: 1.602rem }
-h4 { font-size: 1.424rem }
-h5 { font-size: 1.266rem }
-h6 { font-size: 1.125rem }
-img,video { max-width: 100%; margin: var(--spacing) 0; border-radius: 8px }
-hr { box-sizing: content-box; height: 0; border: 0; border-top: 2px solid var(--border-color) }
-a img { transition: all 0.1s ease-out }
-a img:hover { scale: 1.025; border-radius: 0px }
-a { color: var(--fg1); border-bottom: 2px solid var(--border-color); text-decoration: none; }
-a:hover { color: var(--fg2); border-bottom: 2px solid var(--bg2) }
-ul, ol { margin-block-start: calc(var(--spacing) / 2) margin-block-end: 1em; padding-inline-start: 1.5em }
-li::marker { color: var(--fg1) }
+small { font-size: 0.936rem }
+b, strong { font-weight: 600 }
+ul, ol { margin-block-start: var(--t); margin-block-end: 1em; padding-inline-start: var(--s) }
+li::marker { color: var(--d) }
 blockquote {
 	display: block;
-	font-family: var(--ff-special);
+	font-family: inherit;
 	font-style: italic;
-	padding: var(--spacing) calc(var(--spacing)*2);
+	font-weight: normal;
+	padding: var(--t) calc(var(--t)*2);
 	margin: 0;
 
 	border-right: none;
-	border-left: 2px solid var(--border-color);
-	border-inline-start: 2px solid var(--border-color);
+	border-left: 2px solid var(--b);
+	border-inline-start: 2px solid var(--b);
 	border-inline-end: none;
 }
 blockquote p {
-	margin: var(--spacing) 0;
-	font-size: calc(var(--body-sz) * 1.25);
-	color: var(--fg2);
+	margin: var(--t) 0;
+	font-size: calc(1rem * 1.25);
+	color: var(--c);
 }
 blockquote footer {
-	margin-top: calc(var(--spacing) * 0.5);
-	color: var(--fg0);
+	margin-top: calc(1rem * 0.5);
+	color: var(--d);
 }
-body > header, body > footer { margin: calc(var(--spacing) * 4) 0 }
-nav p a { margin: 0 var(--spacing) }
-body footer p { float: right }
-body footer p a { margin: 0 var(--spacing) }
-body header a { font-weight: 600; border-bottom: none; text-transform: lowercase }
-body header a:hover { border-bottom: none }
-.index {
-	margin-left: 0;
+
+/*header + footer + nav*/
+body header, body footer { padding: var(--s) 0 }
+body header nav p,
+body footer p {
+	display: flex;
+	column-gap: calc(var(--t) * 0.75);
+	text-transform: lowercase;
 }
-table { border-collapse: collapse; max-width: 100%; overflow-x: auto; }
-table tr td,table tr th { padding: 0.3rem 1ch }
-table tr td { vertical-align: top }
-table tr th { border-bottom: 2px solid var(--border-color); color: var(--heading-color); font-weight: normal; text-align: inherit }
-.postlink { vertical-align: top; }
-.postdate { white-space: nowrap; vertical-align: top; width: 1px; font-family: var(--ff-mono); }
-code { background: var(--bg1); color: var(--fg2); border-radius: 4px; font-size: calc(var(--body-sz) - 4px); font-family: var(--ff-mono); padding: 0px 4px }
+body footer p { justify-content: flex-end  }
+body header nav p a,
+body footer p a {
+	font-weight: 600;
+	color: var(--c);
+	text-decoration: none;
+}
+body header nav p a:hover {
+	color: var(--d);
+}
+
+/*code styles*/
+code {
+	font-family: var(--e);
+	font-size: calc(1rem - 2px);
+	font-weight: normal;
+	padding: 2px 4px;
+}
 pre code {
 	background: transparent;
 	display: block;
-	line-height: 1.25;
-	padding: 1.5rem;
+	padding: var(--t);
+	line-height: 1.3;
 	overflow-x: auto;
 	overflow-y: hidden;
+	border: 1px solid var(--b);
 	border-radius: 8px;
-	border: 2px solid var(--border-color);
 }
+
+/*misc*/
+img,video { max-width: 100%; margin: var(--t) 0 }
+hr { box-sizing: content-box; height: 0; border: 0; border-top: 2px solid var(--b) }
+
+/*link styles*/
+a {
+	color: var(--d);
+	text-decoration: underline;
+	text-decoration-color: var(--b);
+	text-decoration-thickness: 1px;
+	text-underline-offset: .14rem;
+	text-decoration-style: dotted;
+}
+a:hover, a:active, a:focus {
+	color: var(--d);
+	text-decoration-color: var(--c);
+}
+
+/*tables*/
+table { border-collapse: collapse; max-width: 100%; overflow-x: auto; }
+table tr td,table tr th { padding: 0.3rem 1ch }
+table tr td { vertical-align: top }
+table tr th { border-bottom: 2px solid var(--c); color: var(--d); font-weight: 500; text-align: inherit }
+
+/*index table*/
+.postlink { vertical-align: top }
+.postdate { vertical-align: top; white-space: nowrap; width: 1px; font-family: var(--e) }
+
