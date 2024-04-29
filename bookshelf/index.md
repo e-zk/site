@@ -2,7 +2,7 @@
 
 List of books I am currenly reading:
 
-- _The Stranger_ by Albert Camus
+- n/a
 
 ## Collecting dust
 
@@ -10,7 +10,8 @@ Following is a list of books I have previously read, and are now collecting dust
 I try to keep the list in reverse chronological order of when I've completed them.  
 I have read (and forgotten) so much over the years so this list is not exhaustive.  
 
-- _Before the Coffee Gets Cold_ by Toshikazu Kawaguchi
+- _The Stranger_ by Albert Camus
+- _Before the Coffee Gets Cold_ by Toshikazu Kawaguchi (transl. Geoffrey Trousselot)
 - _The Autobiography of Malcom X_ by Malcolm X, Alex Haley
 - _Dracula_ by Bram Stoker
 - _The Iliac Crest_ by Cristina Rivera Garza (transl. Sarah Booker)
