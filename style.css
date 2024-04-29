@@ -56,7 +56,7 @@ h6 { font-size: 1.067rem }
 p { font-size: 1rem }
 small { font-size: 0.936rem }
 b, strong { font-weight: 600 }
-ul, ol { margin-block-start: var(--t); margin-block-end: 1em; padding-inline-start: var(--s) }
+ul, ol { margin-block-start: var(--t); margin-block-end: var(--t); padding-inline-start: calc(var(--t) + 0.1rem) }
 li::marker { color: var(--d) }
 blockquote {
 	display: block;
