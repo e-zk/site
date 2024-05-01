@@ -2,7 +2,8 @@
 
 List of books I am currenly reading:
 
-- n/a
+- _White Nights_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
+- _Wuthering Heights_ by Emily Bronte
 
 ## Collecting dust
 
