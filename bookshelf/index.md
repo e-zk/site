@@ -2,7 +2,6 @@
 
 List of books I am currenly reading:
 
-- _White Nights_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
 - _Wuthering Heights_ by Emily Bronte
 
 ## Collecting dust
@@ -11,6 +10,8 @@ Following is a list of books I have previously read, and are now collecting dust
 I try to keep the list in reverse chronological order of when I've completed them.  
 I have read (and forgotten) so much over the years so this list is not exhaustive.  
 
+- _Bobok_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
+- _White Nights_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
 - _The Stranger_ by Albert Camus
 - _Before the Coffee Gets Cold_ by Toshikazu Kawaguchi (transl. Geoffrey Trousselot)
 - _The Autobiography of Malcom X_ by Malcolm X, Alex Haley
