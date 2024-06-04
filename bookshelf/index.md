@@ -3,6 +3,7 @@
 List of books I am currenly reading:
 
 - _Wuthering Heights_ by Emily Bronte
+- _Against White Feminism: Notes on Disruption_ by Rafia Zakaria
 
 ## Collecting dust
 
