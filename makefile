@@ -1,17 +1,14 @@
 .POSIX:
-.PHONY: update index rss serve
+.PHONY: update rss serve
 
-all: update index rss
+all: update rss serve
 
 update:
-	shite ./.env
-
-index:
-	sh index.sh ./.env
+	../site-gen/site-gen .
 
 rss:
-	rss.sh ./.env > rss.xml
+	echo stub
 
 # serve (for testing only)
 serve:
-	-pgrep sghs || sghs && echo "error: already serving" &
+	-pgrep sghs || sghs && echo "error: already serving"
