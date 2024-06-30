@@ -2,32 +2,35 @@
 
 List of books I am currenly reading:
 
-- _Wuthering Heights_ by Emily Bronte
-- _Against White Feminism: Notes on Disruption_ by Rafia Zakaria
+- _The Plague_ by Albert Camus
+- _Against White Feminism: Notes on Disruption_ by Rafia [Zakaria](# "no relation")
 
 ## Collecting dust
 
-Following is a list of books I have previously read, and are now collecting dust on my desk.
-I try to keep the list in reverse chronological order of when I've completed them.  
+Following is a table of books I have previously read, and are now collecting dust on my desk.
+I try to keep the list in reverse chronological order of when I've read them.  
 I have read (and forgotten) so much over the years so this list is not exhaustive.  
+This table is highly inspired by [icyphox](https://icyphox.sh/reading/ "reading - icyphox").  
 
-- _Bobok_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
-- _White Nights_ by Fyodor Dostoyevsky (transl. Ronald Meyer)
-- _The Stranger_ by Albert Camus
-- _Before the Coffee Gets Cold_ by Toshikazu Kawaguchi (transl. Geoffrey Trousselot)
-- _The Autobiography of Malcom X_ by Malcolm X, Alex Haley
-- _Dracula_ by Bram Stoker
-- _The Iliac Crest_ by Cristina Rivera Garza (transl. Sarah Booker)
-- _Ubik_ by Philip K. Dick
-- _A Scanner Darkly_ by Philip K. Dick
-- _Do Androids Dream of Electric Sheep_ by Philip K. Dick
-- _Brave New World_ by Aldous Huxley
-- _Count Zero_ by William Gibson
-- _In the Miso Soup_ by Ryu Murakami (transl. Ralph McCarthy)
-- _Neuromancer_ by William Gibson
-- _Trainspotting_ by Irvine Welsh
-- _Balzac and the Little Chinese Seamstress_ by Dai Sijie (transl. Ina Rilke)
-- _Sputnik Sweetheart_ by Haruki Murakami (transl. Philip Gabriel)
-- _The Poisonwood Bible_ by Barbara Kingsolver
-- _Nineteen Eighty-Four_ by George Orwell
+|----|----|----|
+|Wuthering Heights |Emily Bronte| [dnf](# "will come back to at some point") |
+|Bobok| Fyodor Dostoyevsky (transl. Ronald Meyer) | •••• |
+|White Nights|Fyodor Dostoyevsky (transl. Ronald Meyer) | ••••• |
+|The Stranger| Albert Camus | •••• |
+|Before the Coffee Gets Cold| Toshikazu Kawaguchi (transl. Geoffrey Trousselot) | •••• |
+|The Autobiography of Malcom X| Malcolm X, Alex Haley | ••••• |
+|Dracula| Bram Stoker | ••••• |
+|The Iliac Crest| Cristina Rivera Garza (transl. Sarah Booker)| •••• |
+|Ubik| Philip K. Dick| ••••• |
+|A Scanner Darkly| Philip K. Dick| •••• |
+|Do Androids Dream of Electric Sheep| Philip K. Dick| ••• |
+|Brave New World| Aldous Huxley| ••••• |
+|Count Zero| William Gibson| •••• |
+|In the Miso Soup| Ryu Murakami (transl. Ralph McCarthy)| •••• |
+|Neuromancer| William Gibson| ••••• |
+|Trainspotting| Irvine Welsh| ••••• |
+|Balzac and the Little Chinese Seamstress| Dai Sijie (transl. Ina Rilke)| •••• |
+|Sputnik Sweetheart| Haruki Murakami (transl. Philip Gabriel)| ••• |
+|The Poisonwood Bible| Barbara Kingsolver| ••••• |
+|Nineteen Eighty-Four| George Orwell| •••• |
 
