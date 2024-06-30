@@ -137,12 +137,12 @@ a:hover, a:active, a:focus {
 }
 
 /*tables*/
-table { border-collapse: collapse; max-width: 100%; overflow-x: auto; }
-table tr td,table tr th { padding: 0.3rem 1ch }
-table tr td { vertical-align: top }
-table tr th { border-bottom: 2px solid var(--c); color: var(--d); font-weight: 500; text-align: inherit }
+table { border-collapse: collapse; width: 100%; overflow-x: auto; table-layout: fixed }
+td, th { padding: 0.3rem 1ch }
+th { border-bottom: 2px solid var(--c); color: var(--d); font-weight: 500; text-align: inherit }
+td:first-child, th:first-child { padding-left: 0 }
+td:last-child, th:first-child { padding-right: 0 }
 
 /*index table*/
-.postlink { vertical-align: top }
-.postdate { vertical-align: top; white-space: nowrap; width: 1px; font-family: var(--e) }
+.postdate { white-space: nowrap; width: 10ch; font-family: var(--e) }
 
