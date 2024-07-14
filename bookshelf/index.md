@@ -2,6 +2,7 @@
 
 List of books I am currenly reading:
 
+- _Notes from the Underground_ by Fyodor Dostoyevsky
 - _The Plague_ by Albert Camus
 - _Against White Feminism: Notes on Disruption_ by Rafia [Zakaria](# "no relation")
 
