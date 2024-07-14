@@ -11,4 +11,5 @@ rss:
 
 # serve (for testing only)
 serve:
+	ip a
 	-pgrep sghs || sghs && echo "error: already serving"
