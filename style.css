@@ -36,7 +36,7 @@ body {
 	font-family: var(--f);
 	font-size: 16px;
 	font-weight: 350;
-	line-height: 1.6;
+	line-height: 160%;
 	background: var(--a);
 	color: var(--c);
 }
@@ -89,7 +89,6 @@ body footer p {
 	column-gap: calc(var(--t) * 0.75);
 	text-transform: lowercase;
 }
-body footer p { justify-content: flex-end  }
 body header nav p a,
 body footer p a {
 	font-weight: 600;
