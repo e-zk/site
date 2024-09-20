@@ -10,7 +10,6 @@ I try to [read](/bookshelf/ "link to my bookshelf") in my spare time.
 List of online places I am:
 - [zk](https://lobste.rs/u/zk) @ Lobste.rs
 - [e-zk](https://github.com/e-zk/) @ GitHub
-- [zxzxzxzxzxzxz](https://bandcamp.com/zxzxzxzxzxzxz) @ Bandcamp
 
 ## Code
 
