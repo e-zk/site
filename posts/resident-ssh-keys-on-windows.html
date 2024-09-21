@@ -18,7 +18,7 @@
 </nav>
 </header>
 <main>
-
+<p><small>2022-03-23</small></p>
 <h1 id="yubikey-resident-ssh-keys-on-windows-wsl">YubiKey resident SSH keys on Windows+WSL</h1>
 
 <p>This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via <code>npiperelay</code> and <code>socat</code>.</p>
@@ -115,7 +115,6 @@ ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
 <p>Save this script as <code>ssh-keys.ps1</code> in: <code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp</code>, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.</p>
 
 <p>Similarly, for adding the private keys in WSL2 you can add a <code>ssh-add /path/to/key1 /path/to/key1</code> line to your shell rc.</p>
-
 
 </main>
 <footer>

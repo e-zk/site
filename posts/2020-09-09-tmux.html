@@ -18,7 +18,7 @@
 </nav>
 </header>
 <main>
-
+<p><small>2020-09-09</small></p>
 <h1 id="quick-setup-script-with-tmux">Quick setup script with <code>tmux</code></h1>
 
 <p>In my network security class we ssh into a handful of VMs pretty often.<br>
@@ -50,7 +50,6 @@ tmux attach-session -d
 <p>First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.</p>
 
 <p>Now after I start my VM all I have to do is run the script (I called it <code>setupsess</code>), and I&rsquo;m ready to start hacking away at my messy nftables configs.</p>
-
 
 </main>
 <footer>
