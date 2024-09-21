@@ -1,5 +1,4 @@
 {{define "title"}}{{.Title}}{{end}}
-{{define "body"}}
-{{.Content}}
-{{end}}
+{{define "body"}}{{if .Date }}<p><small>{{.Date}}</small></p>{{end}}
+{{.Content}}{{end}}
 {{define "footer"}}{{.Footer}}{{end}}
