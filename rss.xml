@@ -8,102 +8,102 @@
 <title>YubiKey resident SSH keys on Windows&#43;WSL</title>
 <pubDate>Wed, 23 Mar 2022 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="yubikey-resident-ssh-keys-on-windows-wsl">YubiKey resident SSH keys on Windows+WSL</h1>
+&lt;h1 id=&#34;yubikey-resident-ssh-keys-on-windows-wsl&#34;&gt;YubiKey resident SSH keys on Windows+WSL&lt;/h1&gt;
 
-<p>This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via <code>npiperelay</code> and <code>socat</code>.</p>
+&lt;p&gt;This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via &lt;code&gt;npiperelay&lt;/code&gt; and &lt;code&gt;socat&lt;/code&gt;.&lt;/p&gt;
 
-<p>It's important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn't notice any functional differences.</p>
+&lt;p&gt;It&#39;s important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn&#39;t notice any functional differences.&lt;/p&gt;
 
-<h2 id="download-openssh">Download OpenSSH</h2>
+&lt;h2 id=&#34;download-openssh&#34;&gt;Download OpenSSH&lt;/h2&gt;
 
-<p>As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via <code>ssh-add</code> or <code>ssh-keygen</code>. So first we need to update OpenSSH for Windows:</p>
+&lt;p&gt;As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via &lt;code&gt;ssh-add&lt;/code&gt; or &lt;code&gt;ssh-keygen&lt;/code&gt;. So first we need to update OpenSSH for Windows:&lt;/p&gt;
 
-<ol>
-<li>Download the latest .zip from the <a href="https://github.com/PowerShell/Win32-OpenSSH/releases">Win32-OpenSSH GitHub releases page</a>. (OpenSSH-Win64.zip in my case).</li>
-<li>Unzip it, and run the <code>install-sshd.ps1</code> script as Administrator.</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Download the latest .zip from the &lt;a href=&#34;https://github.com/PowerShell/Win32-OpenSSH/releases&#34;&gt;Win32-OpenSSH GitHub releases page&lt;/a&gt;. (OpenSSH-Win64.zip in my case).&lt;/li&gt;
+&lt;li&gt;Unzip it, and run the &lt;code&gt;install-sshd.ps1&lt;/code&gt; script as Administrator.&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>This script will update the appropriate Windows system services (<code>sshd</code> and <code>ssh-agent</code>) to use the executables in the current directory instead of the default ones. The script will not, however install the the executables into your PATH (of which <code>ssh-add</code> and <code>ssh-keygen</code> we'll need later on) so remember where you've unzipped it.</p>
+&lt;p&gt;This script will update the appropriate Windows system services (&lt;code&gt;sshd&lt;/code&gt; and &lt;code&gt;ssh-agent&lt;/code&gt;) to use the executables in the current directory instead of the default ones. The script will not, however install the the executables into your PATH (of which &lt;code&gt;ssh-add&lt;/code&gt; and &lt;code&gt;ssh-keygen&lt;/code&gt; we&#39;ll need later on) so remember where you&#39;ve unzipped it.&lt;/p&gt;
 
-<p>Next restart the <code>ssh-agent</code> Windows service:</p>
+&lt;p&gt;Next restart the &lt;code&gt;ssh-agent&lt;/code&gt; Windows service:&lt;/p&gt;
 
-<ol>
-<li>Open <code>services.msc</code> from Run (<code>Win+R</code>).</li>
-<li>Find &quot;OpenSSH Authentication Agent&quot;, right click and select &quot;Restart&quot;.</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Open &lt;code&gt;services.msc&lt;/code&gt; from Run (&lt;code&gt;Win+R&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Find &amp;quot;OpenSSH Authentication Agent&amp;quot;, right click and select &amp;quot;Restart&amp;quot;.&lt;/li&gt;
+&lt;/ol&gt;
 
-<h2 id="configuring-wsl2">Configuring WSL2</h2>
+&lt;h2 id=&#34;configuring-wsl2&#34;&gt;Configuring WSL2&lt;/h2&gt;
 
-<ol>
-<li><p>Install <code>socat</code> using your package manager (e.g. <code>sudo apt install socat</code>).</p></li>
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install &lt;code&gt;socat&lt;/code&gt; using your package manager (e.g. &lt;code&gt;sudo apt install socat&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
 
-<li><p>Download the latest npiperelay from the <a href="https://github.com/jstarks/npiperelay/releases">GitHub releases page</a>. Unzip it, and copy npiperelay.exe to somewhere in your WSL's <code>$PATH</code> (<code>~/bin/npiperelay.exe</code> in my case).</p></li>
+&lt;li&gt;&lt;p&gt;Download the latest npiperelay from the &lt;a href=&#34;https://github.com/jstarks/npiperelay/releases&#34;&gt;GitHub releases page&lt;/a&gt;. Unzip it, and copy npiperelay.exe to somewhere in your WSL&#39;s &lt;code&gt;$PATH&lt;/code&gt; (&lt;code&gt;~/bin/npiperelay.exe&lt;/code&gt; in my case).&lt;/p&gt;&lt;/li&gt;
 
-<li><p>In your <code>~/.profile</code>, or <code>~/.bashrc</code> shell startup script add the following (adapted from the <a href="https://github.com/rupor-github/wsl-ssh-agent"><code>wsl-ssh-agent</code> README</a>):</p>
+&lt;li&gt;&lt;p&gt;In your &lt;code&gt;~/.profile&lt;/code&gt;, or &lt;code&gt;~/.bashrc&lt;/code&gt; shell startup script add the following (adapted from the &lt;a href=&#34;https://github.com/rupor-github/wsl-ssh-agent&#34;&gt;&lt;code&gt;wsl-ssh-agent&lt;/code&gt; README&lt;/a&gt;):&lt;/p&gt;
 
-<pre><code>export NPIPE_CMD=$(command -v npiperelay.exe)
+&lt;pre&gt;&lt;code&gt;export NPIPE_CMD=$(command -v npiperelay.exe)
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
 
 
 # setup socat
 ss -a | grep -q $SSH_AUTH_SOCK
-if [ &quot;$?&quot; -ne &quot;0&quot; ]; then
+if [ &amp;quot;$?&amp;quot; -ne &amp;quot;0&amp;quot; ]; then
 	rm -f $SSH_AUTH_SOCK
-	( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:&quot;$NPIPE_CMD -ei -s //./pipe/openssh-ssh-agent&quot;,nofork &amp; ) &gt;/dev/null 2&gt;&amp;1
+	( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:&amp;quot;$NPIPE_CMD -ei -s //./pipe/openssh-ssh-agent&amp;quot;,nofork &amp;amp; ) &amp;gt;/dev/null 2&amp;gt;&amp;amp;1
 fi
 
 
 # add your ssh private key paths here ...
 ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
-</code></pre></li>
-</ol>
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
-<h2 id="importing-resident-ssh-keys">Importing resident SSH keys</h2>
+&lt;h2 id=&#34;importing-resident-ssh-keys&#34;&gt;Importing resident SSH keys&lt;/h2&gt;
 
-<p>Importing resident ssh private keys from the YubiKey via <code>ssh-keygen -K</code> isn't supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:</p>
+&lt;p&gt;Importing resident ssh private keys from the YubiKey via &lt;code&gt;ssh-keygen -K&lt;/code&gt; isn&#39;t supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:&lt;/p&gt;
 
-<ol>
-<li>Open a privileged <strong>Administrator</strong> PowerShell window. It must be a privileged PowerShell window, otherwise it will fail with an &quot;invalid format&quot; error.</li>
-<li><code>cd</code> to the directory the previously downloaded OpenSSH binaries reside (the path I told you to keep a not of).</li>
-<li>Run <code>.\ssh-keygen -K</code>, and follow the prompts:</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Open a privileged &lt;strong&gt;Administrator&lt;/strong&gt; PowerShell window. It must be a privileged PowerShell window, otherwise it will fail with an &amp;quot;invalid format&amp;quot; error.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cd&lt;/code&gt; to the directory the previously downloaded OpenSSH binaries reside (the path I told you to keep a not of).&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;.\ssh-keygen -K&lt;/code&gt;, and follow the prompts:&lt;/li&gt;
+&lt;/ol&gt;
 
-<p><img src="/static/img/import-resident-key.png" alt="screencap of PowerShell window showing the steps to import a resident ssh key" /></p>
+&lt;p&gt;&lt;img src=&#34;/static/img/import-resident-key.png&#34; alt=&#34;screencap of PowerShell window showing the steps to import a resident ssh key&#34; /&gt;&lt;/p&gt;
 
-<p>There is another method that requires a second device running anything that isn't Windows (Linux, *BSD, etc). I did this way before realising I could use the updated <code>ssh-keygen</code> binary:</p>
+&lt;p&gt;There is another method that requires a second device running anything that isn&#39;t Windows (Linux, *BSD, etc). I did this way before realising I could use the updated &lt;code&gt;ssh-keygen&lt;/code&gt; binary:&lt;/p&gt;
 
-<ol>
-<li>Import the resident keys to a file; <code>ssh-keygen -K -f ./id_ed25519_sk</code>, (make sure to set a password).</li>
-<li>Either copy the resulting file to a USB drive, or upload it somewhere private (this is, after all, your <em>private</em> key).</li>
-<li>Copy/download the file onto your Windows machine, and add it to the authentication agent via <code>ssh-add c:\path\to\file</code>.</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Import the resident keys to a file; &lt;code&gt;ssh-keygen -K -f ./id_ed25519_sk&lt;/code&gt;, (make sure to set a password).&lt;/li&gt;
+&lt;li&gt;Either copy the resulting file to a USB drive, or upload it somewhere private (this is, after all, your &lt;em&gt;private&lt;/em&gt; key).&lt;/li&gt;
+&lt;li&gt;Copy/download the file onto your Windows machine, and add it to the authentication agent via &lt;code&gt;ssh-add c:\path\to\file&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
 
-<h2 id="adding-keys-to-the-agent">Adding keys to the agent</h2>
+&lt;h2 id=&#34;adding-keys-to-the-agent&#34;&gt;Adding keys to the agent&lt;/h2&gt;
 
-<p>Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the <code>ssh-add</code> command.</p>
+&lt;p&gt;Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the &lt;code&gt;ssh-add&lt;/code&gt; command.&lt;/p&gt;
 
-<p>In WSL2:</p>
+&lt;p&gt;In WSL2:&lt;/p&gt;
 
-<pre><code>$ ssh-add /path/to/file
-</code></pre>
+&lt;pre&gt;&lt;code&gt;$ ssh-add /path/to/file
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>In Windows (PowerShell):</p>
+&lt;p&gt;In Windows (PowerShell):&lt;/p&gt;
 
-<pre><code>PS C:\Windows\system32&gt; ssh-add C:\path\to\file
-</code></pre>
+&lt;pre&gt;&lt;code&gt;PS C:\Windows\system32&amp;gt; ssh-add C:\path\to\file
+&lt;/code&gt;&lt;/pre&gt;
 
-<h3 id="automating">Automating</h3>
+&lt;h3 id=&#34;automating&#34;&gt;Automating&lt;/h3&gt;
 
-<p>If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won't load your keys on startup, we can write a simple PowerShell one-liner that runs at login:</p>
+&lt;p&gt;If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won&#39;t load your keys on startup, we can write a simple PowerShell one-liner that runs at login:&lt;/p&gt;
 
-<pre><code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\ssh-add.exe &quot;$env:USERPROFILE\.ssh\id_yubikey&quot; &quot;$env:USERPROFILE\.ssh\id_something_nonstandard&quot;
-</code></pre>
+&lt;pre&gt;&lt;code&gt;C:\Users\zzz\Documents\bin\OpenSSH-Win64\ssh-add.exe &amp;quot;$env:USERPROFILE\.ssh\id_yubikey&amp;quot; &amp;quot;$env:USERPROFILE\.ssh\id_something_nonstandard&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>You will need to replace <code>C:\Users\zzz\Documents\bin\OpenSSH-Win64\</code> with the path to where you unzipped Win32-OpenSSH previously (hope you didn't forget!).</p>
+&lt;p&gt;You will need to replace &lt;code&gt;C:\Users\zzz\Documents\bin\OpenSSH-Win64\&lt;/code&gt; with the path to where you unzipped Win32-OpenSSH previously (hope you didn&#39;t forget!).&lt;/p&gt;
 
-<p>Save this script as <code>ssh-keys.ps1</code> in: <code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp</code>, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.</p>
+&lt;p&gt;Save this script as &lt;code&gt;ssh-keys.ps1&lt;/code&gt; in: &lt;code&gt;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp&lt;/code&gt;, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.&lt;/p&gt;
 
-<p>Similarly, for adding the private keys in WSL2 you can add a <code>ssh-add /path/to/key1 /path/to/key1</code> line to your shell rc.</p>
+&lt;p&gt;Similarly, for adding the private keys in WSL2 you can add a &lt;code&gt;ssh-add /path/to/key1 /path/to/key1&lt;/code&gt; line to your shell rc.&lt;/p&gt;
 
 </description>
 </item><item>
@@ -111,136 +111,136 @@ ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
 <title>Installing Headscale on OpenBSD</title>
 <pubDate>Tue, 15 Feb 2022 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="installing-headscale-on-openbsd">Installing headscale on OpenBSD</h1>
+&lt;h1 id=&#34;installing-headscale-on-openbsd&#34;&gt;Installing headscale on OpenBSD&lt;/h1&gt;
 
-<p>In this post I'll detail the steps I took to install and configure
-<a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
+&lt;p&gt;In this post I&#39;ll detail the steps I took to install and configure
+&lt;a href=&#34;https://github.com/juanfont/headscale&#34;&gt;headscale&lt;/a&gt;, an open-source self-hostable implementation of the &lt;a href=&#34;https://tailscale.com/&#34;&gt;Tailscale&lt;/a&gt; control server, on OpenBSD.&lt;/p&gt;
 
-<p>Code blocks prefixed with <code>#</code> imply that the command should be run as a privileged user/root.</p>
+&lt;p&gt;Code blocks prefixed with &lt;code&gt;#&lt;/code&gt; imply that the command should be run as a privileged user/root.&lt;/p&gt;
 
-<p>If you get stuck, it'll be probably worthwhile to have a read of headscale's documentation available in their GitHub repo: <a href="https://github.com/juanfont/headscale/tree/main/docs">https://github.com/juanfont/headscale/tree/main/docs</a> .</p>
+&lt;p&gt;If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: &lt;a href=&#34;https://github.com/juanfont/headscale/tree/main/docs&#34;&gt;https://github.com/juanfont/headscale/tree/main/docs&lt;/a&gt; .&lt;/p&gt;
 
-<h2 id="compilation">Compilation</h2>
+&lt;h2 id=&#34;compilation&#34;&gt;Compilation&lt;/h2&gt;
 
-<p>Since my server is on OpenBSD-stable, headscale is only available via <code>pkg_add</code> on -current, I need to compile the headscale binary by hand and upload it to the server.
-I'm doing this on an OpenBSD machine, so compiling and uploading it to the server
-should be a breeze.</p>
+&lt;p&gt;Since my server is on OpenBSD-stable, headscale is only available via &lt;code&gt;pkg_add&lt;/code&gt; on -current, I need to compile the headscale binary by hand and upload it to the server.
+I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+should be a breeze.&lt;/p&gt;
 
-<pre><code>$ git clone git@github.com:juanfont/headscale.git
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:juanfont/headscale.git
 $ cd headscale
 $ make generate
 $ make build
-$ sftp user@server &lt;&lt;EOF
-&gt; put ./headscale
-&gt; bye
+$ sftp user@server &amp;lt;&amp;lt;EOF
+&amp;gt; put ./headscale
+&amp;gt; bye
 EOF
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Then login, get root access, and copy the binary to <code>/usr/local/bin</code>:</p>
+&lt;p&gt;Then login, get root access, and copy the binary to &lt;code&gt;/usr/local/bin&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>$ ssh user@server
+&lt;pre&gt;&lt;code&gt;$ ssh user@server
 $ doas -s
 ...
 # cp ./headscale /usr/local/bin
 # chown root:bin /usr/local/bin/headscale
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="configuration">Configuration</h2>
+&lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
 
-<p>Next we need to setup:</p>
+&lt;p&gt;Next we need to setup:&lt;/p&gt;
 
-<ol>
-<li>a <code>_headscale</code> daemon user that headscale will run as.</li>
-<li>directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions/owner).</li>
-<li>copy the example config from GitHub, and edit it to our liking</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;a &lt;code&gt;_headscale&lt;/code&gt; daemon user that headscale will run as.&lt;/li&gt;
+&lt;li&gt;directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions/owner).&lt;/li&gt;
+&lt;li&gt;copy the example config from GitHub, and edit it to our liking&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>First we setup some directories:</p>
+&lt;p&gt;First we setup some directories:&lt;/p&gt;
 
-<pre><code># mkdir -p /etc/headscale
+&lt;pre&gt;&lt;code&gt;# mkdir -p /etc/headscale
 # touch /etc/headscale/config.yaml
 # mkdir -p /var/headscale
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Then we add our <code>_headscale</code> daemon user, and <code>chown</code> all the necessary dirs.<br />
-Here we also run <code>doas</code> to get us a shell as <code>_headscale</code> so I can create the db.sqlite file. Note doing it this way requires some <code>doas.conf</code> rules.</p>
+&lt;p&gt;Then we add our &lt;code&gt;_headscale&lt;/code&gt; daemon user, and &lt;code&gt;chown&lt;/code&gt; all the necessary dirs.&lt;br /&gt;
+Here we also run &lt;code&gt;doas&lt;/code&gt; to get us a shell as &lt;code&gt;_headscale&lt;/code&gt; so I can create the db.sqlite file. Note doing it this way requires some &lt;code&gt;doas.conf&lt;/code&gt; rules.&lt;/p&gt;
 
-<pre><code># useradd -L daemon -s /sbin/nologin -d /var/headscale _headscale
+&lt;pre&gt;&lt;code&gt;# useradd -L daemon -s /sbin/nologin -d /var/headscale _headscale
 # chown -R _headscale:_headscale /var/headscale 
 # doas -u _headscale /bin/ksh
 $ touch /var/headscale/db.sqlite
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Finally we can edit the headscale config. I highly recommend copying the <a href="https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml">example config</a> and using that as a starting point.</p>
+&lt;p&gt;Finally we can edit the headscale config. I highly recommend copying the &lt;a href=&#34;https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml&#34;&gt;example config&lt;/a&gt; and using that as a starting point.&lt;/p&gt;
 
-<pre><code># vi /etc/headscale/config.yaml
+&lt;pre&gt;&lt;code&gt;# vi /etc/headscale/config.yaml
 # # copy the example config
 # # change domain, IPs, ports
 # # change sock location to /var/headscale/headscale.sock 
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>I'm currently using <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don't need to
-configure any TLS-related stuff.</p>
+&lt;p&gt;I&#39;m currently using &lt;a href=&#34;https://man.openbsd.org/relayd&#34;&gt;relayd(8)&lt;/a&gt; as a TLS proxy, so I don&#39;t need to
+configure any TLS-related stuff.&lt;/p&gt;
 
-<p>Run <code>headscale serve</code> to see if the config works, and all the directories and permissions are correct:</p>
+&lt;p&gt;Run &lt;code&gt;headscale serve&lt;/code&gt; to see if the config works, and all the directories and permissions are correct:&lt;/p&gt;
 
-<pre><code># doas -u _headscale headscale serve
+&lt;pre&gt;&lt;code&gt;# doas -u _headscale headscale serve
 ...
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>If all is well we can move onto setting up an init script for the headscale daemon.</p>
+&lt;p&gt;If all is well we can move onto setting up an init script for the headscale daemon.&lt;/p&gt;
 
-<h2 id="rc-d">rc.d</h2>
+&lt;h2 id=&#34;rc-d&#34;&gt;rc.d&lt;/h2&gt;
 
-<p>I've made an init script to making stopping/starting and running at boot
-a lot easier. Drop this simple script into <code>/etc/rc.d/headscale</code>:</p>
+&lt;p&gt;I&#39;ve made an init script to making stopping/starting and running at boot
+a lot easier. Drop this simple script into &lt;code&gt;/etc/rc.d/headscale&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>#!/bin/ksh
+&lt;pre&gt;&lt;code&gt;#!/bin/ksh
 #
 # /etc/rc.d/headscale
 
-daemon_user=&quot;_headscale&quot;
-daemon=&quot;/usr/local/bin/headscale&quot;
-daemon_flags=&quot;serve&quot;
+daemon_user=&amp;quot;_headscale&amp;quot;
+daemon=&amp;quot;/usr/local/bin/headscale&amp;quot;
+daemon_flags=&amp;quot;serve&amp;quot;
 
 . /etc/rc.d/rc.subr
 
 rc_cmd $1
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p><code>chmod</code>, enable and start it as usual:</p>
+&lt;p&gt;&lt;code&gt;chmod&lt;/code&gt;, enable and start it as usual:&lt;/p&gt;
 
-<pre><code># chmod +x /etc/rc.d/headscale
+&lt;pre&gt;&lt;code&gt;# chmod +x /etc/rc.d/headscale
 # rcctl enable headscale
 # rcctl start headscale
 headscale(ok)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="clients">Clients</h2>
+&lt;h2 id=&#34;clients&#34;&gt;Clients&lt;/h2&gt;
 
-<p>So here's where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.</p>
+&lt;p&gt;So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.&lt;/p&gt;
 
-<h3 id="openbsd-client">OpenBSD client</h3>
+&lt;h3 id=&#34;openbsd-client&#34;&gt;OpenBSD client&lt;/h3&gt;
 
-<p>It's pretty easy to get the Tailscale client on OpenBSD to use your control server.</p>
+&lt;p&gt;It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server.&lt;/p&gt;
 
-<pre><code># pkg_add tailscale
+&lt;pre&gt;&lt;code&gt;# pkg_add tailscale
 # rcctl enable tailscaled; rcctl start tailscaled
-# tailscale --login-server &quot;https://headscale.example.com:443&quot;
+# tailscale --login-server &amp;quot;https://headscale.example.com:443&amp;quot;
 ...
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Where <code>https://headscale.example.com:443</code> is your control server URL.</p>
+&lt;p&gt;Where &lt;code&gt;https://headscale.example.com:443&lt;/code&gt; is your control server URL.&lt;/p&gt;
 
-<h3 id="android-client">Android client</h3>
+&lt;h3 id=&#34;android-client&#34;&gt;Android client&lt;/h3&gt;
 
-<p>You can find the instructions for patching and building the custom APK <a href="https://github.com/juanfont/headscale/issues/58#issuecomment-950386833">here</a>.</p>
+&lt;p&gt;You can find the instructions for patching and building the custom APK &lt;a href=&#34;https://github.com/juanfont/headscale/issues/58#issuecomment-950386833&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-<p>I didn't bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can't be bothered to move all the junk I've accumulated in my WSL distro's $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran <code>make tailscale-debug.apk</code>.</p>
+&lt;p&gt;I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran &lt;code&gt;make tailscale-debug.apk&lt;/code&gt;.&lt;/p&gt;
 
-<p>Quite frankly this was painful, but it isn't supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.</p>
+&lt;p&gt;Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.&lt;/p&gt;
 
-<p>In the end it was quite rewarding to install the APK file, open it up and see it all working!</p>
+&lt;p&gt;In the end it was quite rewarding to install the APK file, open it up and see it all working!&lt;/p&gt;
 
 </description>
 </item><item>
@@ -248,106 +248,106 @@ headscale(ok)
 <title>My stagit setup</title>
 <pubDate>Mon, 14 Feb 2022 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="stagit-setup-on-openbsd">stagit setup on OpenBSD</h1>
+&lt;h1 id=&#34;stagit-setup-on-openbsd&#34;&gt;stagit setup on OpenBSD&lt;/h1&gt;
 
-<p><a href="https://codemadness.org/stagit.html">stagit</a> is a static page generator for git repos. It's very minimal - which I like.</p>
+&lt;p&gt;&lt;a href=&#34;https://codemadness.org/stagit.html&#34;&gt;stagit&lt;/a&gt; is a static page generator for git repos. It&#39;s very minimal - which I like.&lt;/p&gt;
 
-<p>In this post I'll detail how I set up <a href="https://git.zakaria.org/">git.zakaria.org</a> on my OpenBSD server.</p>
+&lt;p&gt;In this post I&#39;ll detail how I set up &lt;a href=&#34;https://git.zakaria.org/&#34;&gt;git.zakaria.org&lt;/a&gt; on my OpenBSD server.&lt;/p&gt;
 
-<p>The majority of my setup is based upon a post by <code>poptart</code>. Be sure to check out the original post here: <a href="https://hosakacorp.net/p/stagit-server.html">https://hosakacorp.net/p/stagit-server.html</a>. It's pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). <code>poptart</code> has some other great OpenBSD-related posts on there as well.</p>
+&lt;p&gt;The majority of my setup is based upon a post by &lt;code&gt;poptart&lt;/code&gt;. Be sure to check out the original post here: &lt;a href=&#34;https://hosakacorp.net/p/stagit-server.html&#34;&gt;https://hosakacorp.net/p/stagit-server.html&lt;/a&gt;. It&#39;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). &lt;code&gt;poptart&lt;/code&gt; has some other great OpenBSD-related posts on there as well.&lt;/p&gt;
 
-<h2 id="setup">Setup</h2>
+&lt;h2 id=&#34;setup&#34;&gt;Setup&lt;/h2&gt;
 
-<p>On the server install <code>git</code>, create the <code>_git</code> user, and make some directories:</p>
+&lt;p&gt;On the server install &lt;code&gt;git&lt;/code&gt;, create the &lt;code&gt;_git&lt;/code&gt; user, and make some directories:&lt;/p&gt;
 
-<pre><code>server# pkg_add git libgit2
+&lt;pre&gt;&lt;code&gt;server# pkg_add git libgit2
 server# groupadd _git
 server# mkdir -p -m 744 /var/git/repos /var/git/template
-server# useradd -g _git -L daemon -c &quot;git backend user&quot; -d /var/git/repos -s /usr/local/bin/git-shell _git
+server# useradd -g _git -L daemon -c &amp;quot;git backend user&amp;quot; -d /var/git/repos -s /usr/local/bin/git-shell _git
 server# chown _git:_git /var/git/repos
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The directories we created:</p>
+&lt;p&gt;The directories we created:&lt;/p&gt;
 
-<ul>
-<li><code>/var/www/repos</code> contains the bare git files (also the <code>$HOME</code> of user <code>_git</code>)</li>
-<li><code>/var/git/template</code> will contain the template for new repositories.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/var/www/repos&lt;/code&gt; contains the bare git files (also the &lt;code&gt;$HOME&lt;/code&gt; of user &lt;code&gt;_git&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/var/git/template&lt;/code&gt; will contain the template for new repositories.&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>The next steps are only if like me you've made source changes to stagit and you'd like to use your custom version. If you want to use plain stagit, install it on the server with <code>pkg_add stagit</code>.<br />
-On another machine, compile stagit and <code>sftp</code> it over to the server:</p>
+&lt;p&gt;The next steps are only if like me you&#39;ve made source changes to stagit and you&#39;d like to use your custom version. If you want to use plain stagit, install it on the server with &lt;code&gt;pkg_add stagit&lt;/code&gt;.&lt;br /&gt;
+On another machine, compile stagit and &lt;code&gt;sftp&lt;/code&gt; it over to the server:&lt;/p&gt;
 
-<pre><code>laptop$ make
+&lt;pre&gt;&lt;code&gt;laptop$ make
 laptop$ md5 stagit stagit-index
-laptop$ # remember these checksums for verifying it's been copied over correctly
-laptop$ sftp enderman &lt;&lt;EOF
-&gt; put stagit
-&gt; put stagit-index
-&gt; bye
+laptop$ # remember these checksums for verifying it&#39;s been copied over correctly
+laptop$ sftp enderman &amp;lt;&amp;lt;EOF
+&amp;gt; put stagit
+&amp;gt; put stagit-index
+&amp;gt; bye
 EOF
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Back on the server, verify the binaries were copied over correctly:</p>
+&lt;p&gt;Back on the server, verify the binaries were copied over correctly:&lt;/p&gt;
 
-<pre><code>server# md5 stagit stagit-index
+&lt;pre&gt;&lt;code&gt;server# md5 stagit stagit-index
 server# # verify the checksums
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Copy these binaries to <code>/usr/local/bin</code> and set permissions appropriately:</p>
+&lt;p&gt;Copy these binaries to &lt;code&gt;/usr/local/bin&lt;/code&gt; and set permissions appropriately:&lt;/p&gt;
 
-<pre><code>server# cp stagit{,-index} /usr/local/bin
+&lt;pre&gt;&lt;code&gt;server# cp stagit{,-index} /usr/local/bin
 server# chown root:bin /usr/local/bin/stagit{,-index} 
 server# chmod 755 /usr/local/bin/stagit{,-index}
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The following is a message from the future:</p>
+&lt;p&gt;The following is a message from the future:&lt;/p&gt;
 
-<blockquote>
-<p>I wrote this post a while ago. But I recall abandoning the modified stagit binary setup
+&lt;blockquote&gt;
+&lt;p&gt;I wrote this post a while ago. But I recall abandoning the modified stagit binary setup
 purely because the libraries on my laptop were newer than my server, and I
 could not get static compilation to work...
-So I gave up and installed stagit via <code>pkg_add stagit</code> on the server :P</p>
-</blockquote>
+So I gave up and installed stagit via &lt;code&gt;pkg_add stagit&lt;/code&gt; on the server :P&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<h2 id="scripts">Scripts</h2>
+&lt;h2 id=&#34;scripts&#34;&gt;Scripts&lt;/h2&gt;
 
-<p>Next we'll configure a few scripts:</p>
+&lt;p&gt;Next we&#39;ll configure a few scripts:&lt;/p&gt;
 
-<ul>
-<li><code>/var/git/repos/template/post-receive</code><br />
-Will be executed every time we push to a repo.</li>
-<li><code>/usr/local/bin/stagit-gen-index</code><br />
-A helper script to generate the index page.</li>
-<li><code>/usr/local/bin/stagit-newrepo</code><br />
-Script to run to create a new repository.</li>
-<li><code>/usr/local/bin/stagit-chdesc</code><br />
-Script to change the description of an existing repository.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/var/git/repos/template/post-receive&lt;/code&gt;&lt;br /&gt;
+Will be executed every time we push to a repo.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-gen-index&lt;/code&gt;&lt;br /&gt;
+A helper script to generate the index page.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-newrepo&lt;/code&gt;&lt;br /&gt;
+Script to run to create a new repository.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-chdesc&lt;/code&gt;&lt;br /&gt;
+Script to change the description of an existing repository.&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>Some internal variables will be shared between these scripts, for instance the
+&lt;p&gt;Some internal variables will be shared between these scripts, for instance the
 git user, htdocs path, etc. Instead of writing these out into each script we
-can create a config file that each script will source before running anything.<br />
-In <code>/var/git/config.rc</code>:</p>
+can create a config file that each script will source before running anything.&lt;br /&gt;
+In &lt;code&gt;/var/git/config.rc&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code># shared variables
-GIT_HOME=&quot;/var/git&quot;
-GIT_REPOS=&quot;${GIT_HOME}/repos&quot;
-WWW_HOME=&quot;/var/www/htdocs/git.zakaria.org
-CLONE_URI=&quot;_git@git.zakaria.org&quot;
-DEFAULT_OWNER=&quot;zakaria&quot;
-DEFAULT_DESC=&quot;&quot;
-GIT_USER=&quot;_git&quot;
-</code></pre>
+&lt;pre&gt;&lt;code&gt;# shared variables
+GIT_HOME=&amp;quot;/var/git&amp;quot;
+GIT_REPOS=&amp;quot;${GIT_HOME}/repos&amp;quot;
+WWW_HOME=&amp;quot;/var/www/htdocs/git.zakaria.org
+CLONE_URI=&amp;quot;_git@git.zakaria.org&amp;quot;
+DEFAULT_OWNER=&amp;quot;zakaria&amp;quot;
+DEFAULT_DESC=&amp;quot;&amp;quot;
+GIT_USER=&amp;quot;_git&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>We restrict access to this file to <code>root:wheel</code>:</p>
+&lt;p&gt;We restrict access to this file to &lt;code&gt;root:wheel&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>server# chown root:wheel /var/git/config.rc
-</code></pre>
+&lt;pre&gt;&lt;code&gt;server# chown root:wheel /var/git/config.rc
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>After a <code>git push</code> we want the server to (re)generate the static html pages. To do this, we write a script in <code>/var/git/template/post-receive</code>:</p>
+&lt;p&gt;After a &lt;code&gt;git push&lt;/code&gt; we want the server to (re)generate the static html pages. To do this, we write a script in &lt;code&gt;/var/git/template/post-receive&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
-# Author: Cale &quot;poptart&quot; Black
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# Author: Cale &amp;quot;poptart&amp;quot; Black
 # Modified by: zakaria @ zakaria.org
 # License: MIT
 
@@ -355,161 +355,161 @@ set -euf
 
 . /var/git/config.rc
 
-export LC_TYPE=&quot;en_US.UTF-8&quot;
-src=&quot;$(pwd)&quot;
-name=&quot;$(basename &quot;$src&quot;)&quot;
-dest=&quot;${WWW_HOME}/$(basename &quot;$name&quot; '.git')&quot;
-mkdir -p &quot;$dest&quot;
-cd &quot;$dest&quot; || exit 1
+export LC_TYPE=&amp;quot;en_US.UTF-8&amp;quot;
+src=&amp;quot;$(pwd)&amp;quot;
+name=&amp;quot;$(basename &amp;quot;$src&amp;quot;)&amp;quot;
+dest=&amp;quot;${WWW_HOME}/$(basename &amp;quot;$name&amp;quot; &#39;.git&#39;)&amp;quot;
+mkdir -p &amp;quot;$dest&amp;quot;
+cd &amp;quot;$dest&amp;quot; || exit 1
 
-echo &quot;[stagit] building $dest&quot;
-/usr/local/bin/stagit &quot;$src&quot;
+echo &amp;quot;[stagit] building $dest&amp;quot;
+/usr/local/bin/stagit &amp;quot;$src&amp;quot;
 
-echo &quot;[stagit] linking $dest&quot;
+echo &amp;quot;[stagit] linking $dest&amp;quot;
 # if a README.html exists use that as the index.html
 # if not use log.html
-if [ -f &quot;README.html&quot; ]; then
+if [ -f &amp;quot;README.html&amp;quot; ]; then
 	ln -sf README.html index.html
 else
 	ln -sf log.html index.html
 fi
 ln -sf ../style.css style.css
 ln -sf ../logo.png logo.png
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Next, we need a script to generate the stagit <code>/index.html</code>. In <code>/usr/local/bin/stagit-gen-index</code>:</p>
+&lt;p&gt;Next, we need a script to generate the stagit &lt;code&gt;/index.html&lt;/code&gt;. In &lt;code&gt;/usr/local/bin/stagit-gen-index&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>#!/bin/sh 
-# Author: Cale &quot;poptart&quot; Black
+&lt;pre&gt;&lt;code&gt;#!/bin/sh 
+# Author: Cale &amp;quot;poptart&amp;quot; Black
 # License: MIT
 
 set -eu
 
 . /var/git/config.rc
-stagit-index &quot;${GIT_REPOS}/*.git&quot; &gt; &quot;${WWW_HOME}/index.html&quot;
-</code></pre>
+stagit-index &amp;quot;${GIT_REPOS}/*.git&amp;quot; &amp;gt; &amp;quot;${WWW_HOME}/index.html&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The next script will be used to setup a new repository. In <code>/usr/local/bin/stagit-newrepo</code>:</p>
+&lt;p&gt;The next script will be used to setup a new repository. In &lt;code&gt;/usr/local/bin/stagit-newrepo&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
-# Author: Cale &quot;poptart&quot; Black
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# Author: Cale &amp;quot;poptart&amp;quot; Black
 # Modified by: zakaria @ zakaria.org
 # License: MIT
-# Usage: stagit-newrepo &lt;name&gt; [desc] [author]
+# Usage: stagit-newrepo &amp;lt;name&amp;gt; [desc] [author]
 
 set -eu
 
 . /var/git/config.rc
 
 log() {
-	printf '%s\n' &quot;$*&quot; &gt;&amp;2
+	printf &#39;%s\n&#39; &amp;quot;$*&amp;quot; &amp;gt;&amp;amp;2
 }
 die() {
-	log &quot;error: $*&quot;
-	printf 'exiting...\n'
+	log &amp;quot;error: $*&amp;quot;
+	printf &#39;exiting...\n&#39;
 	exit 1
 }
 
-REPO=&quot;$1&quot;
-DESC=&quot;${2:-$DEFAULT_DESC}&quot;
-OWNER=&quot;${3:-$DEFAULT_OWNER}&quot;
+REPO=&amp;quot;$1&amp;quot;
+DESC=&amp;quot;${2:-$DEFAULT_DESC}&amp;quot;
+OWNER=&amp;quot;${3:-$DEFAULT_OWNER}&amp;quot;
 
-if [ -z &quot;$REPO&quot; ]; then
-	die &quot;no repo name given&quot;
+if [ -z &amp;quot;$REPO&amp;quot; ]; then
+	die &amp;quot;no repo name given&amp;quot;
 fi
 
-REPO_PATH=&quot;${GIT_REPOS}/${REPO}.git&quot;
+REPO_PATH=&amp;quot;${GIT_REPOS}/${REPO}.git&amp;quot;
 
-git init --bare &quot;$REPO_PATH&quot;
-cp &quot;${GIT_HOME}/template/post-receive&quot; &quot;${REPO_PATH}/hooks/post-receive&quot;
-echo &quot;${CLONE_URI}/${REPO}.git&quot; &gt; &quot;${REPO_PATH}/url&quot;
-echo &quot;$OWNER&quot; &gt; &quot;${REPO_PATH}/owner&quot;
-echo &quot;$DESC&quot; &gt; &quot;${REPO_PATH}/description&quot;
+git init --bare &amp;quot;$REPO_PATH&amp;quot;
+cp &amp;quot;${GIT_HOME}/template/post-receive&amp;quot; &amp;quot;${REPO_PATH}/hooks/post-receive&amp;quot;
+echo &amp;quot;${CLONE_URI}/${REPO}.git&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/url&amp;quot;
+echo &amp;quot;$OWNER&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/owner&amp;quot;
+echo &amp;quot;$DESC&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/description&amp;quot;
 
-chmod u+x &quot;${REPO_PATH}/hooks/post-receive&quot;
-mkdir &quot;${WWW_HOME}/${REPO}&quot;
+chmod u+x &amp;quot;${REPO_PATH}/hooks/post-receive&amp;quot;
+mkdir &amp;quot;${WWW_HOME}/${REPO}&amp;quot;
 /usr/local/bin/stagit-gen-index
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>At the end of this script we call our <code>stagit-gen-index</code> helper script to regenerate
-the <code>index.html</code>.</p>
+&lt;p&gt;At the end of this script we call our &lt;code&gt;stagit-gen-index&lt;/code&gt; helper script to regenerate
+the &lt;code&gt;index.html&lt;/code&gt;.&lt;/p&gt;
 
-<p>The last script is a simple wrapper that will allow us to change a repo's description:</p>
+&lt;p&gt;The last script is a simple wrapper that will allow us to change a repo&#39;s description:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 # Author: zakaria / zakaria.org
 # License: MIT
-# Usage: stagit-chdesc &lt;repo&gt; &lt;new_description&gt;
+# Usage: stagit-chdesc &amp;lt;repo&amp;gt; &amp;lt;new_description&amp;gt;
 
 set -eu
 
 . /var/git/config.rc
 
 log() {
-	printf '%s\n' &quot;$*&quot; &gt;&amp;2
+	printf &#39;%s\n&#39; &amp;quot;$*&amp;quot; &amp;gt;&amp;amp;2
 }
 die() {
-	log &quot;error: $*&quot;
-	printf 'exiting...\n'
+	log &amp;quot;error: $*&amp;quot;
+	printf &#39;exiting...\n&#39;
 	exit 1
 }
 
-REPO=&quot;$1&quot;
-DESC=&quot;$2&quot;
+REPO=&amp;quot;$1&amp;quot;
+DESC=&amp;quot;$2&amp;quot;
 
-if [ -z &quot;$REPO&quot; ]; then
-	die &quot;no repo name provided&quot;
+if [ -z &amp;quot;$REPO&amp;quot; ]; then
+	die &amp;quot;no repo name provided&amp;quot;
 fi
-if [ -z &quot;$DESC&quot; ]; then
-	die &quot;no new description provided&quot;
+if [ -z &amp;quot;$DESC&amp;quot; ]; then
+	die &amp;quot;no new description provided&amp;quot;
 fi
 
-REPO_PATH=&quot;${GIT_REPOS}/${REPO}.git&quot;
+REPO_PATH=&amp;quot;${GIT_REPOS}/${REPO}.git&amp;quot;
 
-echo &quot;$DESC&quot; &gt; ${REPO_PATH}/description
-</code></pre>
+echo &amp;quot;$DESC&amp;quot; &amp;gt; ${REPO_PATH}/description
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Then set the appropriate permissions and restrictions for these scripts:</p>
+&lt;p&gt;Then set the appropriate permissions and restrictions for these scripts:&lt;/p&gt;
 
-<pre><code>$ chmod +x /usr/local/bin/stagit-{gen-index,newrepo,chdesc}
+&lt;pre&gt;&lt;code&gt;$ chmod +x /usr/local/bin/stagit-{gen-index,newrepo,chdesc}
 $ chown -R _git:_git /var/git/template
 $ chmod +x $GIT_HOME/template
 $ chown -R _git:_git $WWW_HOME
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Replacing <code>GIT_HOME</code> and <code>WWW_HOME</code> with the variables we configured previously in <code>config.rc</code>.</p>
+&lt;p&gt;Replacing &lt;code&gt;GIT_HOME&lt;/code&gt; and &lt;code&gt;WWW_HOME&lt;/code&gt; with the variables we configured previously in &lt;code&gt;config.rc&lt;/code&gt;.&lt;/p&gt;
 
-<p>Finally we configure our <a href="https://man.openbsd.org/doas.conf">doas.conf(5)</a> to allow our main user to run these commands:</p>
+&lt;p&gt;Finally we configure our &lt;a href=&#34;https://man.openbsd.org/doas.conf&#34;&gt;doas.conf(5)&lt;/a&gt; to allow our main user to run these commands:&lt;/p&gt;
 
-<pre><code>permit nopass mite as _git cmd /usr/local/bin/stagit-newrepo
+&lt;pre&gt;&lt;code&gt;permit nopass mite as _git cmd /usr/local/bin/stagit-newrepo
 permit nopass mite as _git cmd /usr/local/bin/stagit-gen-index
 permit nopass mite as _git cmd /usr/local/bin/stagit-chdesc
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>I've made a git repository for these scripts (and maybe a few more) available on <a href="https://github.com/e-zk/stagit-scripts">GitHub</a> which is mirrored on <a href="https://git.zakaria.org/stagit-scripts/log.html">git.zakaria.org</a></p>
+&lt;p&gt;I&#39;ve made a git repository for these scripts (and maybe a few more) available on &lt;a href=&#34;https://github.com/e-zk/stagit-scripts&#34;&gt;GitHub&lt;/a&gt; which is mirrored on &lt;a href=&#34;https://git.zakaria.org/stagit-scripts/log.html&#34;&gt;git.zakaria.org&lt;/a&gt;&lt;/p&gt;
 
-<h2 id="httpd-config">httpd config</h2>
+&lt;h2 id=&#34;httpd-config&#34;&gt;httpd config&lt;/h2&gt;
 
-<p>To actually serve the generated static files we need to configure <a href="https://man.openbsd.org/httpd">httpd(8)</a>. In <a href="https://man.openbsd.org/httpd.conf"><code>/etc/httpd.conf</code></a>:</p>
+&lt;p&gt;To actually serve the generated static files we need to configure &lt;a href=&#34;https://man.openbsd.org/httpd&#34;&gt;httpd(8)&lt;/a&gt;. In &lt;a href=&#34;https://man.openbsd.org/httpd.conf&#34;&gt;&lt;code&gt;/etc/httpd.conf&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 
-<pre><code>...snip...
+&lt;pre&gt;&lt;code&gt;...snip...
 
-server &quot;git.zakaria.org&quot; {
+server &amp;quot;git.zakaria.org&amp;quot; {
 	listen on 127.0.0.1 on 8080
 
 	# for letsencrypt
-	location &quot;/.well-known/acme-challenge/*&quot; {
-		root &quot;/acme&quot;
+	location &amp;quot;/.well-known/acme-challenge/*&amp;quot; {
+		root &amp;quot;/acme&amp;quot;
 		request strip 2
 	}
 
-	root &quot;/htdocs/git.zakaria.org&quot;
+	root &amp;quot;/htdocs/git.zakaria.org&amp;quot;
 }
 
 ...snip...
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>I use <a href="https://man.openbsd.org/relayd">relayd(8)</a> as a TLS proxy, so I don't need to configure TLS certs in httpd.conf.</p>
+&lt;p&gt;I use &lt;a href=&#34;https://man.openbsd.org/relayd&#34;&gt;relayd(8)&lt;/a&gt; as a TLS proxy, so I don&#39;t need to configure TLS certs in httpd.conf.&lt;/p&gt;
 
 </description>
 </item><item>
@@ -517,138 +517,138 @@ server &quot;git.zakaria.org&quot; {
 <title>Temporary web browsing</title>
 <pubDate>Mon, 13 Dec 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="temporary-web-browsing">Temporary web browsing</h1>
+&lt;h1 id=&#34;temporary-web-browsing&#34;&gt;Temporary web browsing&lt;/h1&gt;
 
-<p>Here's a few ways of scripting an ephemeral browser environment.</p>
+&lt;p&gt;Here&#39;s a few ways of scripting an ephemeral browser environment.&lt;/p&gt;
 
-<p>The idea is that the entire state of the browser is ephemeral - on exit
+&lt;p&gt;The idea is that the entire state of the browser is ephemeral - on exit
 everything should be removed from storage including cookies, history
 bookmarks, etc. This is more aggressive than your standard incognito mode
-as it directly removes all files associated with the browser instance.</p>
+as it directly removes all files associated with the browser instance.&lt;/p&gt;
 
-<p>I use this all the time because for some things I don't find it necessary
+&lt;p&gt;I use this all the time because for some things I don&#39;t find it necessary
 for history, bookmarks, etc to be saved (a quick web search, logging into
 personal, sensitive services like online banking). Some might find it
-over-the-top but I think its a useful scripting exercise if anything.</p>
+over-the-top but I think its a useful scripting exercise if anything.&lt;/p&gt;
 
-<h2 id="1-temporary-profile">1. Temporary profile</h2>
+&lt;h2 id=&#34;1-temporary-profile&#34;&gt;1. Temporary profile&lt;/h2&gt;
 
-<p>Browsers typically have a user &quot;profile&quot;, where all bookmarks, history, and
-other required state is stored.<br />
+&lt;p&gt;Browsers typically have a user &amp;quot;profile&amp;quot;, where all bookmarks, history, and
+other required state is stored.&lt;br /&gt;
 Most browsers that matter (Firefox, Chromium) allow the directory this profile
 information is stored in to be configured via a CLI flag. For firefox this is
-<code>---profile &lt;path&gt;</code>, which defaults to somewhere in <code>~/.local</code> if my memory
+&lt;code&gt;---profile &amp;lt;path&amp;gt;&lt;/code&gt;, which defaults to somewhere in &lt;code&gt;~/.local&lt;/code&gt; if my memory
 serves correct. Similarly, Chromium (and I assume other Chromium-based browsers
-by proxy) support this via the <code>--user-data-dir=&lt;path&gt;</code>, which defaults to
-<code>~/.config/chromium</code>.</p>
+by proxy) support this via the &lt;code&gt;--user-data-dir=&amp;lt;path&amp;gt;&lt;/code&gt;, which defaults to
+&lt;code&gt;~/.config/chromium&lt;/code&gt;.&lt;/p&gt;
 
-<p>This feature can be used to create a fresh, new profile in a custom directory.
-On exit this directory can be aggressively removed by a simple <code>rm -rf &lt;path&gt;</code>
-command. Here's a short script to facilitate all this for Firefox:</p>
+&lt;p&gt;This feature can be used to create a fresh, new profile in a custom directory.
+On exit this directory can be aggressively removed by a simple &lt;code&gt;rm -rf &amp;lt;path&amp;gt;&lt;/code&gt;
+command. Here&#39;s a short script to facilitate all this for Firefox:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 
 # make temporary profile directory
-PROFILE_DIR=&quot;$(mktemp -d -p /tmp 'firefox.XXXXXX')&quot;
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
 
 cleanup() {
-	rm -rvf &quot;$PROFILE_DIR&quot;
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
 }
 
-firefox-esr --new-instance --no-remote --profile &quot;$PROFILE_DIR&quot; &quot;$@&quot;
+firefox-esr --new-instance --no-remote --profile &amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
 
 cleanup
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>First the script creates a temporary directory via <code>mktemp</code>, where the profile
+&lt;p&gt;First the script creates a temporary directory via &lt;code&gt;mktemp&lt;/code&gt;, where the profile
 will be. Next we define a cleanup function to be run after Firefox, so that on
-exit the profile is simply <code>rm -rf</code>'d. Then <code>firefox-esr</code> is run (replace this
-with <code>firefox</code> if you don't use the ESR variant), and the profile directory is
-specified with <code>--profile</code>.</p>
+exit the profile is simply &lt;code&gt;rm -rf&lt;/code&gt;&#39;d. Then &lt;code&gt;firefox-esr&lt;/code&gt; is run (replace this
+with &lt;code&gt;firefox&lt;/code&gt; if you don&#39;t use the ESR variant), and the profile directory is
+specified with &lt;code&gt;--profile&lt;/code&gt;.&lt;/p&gt;
 
-<p>I also included the <code>--new-instance</code> flag to make sure Firefox didn't just
-open a tab in an already running instance, and <code>--no-remote</code> to dissallow
-remote commands.</p>
+&lt;p&gt;I also included the &lt;code&gt;--new-instance&lt;/code&gt; flag to make sure Firefox didn&#39;t just
+open a tab in an already running instance, and &lt;code&gt;--no-remote&lt;/code&gt; to dissallow
+remote commands.&lt;/p&gt;
 
-<p>Additional arguments can be passed to the script - these will be directly added to
-<code>firefox-esr</code>'s arguments.</p>
+&lt;p&gt;Additional arguments can be passed to the script - these will be directly added to
+&lt;code&gt;firefox-esr&lt;/code&gt;&#39;s arguments.&lt;/p&gt;
 
-<p>I also like to add a <code>trap</code> to the script, so if it ever exits unexpectedly,
-the clean-up process will still take place. This is what that looks like:</p>
+&lt;p&gt;I also like to add a &lt;code&gt;trap&lt;/code&gt; to the script, so if it ever exits unexpectedly,
+the clean-up process will still take place. This is what that looks like:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 # trap everything; clean up on exit
 trap cleanup 1 2 3 6 15
 
 # make temporary profile directory
-PROFILE_DIR=&quot;$(mktemp -d -p /tmp 'firefox.XXXXXX')&quot;
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
 
 cleanup() {
-	rm -rvf &quot;$PROFILE_DIR&quot;
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
 }
 
-firefox-esr --new-instance --no-remote --profile &quot;$PROFILE_DIR&quot; &quot;$@&quot;
+firefox-esr --new-instance --no-remote --profile &amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
 
 cleanup
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The equivalent final script for Chromium/Chrome:</p>
+&lt;p&gt;The equivalent final script for Chromium/Chrome:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 # trap everything; clean up on exit
 trap cleanup 1 2 3 6 15
 
 # make temporary profile directory
-PROFILE_DIR=&quot;$(mktemp -d -p /tmp 'chrome.XXXXXX')&quot;
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;chrome.XXXXXX&#39;)&amp;quot;
 
 cleanup() {
-	rm -rvf &quot;$PROFILE_DIR&quot;
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
 }
 
-chromium --user-data-dir=&quot;$PROFILE_DIR&quot; &quot;$@&quot;
+chromium --user-data-dir=&amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
 
 cleanup
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="2-temporary-home-directory">2. Temporary home directory</h2>
+&lt;h2 id=&#34;2-temporary-home-directory&#34;&gt;2. Temporary home directory&lt;/h2&gt;
 
-<p>Instead of specifying a custom profile, then removing it, why not create an
-entire ephemeral home directory, then remove <em>that</em>?</p>
+&lt;p&gt;Instead of specifying a custom profile, then removing it, why not create an
+entire ephemeral home directory, then remove &lt;em&gt;that&lt;/em&gt;?&lt;/p&gt;
 
-<p>This trick is fairly simple and works on <em>any program</em>, not just browsers.
-Just re-define the <code>$HOME</code> environment variable to <code>$FAKEHOME</code>, and any program that runs
-after that will &quot;think&quot; that's the real home directory:</p>
+&lt;p&gt;This trick is fairly simple and works on &lt;em&gt;any program&lt;/em&gt;, not just browsers.
+Just re-define the &lt;code&gt;$HOME&lt;/code&gt; environment variable to &lt;code&gt;$FAKEHOME&lt;/code&gt;, and any program that runs
+after that will &amp;quot;think&amp;quot; that&#39;s the real home directory:&lt;/p&gt;
 
-<pre><code>$ FAKEHOME=/tmp/firefox
+&lt;pre&gt;&lt;code&gt;$ FAKEHOME=/tmp/firefox
 $ HOME=$FAKEHOME firefox [...] https://zakaria.org/
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Note this method means removing <code>$FAKEHOME/Downloads</code> and <em>any</em> directory the
-program creates in its dedicated home directory on exit. If you've downloaded
-something you'd like to keep you'll need to copy it out of <code>$FAKEHOME/Downloads</code>
-<em>BEFORE</em> closing the browser.<br />
-Since the program runs in a new home directory, if you use X11 it won't have
-access to <code>~/.Xauthority</code>, so it won't be able to actually be graphically useful.
-To fix this simply symlink <code>~/.Xauthority</code> to <code>$FAKEHOME/.Xauthority</code> before running.</p>
+&lt;p&gt;Note this method means removing &lt;code&gt;$FAKEHOME/Downloads&lt;/code&gt; and &lt;em&gt;any&lt;/em&gt; directory the
+program creates in its dedicated home directory on exit. If you&#39;ve downloaded
+something you&#39;d like to keep you&#39;ll need to copy it out of &lt;code&gt;$FAKEHOME/Downloads&lt;/code&gt;
+&lt;em&gt;BEFORE&lt;/em&gt; closing the browser.&lt;br /&gt;
+Since the program runs in a new home directory, if you use X11 it won&#39;t have
+access to &lt;code&gt;~/.Xauthority&lt;/code&gt;, so it won&#39;t be able to actually be graphically useful.
+To fix this simply symlink &lt;code&gt;~/.Xauthority&lt;/code&gt; to &lt;code&gt;$FAKEHOME/.Xauthority&lt;/code&gt; before running.&lt;/p&gt;
 
-<p>A script that does all this, plus some more:</p>
+&lt;p&gt;A script that does all this, plus some more:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 # trap everything; clean up on exit
 trap cleanup 1 2 3 6 15
 
 # setup fake home dir
-FAKEHOME=&quot;$(mktemp -d -p /tmp 'firefox.XXXXXX')&quot;
+FAKEHOME=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
 
 # clean up after exit
 cleanup() {
-	rm -rvf &quot;$FAKEHOME&quot;
+	rm -rvf &amp;quot;$FAKEHOME&amp;quot;
 }
 
 # link Xauthority
-ln -s &quot;${HOME}/.Xauthority&quot; &quot;${FAKEHOME}/.Xauthority&quot;
+ln -s &amp;quot;${HOME}/.Xauthority&amp;quot; &amp;quot;${FAKEHOME}/.Xauthority&amp;quot;
 
-# unset XDG dirs as these can intefere with the fake $HOME if they're set
+# unset XDG dirs as these can intefere with the fake $HOME if they&#39;re set
 # to something non-default
 unset XDG_CONFIG_HOME
 unset XDG_CACHE_HOME
@@ -657,54 +657,54 @@ unset XDG_CACHE_HOME
 export HOME=${FAKEHOME}
 
 # run firefox w/ given args
-firefox-esr --new-instance --no-remote &quot;$@&quot;
+firefox-esr --new-instance --no-remote &amp;quot;$@&amp;quot;
 
 # uncomment for chrome
-# chromium &quot;$@&quot;
+# chromium &amp;quot;$@&amp;quot;
 
 cleanup
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="extra-stuff">Extra stuff</h2>
+&lt;h2 id=&#34;extra-stuff&#34;&gt;Extra stuff&lt;/h2&gt;
 
-<p>To add to these scripts, one could also:</p>
+&lt;p&gt;To add to these scripts, one could also:&lt;/p&gt;
 
-<ul>
-<li>Force a specific user-agent string</li>
-<li>Configure <code>user.js</code> used by Firefox by writing to <code>$PROFILE_DIR/user.js</code>
-before actually running the Firefox command</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Force a specific user-agent string&lt;/li&gt;
+&lt;li&gt;Configure &lt;code&gt;user.js&lt;/code&gt; used by Firefox by writing to &lt;code&gt;$PROFILE_DIR/user.js&lt;/code&gt;
+before actually running the Firefox command&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>My personal scripts do just that, for <a href="https://git.zakaria.org/bin-obsd/file/tmpchrome.html">Chromium</a> and <a href="https://git.zakaria.org/bin-obsd/file/tmpfox.html" title="maybe uses outdated user.js flags">Firefox</a>.</p>
+&lt;p&gt;My personal scripts do just that, for &lt;a href=&#34;https://git.zakaria.org/bin-obsd/file/tmpchrome.html&#34;&gt;Chromium&lt;/a&gt; and &lt;a href=&#34;https://git.zakaria.org/bin-obsd/file/tmpfox.html&#34; title=&#34;maybe uses outdated user.js flags&#34;&gt;Firefox&lt;/a&gt;.&lt;/p&gt;
 
-<h2 id="other-methods">Other methods</h2>
+&lt;h2 id=&#34;other-methods&#34;&gt;Other methods&lt;/h2&gt;
 
-<p>Some other methods to look into include:</p>
+&lt;p&gt;Some other methods to look into include:&lt;/p&gt;
 
-<ul>
-<li>Mounting a new <strong>in-memory filesystem</strong> dedicated to a fake home dir or browser
+&lt;ul&gt;
+&lt;li&gt;Mounting a new &lt;strong&gt;in-memory filesystem&lt;/strong&gt; dedicated to a fake home dir or browser
 profile
 
-<ul>
-<li>OpenBSD does not support mounting filesystems as non-root
-users, so this isn't ideal for my setup.</li>
-</ul></li>
-<li>Ephemeral <strong>containers</strong>
+&lt;ul&gt;
+&lt;li&gt;OpenBSD does not support mounting filesystems as non-root
+users, so this isn&#39;t ideal for my setup.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Ephemeral &lt;strong&gt;containers&lt;/strong&gt;
 
-<ul>
-<li>While the security aspects of Linux containers are overrated IMO, using
-one as the basis for an ephemeral browser instance doesn't sound like an awful
-idea.</li>
-</ul></li>
-<li>Dedicated <strong>virtual machine</strong>
+&lt;ul&gt;
+&lt;li&gt;While the security aspects of Linux containers are overrated IMO, using
+one as the basis for an ephemeral browser instance doesn&#39;t sound like an awful
+idea.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Dedicated &lt;strong&gt;virtual machine&lt;/strong&gt;
 
-<ul>
-<li>I've actually accomplished this in the past on an Alpine Linux VM running on OpenBSD's
-<a href="https://man.openbsd.org/vmd">vmd(8)</a> and X11 forwarding. But I never fleshed out
+&lt;ul&gt;
+&lt;li&gt;I&#39;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#39;s
+&lt;a href=&#34;https://man.openbsd.org/vmd&#34;&gt;vmd(8)&lt;/a&gt; and X11 forwarding. But I never fleshed out
 any scripts for making it truly ephemeral - that might be the focus of a future blog post.
-<a href="/static/img/linuxwebvm.png">Here's</a> an old screenshot of that running on OpenBSD 6.7.</li>
-</ul></li>
-</ul>
+&lt;a href=&#34;/static/img/linuxwebvm.png&#34;&gt;Here&#39;s&lt;/a&gt; an old screenshot of that running on OpenBSD 6.7.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
 </item><item>
@@ -712,128 +712,128 @@ any scripts for making it truly ephemeral - that might be the focus of a future 
 <title>Breaking promises with LD_PRELOAD</title>
 <pubDate>Tue, 07 Dec 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="breaking-promises-with-ld-preload">Breaking promises with LD_PRELOAD</h1>
+&lt;h1 id=&#34;breaking-promises-with-ld-preload&#34;&gt;Breaking promises with LD_PRELOAD&lt;/h1&gt;
 
-<p>In this post I show how to simply <a href="https://wikipedia.org/wiki/NOP_(code)">noop</a> calls to OpenBSD's <a href="https://man.openbsd.org/pledge">pledge(1)</a> using LD_PRELOAD.</p>
+&lt;p&gt;In this post I show how to simply &lt;a href=&#34;https://wikipedia.org/wiki/NOP_(code)&#34;&gt;noop&lt;/a&gt; calls to OpenBSD&#39;s &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;pledge(1)&lt;/a&gt; using LD_PRELOAD.&lt;/p&gt;
 
-<p>I only focus on pledge(2), only because that's what I first tried this out on.
-But this will also work for <a href="https://man.openbsd.org/unveil">unveil(2)</a>, and any syscall you want for that matter.</p>
+&lt;p&gt;I only focus on pledge(2), only because that&#39;s what I first tried this out on.
+But this will also work for &lt;a href=&#34;https://man.openbsd.org/unveil&#34;&gt;unveil(2)&lt;/a&gt;, and any syscall you want for that matter.&lt;/p&gt;
 
-<p>Before we get into it, this doesn't actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn't pass on the fantastic opportunity for some word play+clickbait.</p>
+&lt;p&gt;Before we get into it, this doesn&#39;t actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn&#39;t pass on the fantastic opportunity for some word play+clickbait.&lt;/p&gt;
 
-<h2 id="what-is-pledge">What is pledge?</h2>
+&lt;h2 id=&#34;what-is-pledge&#34;&gt;What is pledge?&lt;/h2&gt;
 
-<p><a href="https://man.openbsd.org/pledge">pledge(2)</a> is a system call created for OpenBSD for the purpose of application sandboxing.
-When called, pledge(2) &quot;promises&quot; that the current process will only make use of certain system calls - if the process violates these promises after pledge(2) has been called the process is killed with a SIGABT signal.
-Using this system call appropriately facilitates the <a href="https://wikipedia.org/wiki/Principle_of_least_privilege">security principle of least privilege</a>; only allowing the process access to the parts of the system it needs to operate, and denying it access to functionality it does not need.</p>
+&lt;p&gt;&lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;pledge(2)&lt;/a&gt; is a system call created for OpenBSD for the purpose of application sandboxing.
+When called, pledge(2) &amp;quot;promises&amp;quot; that the current process will only make use of certain system calls - if the process violates these promises after pledge(2) has been called the process is killed with a SIGABT signal.
+Using this system call appropriately facilitates the &lt;a href=&#34;https://wikipedia.org/wiki/Principle_of_least_privilege&#34;&gt;security principle of least privilege&lt;/a&gt;; only allowing the process access to the parts of the system it needs to operate, and denying it access to functionality it does not need.&lt;/p&gt;
 
-<p>Subsequent calls to pledge(2) can reduce the abilities of a program further, but abilities cannot be regained.<br />
-This can be useful when writing daemon programs - during initialisation system daemons often need access to a lot of the more &quot;priviledged&quot; system calls, but after initialisation access to these abilities is no longer required. So typically daemon programs on OpenBSD call pledge(2) multiple times. Once to allow access to the initial system calls, then again, once the process is initialised, to deny access to ever use those system calls again.</p>
+&lt;p&gt;Subsequent calls to pledge(2) can reduce the abilities of a program further, but abilities cannot be regained.&lt;br /&gt;
+This can be useful when writing daemon programs - during initialisation system daemons often need access to a lot of the more &amp;quot;priviledged&amp;quot; system calls, but after initialisation access to these abilities is no longer required. So typically daemon programs on OpenBSD call pledge(2) multiple times. Once to allow access to the initial system calls, then again, once the process is initialised, to deny access to ever use those system calls again.&lt;/p&gt;
 
-<h2 id="what-is-the-ld-preload-trick">What is the LD_PRELOAD trick?</h2>
+&lt;h2 id=&#34;what-is-the-ld-preload-trick&#34;&gt;What is the LD_PRELOAD trick?&lt;/h2&gt;
 
-<p>I reccommend reading this article by baeldung to understand what LD_PRELOAD is: <a href="https://www.baeldung.com/linux/ld_preload-trick-what-is">What is the LD_PRELOAD Trick?</a>.</p>
+&lt;p&gt;I reccommend reading this article by baeldung to understand what LD_PRELOAD is: &lt;a href=&#34;https://www.baeldung.com/linux/ld_preload-trick-what-is&#34;&gt;What is the LD_PRELOAD Trick?&lt;/a&gt;.&lt;/p&gt;
 
-<p>Simply put, LD_PRELOAD influences the &quot;linkage&quot; of shared libraries and resolution of functions at runtime. This can be useful for debugging, reversing, and profiling dynamically linked programs.</p>
+&lt;p&gt;Simply put, LD_PRELOAD influences the &amp;quot;linkage&amp;quot; of shared libraries and resolution of functions at runtime. This can be useful for debugging, reversing, and profiling dynamically linked programs.&lt;/p&gt;
 
-<h2 id="crafting-a-shared-object">Crafting a shared object</h2>
+&lt;h2 id=&#34;crafting-a-shared-object&#34;&gt;Crafting a shared object&lt;/h2&gt;
 
-<p>LD_PRELOAD works by loading a shared object file that can essentially re-define whatever dynamically linked C function or syscall during the running of the program.</p>
+&lt;p&gt;LD_PRELOAD works by loading a shared object file that can essentially re-define whatever dynamically linked C function or syscall during the running of the program.&lt;/p&gt;
 
-<p>To craft our shared object to use with LD_PRELOAD first we have to look up the function signature of pledge(2) in the <a href="https://man.openbsd.org/pledge">man page</a> and plop it into a .c file:</p>
+&lt;p&gt;To craft our shared object to use with LD_PRELOAD first we have to look up the function signature of pledge(2) in the &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;man page&lt;/a&gt; and plop it into a .c file:&lt;/p&gt;
 
-<pre><code class="language-c">#include &lt;unistd.h&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;unistd.h&amp;gt;
 
 int
 pledge(const char *promises, const char *execpromises)
 
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Next, we want to make sure when called pledge(2) does absolutely nothing and returns success every time it's called. Alternatively, you could add additional <a href="https://man.openbsd.org/pledge">promises</a>, or remove specific promises, but I think its more jarring to make it do absolutely nothing.</p>
+&lt;p&gt;Next, we want to make sure when called pledge(2) does absolutely nothing and returns success every time it&#39;s called. Alternatively, you could add additional &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;promises&lt;/a&gt;, or remove specific promises, but I think its more jarring to make it do absolutely nothing.&lt;/p&gt;
 
-<pre><code class="language-c">// pledge_override.c
-#include &lt;unistd.h&gt; 
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;// pledge_override.c
+#include &amp;lt;unistd.h&amp;gt; 
 
 int 
 pledge(const char *promises, const char *execpromises) {
 	// noop
 	return 0;
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Compile it into a shared object <code>override.so</code>:</p>
+&lt;p&gt;Compile it into a shared object &lt;code&gt;override.so&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code class="language-console">$ cc -shared -fPIC -o override.so pledge_override.c
-</code></pre>
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cc -shared -fPIC -o override.so pledge_override.c
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Now, with this shared object file, you can run anything you want ignoring it's pledge(2) promises:</p>
+&lt;p&gt;Now, with this shared object file, you can run anything you want ignoring it&#39;s pledge(2) promises:&lt;/p&gt;
 
-<pre><code class="language-console">$ LD_PRELOAD=$PWD/override.so &lt;program&gt;
-</code></pre>
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ LD_PRELOAD=$PWD/override.so &amp;lt;program&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="testing-it-out">Testing it out</h2>
+&lt;h2 id=&#34;testing-it-out&#34;&gt;Testing it out&lt;/h2&gt;
 
-<p>Here we have an example use of pledge(2) (yes, I should be checking return values, but this is just an example).</p>
+&lt;p&gt;Here we have an example use of pledge(2) (yes, I should be checking return values, but this is just an example).&lt;/p&gt;
 
-<pre><code class="language-c">// test.c
-#include &lt;stdio.h&gt;
-#include &lt;unistd.h&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;// test.c
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
 
 int
 main(void) {
 	// promise to only use stdio
-	pledge(&quot;stdio&quot;, NULL);
-	printf(&quot;Hello! I will abort now :3\n&quot;);
+	pledge(&amp;quot;stdio&amp;quot;, NULL);
+	printf(&amp;quot;Hello! I will abort now :3\n&amp;quot;);
 
 	// revoke all promises
-	pledge(&quot;&quot;, NULL);
+	pledge(&amp;quot;&amp;quot;, NULL);
 
 	// should abort here
-	printf(&quot;You should not be seeing this :O\n&quot;);
+	printf(&amp;quot;You should not be seeing this :O\n&amp;quot;);
 	return 0;
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>When run normally the program should abort at the second call to printf(3) since after the
-first one we've revoked the privilege to call <code>stdio</code> functions.</p>
+&lt;p&gt;When run normally the program should abort at the second call to printf(3) since after the
+first one we&#39;ve revoked the privilege to call &lt;code&gt;stdio&lt;/code&gt; functions.&lt;/p&gt;
 
-<pre><code class="language-console">$ ./a.out
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ ./a.out
 Hello! I will abort now :3
 Abort trap (core dumped)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Then, when we add our specially crafted <code>override.so</code> to the equation:</p>
+&lt;p&gt;Then, when we add our specially crafted &lt;code&gt;override.so&lt;/code&gt; to the equation:&lt;/p&gt;
 
-<pre><code class="language-console">$ LD_PRELOAD=$PWD/override.so ./a.out
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ LD_PRELOAD=$PWD/override.so ./a.out
 Hello! I will abort now :3
 You should not be seeing this :O
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="when-this-won-t-work">When this won't work</h2>
+&lt;h2 id=&#34;when-this-won-t-work&#34;&gt;When this won&#39;t work&lt;/h2&gt;
 
-<p>Using LD_PRELOAD like this to get around pledge doesn't work when:</p>
+&lt;p&gt;Using LD_PRELOAD like this to get around pledge doesn&#39;t work when:&lt;/p&gt;
 
-<ol>
-<li>You statically link your binary
+&lt;ol&gt;
+&lt;li&gt;You statically link your binary
 
-<ul>
-<li>If you statically link your binary, LD_PRELOAD does not have any effect.</li>
-<li>To test this out, compile the above example program with <code>-static</code>, then try and do the LD_PRELOAD trick again. It'll always abort at the correct <code>printf(3)</code> call.</li>
-</ul></li>
-<li>SUID / SGID
+&lt;ul&gt;
+&lt;li&gt;If you statically link your binary, LD_PRELOAD does not have any effect.&lt;/li&gt;
+&lt;li&gt;To test this out, compile the above example program with &lt;code&gt;-static&lt;/code&gt;, then try and do the LD_PRELOAD trick again. It&#39;ll always abort at the correct &lt;code&gt;printf(3)&lt;/code&gt; call.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;SUID / SGID
 
-<ul>
-<li>SUID or SGID binaries aren't affected by LD_PRELOAD according to the OpenBSD <a href="https://man.openbsd.org/ld.so#LD_PRELOAD">man page</a>.<br />
-The Linux <a href="https://linux.die.net/man/8/ld.so">man page</a> is less clear about this, but I assume its the same.</li>
-<li>Simply put, your doas(1) and sudo(1) are safe.</li>
-</ul></li>
-</ol>
+&lt;ul&gt;
+&lt;li&gt;SUID or SGID binaries aren&#39;t affected by LD_PRELOAD according to the OpenBSD &lt;a href=&#34;https://man.openbsd.org/ld.so#LD_PRELOAD&#34;&gt;man page&lt;/a&gt;.&lt;br /&gt;
+The Linux &lt;a href=&#34;https://linux.die.net/man/8/ld.so&#34;&gt;man page&lt;/a&gt; is less clear about this, but I assume its the same.&lt;/li&gt;
+&lt;li&gt;Simply put, your doas(1) and sudo(1) are safe.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
-<h2 id="changelog">Changelog</h2>
+&lt;h2 id=&#34;changelog&#34;&gt;Changelog&lt;/h2&gt;
 
-<ul>
-<li>18-07-2022: Added &quot;What is pledge?&quot; and &quot;What is LD_PRELOAD&quot; sections.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;18-07-2022: Added &amp;quot;What is pledge?&amp;quot; and &amp;quot;What is LD_PRELOAD&amp;quot; sections.&lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
 </item><item>
@@ -841,72 +841,72 @@ The Linux <a href="https://linux.die.net/man/8/ld.so">man page</a> is less clear
 <title>Windows Sandbox</title>
 <pubDate>Sun, 08 Aug 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="windows-sandbox">Windows Sandbox</h1>
+&lt;h1 id=&#34;windows-sandbox&#34;&gt;Windows Sandbox&lt;/h1&gt;
 
-<p>If you['re forced to] use Windows this might be useful for compartmentalisation.</p>
+&lt;p&gt;If you[&#39;re forced to] use Windows this might be useful for compartmentalisation.&lt;/p&gt;
 
-<p>Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.</p>
+&lt;p&gt;Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.&lt;/p&gt;
 
-<h2 id="enabling">Enabling</h2>
+&lt;h2 id=&#34;enabling&#34;&gt;Enabling&lt;/h2&gt;
 
-<p>Windows Sandbox isn't enabled by default. To enable it follow these steps:</p>
+&lt;p&gt;Windows Sandbox isn&#39;t enabled by default. To enable it follow these steps:&lt;/p&gt;
 
-<ol>
-<li>Open &quot;Control Panel&quot; and click the upside down caret next to the back/forward buttons</li>
-<li>Click &quot;All Control Panel Items&quot;</li>
-<li>Navigate to &quot;Programs and Features&quot;</li>
-<li>On the left click &quot;Turn Windows features on or off&quot;</li>
-<li>Scroll down and tick the box next to &quot;Windows Sandbox&quot; if it isn't already ticked</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Open &amp;quot;Control Panel&amp;quot; and click the upside down caret next to the back/forward buttons&lt;/li&gt;
+&lt;li&gt;Click &amp;quot;All Control Panel Items&amp;quot;&lt;/li&gt;
+&lt;li&gt;Navigate to &amp;quot;Programs and Features&amp;quot;&lt;/li&gt;
+&lt;li&gt;On the left click &amp;quot;Turn Windows features on or off&amp;quot;&lt;/li&gt;
+&lt;li&gt;Scroll down and tick the box next to &amp;quot;Windows Sandbox&amp;quot; if it isn&#39;t already ticked&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>From the start menu search for &quot;Windows Sandbox&quot;. Hit enter and a fresh Sandbox window will appear.</p>
+&lt;p&gt;From the start menu search for &amp;quot;Windows Sandbox&amp;quot;. Hit enter and a fresh Sandbox window will appear.&lt;/p&gt;
 
-<h2 id="configuring">Configuring</h2>
+&lt;h2 id=&#34;configuring&#34;&gt;Configuring&lt;/h2&gt;
 
-<p>Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.<br />
-This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.</p>
+&lt;p&gt;Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.&lt;br /&gt;
+This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.&lt;/p&gt;
 
-<p>To make it easier for these cases you can pre-configure sandbox instances via <code>.wsb</code> files. With this file you can configure memory, networking, audio/video passthrough, among other things. See the Microsoft official documentation for Windows Sandbox configuration<sup class="footnote-ref" id="fnref:wsb"><a href="#fn:wsb">1</a></sup>. It also supports running a script at startup, and mapping network devices and local shares.</p>
+&lt;p&gt;To make it easier for these cases you can pre-configure sandbox instances via &lt;code&gt;.wsb&lt;/code&gt; files. With this file you can configure memory, networking, audio/video passthrough, among other things. See the Microsoft official documentation for Windows Sandbox configuration&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:wsb&#34;&gt;&lt;a href=&#34;#fn:wsb&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. It also supports running a script at startup, and mapping network devices and local shares.&lt;/p&gt;
 
-<p>I highly suggest reading through the documentation for the <code>.wsb</code> file format. There are some good examples and interesting features.</p>
+&lt;p&gt;I highly suggest reading through the documentation for the &lt;code&gt;.wsb&lt;/code&gt; file format. There are some good examples and interesting features.&lt;/p&gt;
 
-<h3 id="example-zoom">Example: Zoom</h3>
+&lt;h3 id=&#34;example-zoom&#34;&gt;Example: Zoom&lt;/h3&gt;
 
-<p>Zoom is a very popular group call/video conference software (I won't bore you with the details I'm sure you have <em>some</em> idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you're paranoid like me you may feel uneasy just seeing it's icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:</p>
+&lt;p&gt;Zoom is a very popular group call/video conference software (I won&#39;t bore you with the details I&#39;m sure you have &lt;em&gt;some&lt;/em&gt; idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#39;re paranoid like me you may feel uneasy just seeing it&#39;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:&lt;/p&gt;
 
-<pre><code class="language-xml">&lt;Configuration&gt;
-    &lt;MappedFolders&gt;
-        &lt;MappedFolder&gt;
-            &lt;HostFolder&gt;C:\Sandbox\Installers&lt;/HostFolder&gt;
-            &lt;SandboxFolder&gt;C:\Installers&lt;/SandboxFolder&gt;
-            &lt;ReadOnly&gt;true&lt;/ReadOnly&gt;
-        &lt;/MappedFolder&gt;
-    &lt;/MappedFolders&gt;
-    &lt;AudioInput&gt;Enable&lt;/AudioInput&gt;
-    &lt;VideoInput&gt;Enable&lt;/VideoInput&gt;
-    &lt;VGpu&gt;Enable&lt;/VGpu&gt;
-    &lt;MemoryInMB&gt;12288&lt;/MemoryInMB&gt;
-    &lt;LogonCommand&gt;
-        &lt;Command&gt;C:\Installers\ZoomInstaller.exe&lt;/Command&gt;
-    &lt;/LogonCommand&gt;
-&lt;/Configuration&gt;
-</code></pre>
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;Configuration&amp;gt;
+    &amp;lt;MappedFolders&amp;gt;
+        &amp;lt;MappedFolder&amp;gt;
+            &amp;lt;HostFolder&amp;gt;C:\Sandbox\Installers&amp;lt;/HostFolder&amp;gt;
+            &amp;lt;SandboxFolder&amp;gt;C:\Installers&amp;lt;/SandboxFolder&amp;gt;
+            &amp;lt;ReadOnly&amp;gt;true&amp;lt;/ReadOnly&amp;gt;
+        &amp;lt;/MappedFolder&amp;gt;
+    &amp;lt;/MappedFolders&amp;gt;
+    &amp;lt;AudioInput&amp;gt;Enable&amp;lt;/AudioInput&amp;gt;
+    &amp;lt;VideoInput&amp;gt;Enable&amp;lt;/VideoInput&amp;gt;
+    &amp;lt;VGpu&amp;gt;Enable&amp;lt;/VGpu&amp;gt;
+    &amp;lt;MemoryInMB&amp;gt;12288&amp;lt;/MemoryInMB&amp;gt;
+    &amp;lt;LogonCommand&amp;gt;
+        &amp;lt;Command&amp;gt;C:\Installers\ZoomInstaller.exe&amp;lt;/Command&amp;gt;
+    &amp;lt;/LogonCommand&amp;gt;
+&amp;lt;/Configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>It maps the local <code>C:\Sandbox\Installers</code> directory (where I store <code>ZoomInstaller.exe</code>) to <code>C:\Installers</code> in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.</p>
+&lt;p&gt;It maps the local &lt;code&gt;C:\Sandbox\Installers&lt;/code&gt; directory (where I store &lt;code&gt;ZoomInstaller.exe&lt;/code&gt;) to &lt;code&gt;C:\Installers&lt;/code&gt; in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.&lt;/p&gt;
 
-<p>The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can't reboot a sandbox without deleting everything).</p>
+&lt;p&gt;The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#39;t reboot a sandbox without deleting everything).&lt;/p&gt;
 
-<p>I make use of a couple of these <code>.wsb</code> files for different programs I'd rather install on an ephemeral virtual machine than my main OS.</p>
+&lt;p&gt;I make use of a couple of these &lt;code&gt;.wsb&lt;/code&gt; files for different programs I&#39;d rather install on an ephemeral virtual machine than my main OS.&lt;/p&gt;
 
-<div class="footnotes">
+&lt;div class=&#34;footnotes&#34;&gt;
 
-<hr />
+&lt;hr /&gt;
 
-<ol>
-<li id="fn:wsb"><a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file">https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file</a></li>
-</ol>
+&lt;ol&gt;
+&lt;li id=&#34;fn:wsb&#34;&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file&#34;&gt;https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
-</div>
+&lt;/div&gt;
 
 </description>
 </item><item>
@@ -914,51 +914,51 @@ This can make it annoying if you wish to sandbox a single program, but have to i
 <title>Feb 2021 Update: Git Server &#43; Hidden Service</title>
 <pubDate>Wed, 24 Feb 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="update-feb-2021-git-server-hidden-service">Update Feb 2021: git server + hidden service</h1>
+&lt;h1 id=&#34;update-feb-2021-git-server-hidden-service&#34;&gt;Update Feb 2021: git server + hidden service&lt;/h1&gt;
 
-<p>Here's a little site update.</p>
+&lt;p&gt;Here&#39;s a little site update.&lt;/p&gt;
 
-<h2 id="css-changes">CSS changes</h2>
+&lt;h2 id=&#34;css-changes&#34;&gt;CSS changes&lt;/h2&gt;
 
-<p>As usual the CSS of this website is ever-changing. I've changed it to be more monochrome, with blue highlights on link hover/focus and text selection. Headings are now all <code>1em</code>.</p>
+&lt;p&gt;As usual the CSS of this website is ever-changing. I&#39;ve changed it to be more monochrome, with blue highlights on link hover/focus and text selection. Headings are now all &lt;code&gt;1em&lt;/code&gt;.&lt;/p&gt;
 
-<h2 id="git-server">Git server</h2>
+&lt;h2 id=&#34;git-server&#34;&gt;Git server&lt;/h2&gt;
 
-<p>I've set up a git server on <a href="https://git.zakaria.org/">git.zakaria.org</a> using <a href="https://codemadness.org/stagit.html">stagit</a> to generate the pages. I followed a guide by <code>poptart</code><sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>. It's a very well written guide for setting up stagit on OpenBSD.<br />
-I modified some of the scripts provided to suit my workflow.</p>
+&lt;p&gt;I&#39;ve set up a git server on &lt;a href=&#34;https://git.zakaria.org/&#34;&gt;git.zakaria.org&lt;/a&gt; using &lt;a href=&#34;https://codemadness.org/stagit.html&#34;&gt;stagit&lt;/a&gt; to generate the pages. I followed a guide by &lt;code&gt;poptart&lt;/code&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. It&#39;s a very well written guide for setting up stagit on OpenBSD.&lt;br /&gt;
+I modified some of the scripts provided to suit my workflow.&lt;/p&gt;
 
-<p>I plan to move most of my projects that don't require an issue tracker over there. Namely personal configs/programs.</p>
+&lt;p&gt;I plan to move most of my projects that don&#39;t require an issue tracker over there. Namely personal configs/programs.&lt;/p&gt;
 
-<h2 id="hidden-service">Hidden service</h2>
+&lt;h2 id=&#34;hidden-service&#34;&gt;Hidden service&lt;/h2&gt;
 
-<p>During January I made this site accessible over Tor via a <a href="https://wikipedia.org/wiki/Tor_(anonymity_network)#Onion_services">hidden service/onion service</a>. I had some (layer 8) issues with the service provider and had to reset the server and so the service URL has changed a few times. The canonical onion service URL can be found on the <a href="/about.html">about page</a> or in the footer.</p>
+&lt;p&gt;During January I made this site accessible over Tor via a &lt;a href=&#34;https://wikipedia.org/wiki/Tor_(anonymity_network)#Onion_services&#34;&gt;hidden service/onion service&lt;/a&gt;. I had some (layer 8) issues with the service provider and had to reset the server and so the service URL has changed a few times. The canonical onion service URL can be found on the &lt;a href=&#34;/about.html&#34;&gt;about page&lt;/a&gt; or in the footer.&lt;/p&gt;
 
-<p>Why have I setup an onion service? Three reasons:</p>
+&lt;p&gt;Why have I setup an onion service? Three reasons:&lt;/p&gt;
 
-<ol>
-<li>Tor is a technology that interests me</li>
-<li>I wanted to see how difficult it would be to setup a hidden service (it was not difficult<sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup>)</li>
-<li>It's fun</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Tor is a technology that interests me&lt;/li&gt;
+&lt;li&gt;I wanted to see how difficult it would be to setup a hidden service (it was not difficult&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;)&lt;/li&gt;
+&lt;li&gt;It&#39;s fun&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>Because onion services can't have subdomains, I've setup <code>relayd(8)</code> so the git server can be accessed on the service via a <code>/git/</code> endpoint (this is only available on the hidden service).</p>
+&lt;p&gt;Because onion services can&#39;t have subdomains, I&#39;ve setup &lt;code&gt;relayd(8)&lt;/code&gt; so the git server can be accessed on the service via a &lt;code&gt;/git/&lt;/code&gt; endpoint (this is only available on the hidden service).&lt;/p&gt;
 
-<h2 id="other">Other</h2>
+&lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
 
-<p>Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I've redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.</p>
+&lt;p&gt;Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#39;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.&lt;/p&gt;
 
-<div class="footnotes">
+&lt;div class=&#34;footnotes&#34;&gt;
 
-<hr />
+&lt;hr /&gt;
 
-<ol>
-<li id="fn:1"><a href="https://hosakacorp.net/p/stagit-server.html">https://hosakacorp.net/p/stagit-server.html</a></li>
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://hosakacorp.net/p/stagit-server.html&#34;&gt;https://hosakacorp.net/p/stagit-server.html&lt;/a&gt;&lt;/li&gt;
 
-<li id="fn:2">I referred to these two guides: <a href="https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c">https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c</a>, <a href="https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html">https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html</a><br />
-</li>
-</ol>
+&lt;li id=&#34;fn:2&#34;&gt;I referred to these two guides: &lt;a href=&#34;https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c&#34;&gt;https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c&lt;/a&gt;, &lt;a href=&#34;https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html&#34;&gt;https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 
-</div>
+&lt;/div&gt;
 
 </description>
 </item><item>
@@ -966,48 +966,48 @@ I modified some of the scripts provided to suit my workflow.</p>
 <title>Usbkill the OpenBSD Way</title>
 <pubDate>Mon, 11 Jan 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="usbkill-the-openbsd-way"><code>usbkill</code> the OpenBSD way</h1>
+&lt;h1 id=&#34;usbkill-the-openbsd-way&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt; the OpenBSD way&lt;/h1&gt;
 
-<p><a href="https://github.com/hephaest0s/usbkill"><code>usbkill</code></a> is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of <code>lsusb</code> and when there is a change it runs <code>shutdown -h now</code>.</p>
+&lt;p&gt;&lt;a href=&#34;https://github.com/hephaest0s/usbkill&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt;&lt;/a&gt; is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of &lt;code&gt;lsusb&lt;/code&gt; and when there is a change it runs &lt;code&gt;shutdown -h now&lt;/code&gt;.&lt;/p&gt;
 
-<p>Simple, right? One thing to note is that <code>lsusb</code> is not included in OpenBSD's base packages, but <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code></a> is.</p>
+&lt;p&gt;Simple, right? One thing to note is that &lt;code&gt;lsusb&lt;/code&gt; is not included in OpenBSD&#39;s base packages, but &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;&lt;code&gt;hotplugd(8)&lt;/code&gt;&lt;/a&gt; is.&lt;/p&gt;
 
-<h2 id="hotplugd">hotplugd</h2>
+&lt;h2 id=&#34;hotplugd&#34;&gt;hotplugd&lt;/h2&gt;
 
-<p>So what is <code>hotplugd</code>, and how can it be useful? The <a href="https://man.openbsd.org/hotplugd">man page</a> does a good job of explaining it. Simply put: when any device is attached to or detached from your machine <code>hotplugd</code> will execute a script.</p>
+&lt;p&gt;So what is &lt;code&gt;hotplugd&lt;/code&gt;, and how can it be useful? The &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;man page&lt;/a&gt; does a good job of explaining it. Simply put: when any device is attached to or detached from your machine &lt;code&gt;hotplugd&lt;/code&gt; will execute a script.&lt;/p&gt;
 
-<p>To see how simple it is to write a hotplug script we can start by simply logging device attach events. First, start by enabling and starting <code>hotplugd</code> (as root):</p>
+&lt;p&gt;To see how simple it is to write a hotplug script we can start by simply logging device attach events. First, start by enabling and starting &lt;code&gt;hotplugd&lt;/code&gt; (as root):&lt;/p&gt;
 
-<pre><code># rcctl enable hotplugd
+&lt;pre&gt;&lt;code&gt;# rcctl enable hotplugd
 # rcctl start hotplugd
 hotplugd(ok)
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Next we will write the script that is executed on a device attach event:</p>
+&lt;p&gt;Next we will write the script that is executed on a device attach event:&lt;/p&gt;
 
-<pre><code># mkdir -p /etc/hotplug
+&lt;pre&gt;&lt;code&gt;# mkdir -p /etc/hotplug
 # $EDITOR /etc/hotplug/attach
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>In this file we will log the device class and name:</p>
+&lt;p&gt;In this file we will log the device class and name:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 
 DEVCLASS=$1
 DEVNAME=$2
 
 # log attach event
-logger -t hotplug &quot;$DEVCLASS:$DEVNAME attached&quot;
-</code></pre>
+logger -t hotplug &amp;quot;$DEVCLASS:$DEVNAME attached&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>To see this in action in another terminal type</p>
+&lt;p&gt;To see this in action in another terminal type&lt;/p&gt;
 
-<pre><code>$ tail -f /var/log/messages
-</code></pre>
+&lt;pre&gt;&lt;code&gt;$ tail -f /var/log/messages
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Then connect a USB device to your machine and you should see messages tagged 'hotplug'. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don't use):</p>
+&lt;p&gt;Then connect a USB device to your machine and you should see messages tagged &#39;hotplug&#39;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#39;t use):&lt;/p&gt;
 
-<pre><code>Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
+&lt;pre&gt;&lt;code&gt;Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
 Jan 11 11:48:32 x1 hotplug: 5:wsmouse2 attached
 Jan 11 11:48:32 x1 hotplug: 0:ums0 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhid1 attached
@@ -1021,120 +1021,120 @@ Jan 11 11:48:32 x1 hotplug: 0:ukbd0 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhidev0 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhid5 attached
 Jan 11 11:48:32 x1 hotplug: 0:uhid6 attached
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it's a <a href="https://www.logitech.com/product/unifying-receiver-usb">Unifying Receiver</a>, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.</p>
+&lt;p&gt;Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#39;s a &lt;a href=&#34;https://www.logitech.com/product/unifying-receiver-usb&#34;&gt;Unifying Receiver&lt;/a&gt;, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.&lt;/p&gt;
 
-<h2 id="the-kill-part">The 'kill' part</h2>
+&lt;h2 id=&#34;the-kill-part&#34;&gt;The &#39;kill&#39; part&lt;/h2&gt;
 
-<p>Now that we've seen how <code>hotplugd</code> works, we can work on the <em>kill</em> part of <code>usbkill</code>.<br />
-We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the <em>kill</em> part, since I might need to plug something in once in a while. Make the <code>/etc/hotplug/attach</code> script as so:</p>
+&lt;p&gt;Now that we&#39;ve seen how &lt;code&gt;hotplugd&lt;/code&gt; works, we can work on the &lt;em&gt;kill&lt;/em&gt; part of &lt;code&gt;usbkill&lt;/code&gt;.&lt;br /&gt;
+We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the &lt;em&gt;kill&lt;/em&gt; part, since I might need to plug something in once in a while. Make the &lt;code&gt;/etc/hotplug/attach&lt;/code&gt; script as so:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 
 arm_file=/tmp/arm_usbkill
 
-DEVCLASS=&quot;$1&quot;
-DEVNAME=&quot;$2&quot;
+DEVCLASS=&amp;quot;$1&amp;quot;
+DEVNAME=&amp;quot;$2&amp;quot;
 
-logger -t &quot;${0##*/}&quot; &quot;${DEVCLASS}:${DEVNAME} attached&quot;
+logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;${DEVCLASS}:${DEVNAME} attached&amp;quot;
 
-if [ -f &quot;$arm_file&quot; ]; then
+if [ -f &amp;quot;$arm_file&amp;quot; ]; then
         shutdown -p now
 else
-        logger -t &quot;${0##*/}&quot; &quot;unarmed - aborted shutdown&quot;
+        logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;unarmed - aborted shutdown&amp;quot;
 fi
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>If the <code>/tmp/arm_usbkill</code> file exists then the machine will shutdown, if it doesn't exist it will just add a log entry to syslog.</p>
+&lt;p&gt;If the &lt;code&gt;/tmp/arm_usbkill&lt;/code&gt; file exists then the machine will shutdown, if it doesn&#39;t exist it will just add a log entry to syslog.&lt;/p&gt;
 
-<p><code>hotplug</code> also supports running a different script, <code>/etc/hotplug/detach</code> on detach events. Since both scripts are exactly the same I've symlinked the attach script to the location of the detach script.</p>
+&lt;p&gt;&lt;code&gt;hotplug&lt;/code&gt; also supports running a different script, &lt;code&gt;/etc/hotplug/detach&lt;/code&gt; on detach events. Since both scripts are exactly the same I&#39;ve symlinked the attach script to the location of the detach script.&lt;/p&gt;
 
-<pre><code># ln -s /etc/hotplug/attach /etc/hotplug/detach
-</code></pre>
+&lt;pre&gt;&lt;code&gt;# ln -s /etc/hotplug/attach /etc/hotplug/detach
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The <code>${0##*/}</code> logger tag gets substituted to the filename of the script being executed (in this case it is either <code>attach</code> or <code>detach</code>).</p>
+&lt;p&gt;The &lt;code&gt;${0##*/}&lt;/code&gt; logger tag gets substituted to the filename of the script being executed (in this case it is either &lt;code&gt;attach&lt;/code&gt; or &lt;code&gt;detach&lt;/code&gt;).&lt;/p&gt;
 
-<p>One thing to note is that this setup will execute the shutdown command on <em>any</em> device change event. This includes USBs but also includes network devices, disk drives, and serial line interfaces<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>. If that is a problem, you can implement a device class-based whitelist by checking <code>$DEVCLASS</code>:</p>
+&lt;p&gt;One thing to note is that this setup will execute the shutdown command on &lt;em&gt;any&lt;/em&gt; device change event. This includes USBs but also includes network devices, disk drives, and serial line interfaces&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. If that is a problem, you can implement a device class-based whitelist by checking &lt;code&gt;$DEVCLASS&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 
 # class whitelist (space-separated)
-class_whitelist=&quot;0 2 3 5&quot;
+class_whitelist=&amp;quot;0 2 3 5&amp;quot;
 
 # arm file
 arm_file=/tmp/arm_usbkill
 
-DEVCLASS=&quot;$1&quot;
-DEVNAME=&quot;$2&quot;
+DEVCLASS=&amp;quot;$1&amp;quot;
+DEVNAME=&amp;quot;$2&amp;quot;
 
 whitelisted() {
 	for class in $class_whitelist; do
-		if [ &quot;$class&quot; = &quot;$1&quot; ]; then
+		if [ &amp;quot;$class&amp;quot; = &amp;quot;$1&amp;quot; ]; then
 			return 0
 		fi
 	done
 	return 1
 }
 
-logger -t &quot;${0##*/}&quot; &quot;${DEVCLASS}:${DEVNAME} attached&quot;
+logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;${DEVCLASS}:${DEVNAME} attached&amp;quot;
 
-if [ -f &quot;$arm_file&quot; ]; then
-	if whitelisted &quot;$DEVCLASS&quot;; then
-		logger -t &quot;${0##*/}&quot; &quot;whitelisted - aborted shutdown&quot;
+if [ -f &amp;quot;$arm_file&amp;quot; ]; then
+	if whitelisted &amp;quot;$DEVCLASS&amp;quot;; then
+		logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;whitelisted - aborted shutdown&amp;quot;
 		exit 0
 	fi
 	shutdown -p now
 else
-	logger -t &quot;${0##*/}&quot; &quot;unarmed - aborted shutdown&quot;
+	logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;unarmed - aborted shutdown&amp;quot;
 fi
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>But this is not really useful to me since I use a laptop and I'm not attaching and detaching network devices or disk drives.</p>
+&lt;p&gt;But this is not really useful to me since I use a laptop and I&#39;m not attaching and detaching network devices or disk drives.&lt;/p&gt;
 
-<p>One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with <code>usbkill</code>. This could be acheived through a much more complicated script using <code>usbdevs</code> to get USB IDs, but as of yet I have no need for that.</p>
+&lt;p&gt;One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with &lt;code&gt;usbkill&lt;/code&gt;. This could be acheived through a much more complicated script using &lt;code&gt;usbdevs&lt;/code&gt; to get USB IDs, but as of yet I have no need for that.&lt;/p&gt;
 
-<h2 id="arming-and-disarming">Arming and disarming</h2>
+&lt;h2 id=&#34;arming-and-disarming&#34;&gt;Arming and disarming&lt;/h2&gt;
 
-<p>To arm and disarm this script all you have to do is create or remove the <code>$arm_file</code> respectively. Here are some shell functions to add to your shell rc to make it easier:</p>
+&lt;p&gt;To arm and disarm this script all you have to do is create or remove the &lt;code&gt;$arm_file&lt;/code&gt; respectively. Here are some shell functions to add to your shell rc to make it easier:&lt;/p&gt;
 
-<pre><code># arm/disarm usbkill
+&lt;pre&gt;&lt;code&gt;# arm/disarm usbkill
 arm() {
-        touch /tmp/arm_usbkill &amp;&amp; printf 'armed\\n' || printf 'error arming\\n'
+        touch /tmp/arm_usbkill &amp;amp;&amp;amp; printf &#39;armed\\n&#39; || printf &#39;error arming\\n&#39;
 }
 disarm() {
-        rm -f /tmp/arm_usbkill &amp;&amp; printf 'disarmed\\n' || printf 'error disarming\\n'
+        rm -f /tmp/arm_usbkill &amp;amp;&amp;amp; printf &#39;disarmed\\n&#39; || printf &#39;error disarming\\n&#39;
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn't the case for <code>usbkill</code>, which requires root to run).<br />
-Originally I had added the <code>uchg</code> flag to the file to lock it. But this proved to be counterproductive since it wasn't cleared from <code>/tmp</code> on reboot and when <code>hotplugd</code> would first start up, it would immediately shutdown the machine again. That was fun to fix (not).</p>
+&lt;p&gt;The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#39;t the case for &lt;code&gt;usbkill&lt;/code&gt;, which requires root to run).&lt;br /&gt;
+Originally I had added the &lt;code&gt;uchg&lt;/code&gt; flag to the file to lock it. But this proved to be counterproductive since it wasn&#39;t cleared from &lt;code&gt;/tmp&lt;/code&gt; on reboot and when &lt;code&gt;hotplugd&lt;/code&gt; would first start up, it would immediately shutdown the machine again. That was fun to fix (not).&lt;/p&gt;
 
-<h2 id="why">Why?</h2>
+&lt;h2 id=&#34;why&#34;&gt;Why?&lt;/h2&gt;
 
-<p>So why do all this? Why not just <code>pkg_add usbutils</code>, download + run <code>usbkill</code> and be done?<br />
-Well for starters that isn't as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?</p>
+&lt;p&gt;So why do all this? Why not just &lt;code&gt;pkg_add usbutils&lt;/code&gt;, download + run &lt;code&gt;usbkill&lt;/code&gt; and be done?&lt;br /&gt;
+Well for starters that isn&#39;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?&lt;/p&gt;
 
-<h2 id="see-also">SEE ALSO</h2>
+&lt;h2 id=&#34;see-also&#34;&gt;SEE ALSO&lt;/h2&gt;
 
-<ul>
-<li>OpenBSD <code>hotplug(4)</code> pseudo-device man page: <a href="https://man.openbsd.org/hotplug">https://man.openbsd.org/hotplug</a> .</li>
-<li>OpenBSD includes the <code>usbdevs(8)</code> tool in base that lists connected USB devices and their IDs: <a href="https://man.openbsd.org/usbdevs">https://man.openbsd.org/usbdevs</a> <sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup>.</li>
-<li>OpenWRT has it's own similarly named hotplug.d service: <a href="https://openwrt.org/docs/guide-user/base-system/hotplug">https://openwrt.org/docs/guide-user/base-system/hotplug</a>. But it's slightly different to OpenBSD's.</li>
-<li>A couple of years ago I wrote <a href="https://github.com/e-zk/hidlock">a hotplug script</a> that instead runs <a href="https://man.openbsd.org/xlock"><code>xlock(1)</code></a> on all running X displays after a HID is attached. In theory this would to thwart HID/badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;OpenBSD &lt;code&gt;hotplug(4)&lt;/code&gt; pseudo-device man page: &lt;a href=&#34;https://man.openbsd.org/hotplug&#34;&gt;https://man.openbsd.org/hotplug&lt;/a&gt; .&lt;/li&gt;
+&lt;li&gt;OpenBSD includes the &lt;code&gt;usbdevs(8)&lt;/code&gt; tool in base that lists connected USB devices and their IDs: &lt;a href=&#34;https://man.openbsd.org/usbdevs&#34;&gt;https://man.openbsd.org/usbdevs&lt;/a&gt; &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/li&gt;
+&lt;li&gt;OpenWRT has it&#39;s own similarly named hotplug.d service: &lt;a href=&#34;https://openwrt.org/docs/guide-user/base-system/hotplug&#34;&gt;https://openwrt.org/docs/guide-user/base-system/hotplug&lt;/a&gt;. But it&#39;s slightly different to OpenBSD&#39;s.&lt;/li&gt;
+&lt;li&gt;A couple of years ago I wrote &lt;a href=&#34;https://github.com/e-zk/hidlock&#34;&gt;a hotplug script&lt;/a&gt; that instead runs &lt;a href=&#34;https://man.openbsd.org/xlock&#34;&gt;&lt;code&gt;xlock(1)&lt;/code&gt;&lt;/a&gt; on all running X displays after a HID is attached. In theory this would to thwart HID/badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.&lt;/li&gt;
+&lt;/ul&gt;
 
-<div class="footnotes">
+&lt;div class=&#34;footnotes&#34;&gt;
 
-<hr />
+&lt;hr /&gt;
 
-<ol>
-<li id="fn:1">As per the <a href="https://man.openbsd.org/hotplugd"><code>hotplugd(8)</code> man page</a></li>
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;As per the &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;&lt;code&gt;hotplugd(8)&lt;/code&gt; man page&lt;/a&gt;&lt;/li&gt;
 
-<li id="fn:2">In the future I might write a script to act more similarly to <code>usbkill</code>, using <code>usbdevs</code> to poll for device changes instead of <code>lsusb</code>.</li>
-</ol>
+&lt;li id=&#34;fn:2&#34;&gt;In the future I might write a script to act more similarly to &lt;code&gt;usbkill&lt;/code&gt;, using &lt;code&gt;usbdevs&lt;/code&gt; to poll for device changes instead of &lt;code&gt;lsusb&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
 
-</div>
+&lt;/div&gt;
 
 </description>
 </item><item>
@@ -1142,85 +1142,85 @@ Well for starters that isn't as fun. The main reason is that all this works in a
 <title>My xenodm setup</title>
 <pubDate>Mon, 04 Jan 2021 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="my-xenodm-setup">My xenodm setup</h1>
+&lt;h1 id=&#34;my-xenodm-setup&#34;&gt;My xenodm setup&lt;/h1&gt;
 
-<p>OpenBSD uses the <a href="https://man.openbsd.org/xenodm"><code>xenodm(1)</code></a> display manager, which is a fork of xdm.<br />
-Xenodm looks quite ugly by default, and after reading a couple<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup> of<sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup> articles<sup class="footnote-ref" id="fnref:3"><a href="#fn:3">3</a></sup> on themeing xenodm I've come up with my own setup.</p>
+&lt;p&gt;OpenBSD uses the &lt;a href=&#34;https://man.openbsd.org/xenodm&#34;&gt;&lt;code&gt;xenodm(1)&lt;/code&gt;&lt;/a&gt; display manager, which is a fork of xdm.&lt;br /&gt;
+Xenodm looks quite ugly by default, and after reading a couple&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; of&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; articles&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; on themeing xenodm I&#39;ve come up with my own setup.&lt;/p&gt;
 
-<p>Before we get into the configs, here's what it actually looks like:</p>
+&lt;p&gt;Before we get into the configs, here&#39;s what it actually looks like:&lt;/p&gt;
 
-<p><a href="/static/img/xenodm.png"><img src="/static/img/xenodm.png" alt="themed xenodm" /></a></p>
+&lt;p&gt;&lt;a href=&#34;/static/img/xenodm.png&#34;&gt;&lt;img src=&#34;/static/img/xenodm.png&#34; alt=&#34;themed xenodm&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-<p><em>(The text might be small, click to view the image file)</em></p>
+&lt;p&gt;&lt;em&gt;(The text might be small, click to view the image file)&lt;/em&gt;&lt;/p&gt;
 
-<p>Clean and simple. Now that you've seen what it looks like you can close this tab if that's all you came here to see. If you want to see how this is accomplished then continue reading.</p>
+&lt;p&gt;Clean and simple. Now that you&#39;ve seen what it looks like you can close this tab if that&#39;s all you came here to see. If you want to see how this is accomplished then continue reading.&lt;/p&gt;
 
-<h2 id="files">Files</h2>
+&lt;h2 id=&#34;files&#34;&gt;Files&lt;/h2&gt;
 
-<p>xenodm uses multiple files for configuration. It's quite inconvenient, and I was very confused at first I admit. The files we'll have to deal with are:</p>
+&lt;p&gt;xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll have to deal with are:&lt;/p&gt;
 
-<pre><code>/etc/X11/xenodm/Xresources
+&lt;pre&gt;&lt;code&gt;/etc/X11/xenodm/Xresources
 /etc/X11/xenodm/Xsetup_0
 /etc/X11/xenodm/Xsession
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The last one is for an optional non-cosmetic change that I'll cover later. All these files require root access, so it'd be wise to <code>doas -s</code> before continuing on.</p>
+&lt;p&gt;The last one is for an optional non-cosmetic change that I&#39;ll cover later. All these files require root access, so it&#39;d be wise to &lt;code&gt;doas -s&lt;/code&gt; before continuing on.&lt;/p&gt;
 
-<h2 id="xresources">Xresources</h2>
+&lt;h2 id=&#34;xresources&#34;&gt;Xresources&lt;/h2&gt;
 
-<p>If you've ever dabbled in trying to rice your Unix-like operating system there's a good change you've come across an <a href="https://wikipedia.org/wiki/X_resources">Xresources</a> file before. The X window system uses a &quot;resource database&quot; as a 'unified' way to store configuration data.</p>
+&lt;p&gt;If you&#39;ve ever dabbled in trying to rice your Unix-like operating system there&#39;s a good change you&#39;ve come across an &lt;a href=&#34;https://wikipedia.org/wiki/X_resources&#34;&gt;Xresources&lt;/a&gt; file before. The X window system uses a &amp;quot;resource database&amp;quot; as a &#39;unified&#39; way to store configuration data.&lt;/p&gt;
 
-<p>xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.</p>
+&lt;p&gt;xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.&lt;/p&gt;
 
-<p>First off, I'd like to be able to see my password being entered as I type with little <code>*</code> as it so commonly is.</p>
+&lt;p&gt;First off, I&#39;d like to be able to see my password being entered as I type with little &lt;code&gt;*&lt;/code&gt; as it so commonly is.&lt;/p&gt;
 
-<pre><code>xlogin.Login.echoPasswd: true
-</code></pre>
+&lt;pre&gt;&lt;code&gt;xlogin.Login.echoPasswd: true
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Next I don't want to be 'greeted', and I want the message when I put my password in incorrectly to be <code>ya dun goofed</code>:</p>
+&lt;p&gt;Next I don&#39;t want to be &#39;greeted&#39;, and I want the message when I put my password in incorrectly to be &lt;code&gt;ya dun goofed&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>xlogin.Login.fail: ya dun goofed
+&lt;pre&gt;&lt;code&gt;xlogin.Login.fail: ya dun goofed
 xlogin.Login.greeting:
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Now I'll configure the dimensions and positioning of the login box:</p>
+&lt;p&gt;Now I&#39;ll configure the dimensions and positioning of the login box:&lt;/p&gt;
 
-<pre><code>xlogin.Login.height:            200
+&lt;pre&gt;&lt;code&gt;xlogin.Login.height:            200
 xlogin.Login.width:             400
 xlogin.Login.y:                 320
 xlogin.Login.frameWidth:        10
 xlogin.Login.innerFramesWidth:  0
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Add some colour (or lack thereof):</p>
+&lt;p&gt;Add some colour (or lack thereof):&lt;/p&gt;
 
-<pre><code>xlogin.Login.background:        #000000
+&lt;pre&gt;&lt;code&gt;xlogin.Login.background:        #000000
 xlogin.Login.foreground:        #eeeeee
 xlogin.Login.failColor:         #b00035
 xlogin.Login.inpColor:          #000000
 xlogin.Login.promptColor:       #eeeeee
 xlogin.Login.hiColor:           #000000
 xlogin.Login.shdColor:          #000000
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>And finally let's use a nice bitmap font to complete the look:</p>
+&lt;p&gt;And finally let&#39;s use a nice bitmap font to complete the look:&lt;/p&gt;
 
-<pre><code>xlogin.Login.face:              Dina-11
+&lt;pre&gt;&lt;code&gt;xlogin.Login.face:              Dina-11
 xlogin.Login.failFace:          Dina-11
 xlogin.Login.promptFace:        Dina-11
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Note that last step requires the Dina font to be installed (it does not come with OpenBSD).</p>
+&lt;p&gt;Note that last step requires the Dina font to be installed (it does not come with OpenBSD).&lt;/p&gt;
 
-<h2 id="xsetup-0">Xsetup_0</h2>
+&lt;h2 id=&#34;xsetup-0&#34;&gt;Xsetup_0&lt;/h2&gt;
 
-<p>Next is the Xsetup file. Why is this called Xsetup_<em>0</em>? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out <code>/etc/X11/xenodm/xenodm-config</code>).</p>
+&lt;p&gt;Next is the Xsetup file. Why is this called Xsetup_&lt;em&gt;0&lt;/em&gt;? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out &lt;code&gt;/etc/X11/xenodm/xenodm-config&lt;/code&gt;).&lt;/p&gt;
 
-<p>This file is fairly simple. It's a shell script that xenodm runs. That's it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:</p>
+&lt;p&gt;This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:&lt;/p&gt;
 
-<div><code>/etc/X11/xenodm/Xsetup_0:</code></div>
+&lt;div&gt;&lt;code&gt;/etc/X11/xenodm/Xsetup_0:&lt;/code&gt;&lt;/div&gt;
 
-<pre><code>#!/bin/sh
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
 
 # set background
 /usr/X11R6/bin/xsetroot -solid \#000000
@@ -1231,77 +1231,77 @@ xlogin.Login.promptFace:        Dina-11
 # status bar
 (
 while true; do
-        reboot=&quot;%{F#b00035}%{A:reboot:} r %{A}%{F-}&quot;
-        shutdown=&quot;%{F#b00035}%{A:shutdown -p now:} p %{A}%{F-}&quot;
+        reboot=&amp;quot;%{F#b00035}%{A:reboot:} r %{A}%{F-}&amp;quot;
+        shutdown=&amp;quot;%{F#b00035}%{A:shutdown -p now:} p %{A}%{F-}&amp;quot;
 
-        echo &quot;  $(date '+%T')  %{r}${reboot}/${shutdown}  $(date '+%F')    $(apm -l)%  &quot;
+        echo &amp;quot;  $(date &#39;+%T&#39;)  %{r}${reboot}/${shutdown}  $(date &#39;+%F&#39;)    $(apm -l)%  &amp;quot;
         sleep 1
-done | /home/zzz/bin/lemonbar -d -g 1920x40+0+0 -f 'Dina:style=Medium:pixelsize=13' -B \#000000 -F \#eeeeee | sh
-) &amp;
+done | /home/zzz/bin/lemonbar -d -g 1920x40+0+0 -f &#39;Dina:style=Medium:pixelsize=13&#39; -B \#000000 -F \#eeeeee | sh
+) &amp;amp;
 
-# uncomment to take 'screenshot'
-#(sleep 5 &amp;&amp; xwd -out /tmp/xenodm.xwd -root) &amp;
-</code></pre>
+# uncomment to take &#39;screenshot&#39;
+#(sleep 5 &amp;amp;&amp;amp; xwd -out /tmp/xenodm.xwd -root) &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>The date, time, battery percent are all piped into lemonbar. Additionally the 'r' and 'p' text in red allow me to reboot or power off my machine respectively.</p>
+&lt;p&gt;The date, time, battery percent are all piped into lemonbar. Additionally the &#39;r&#39; and &#39;p&#39; text in red allow me to reboot or power off my machine respectively.&lt;/p&gt;
 
-<p>It should be noted that I probably shouldn't be using a binary that's located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and/or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.</p>
+&lt;p&gt;It should be noted that I probably shouldn&#39;t be using a binary that&#39;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and/or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.&lt;/p&gt;
 
-<h2 id="xsession-extra">Xsession extra</h2>
+&lt;h2 id=&#34;xsession-extra&#34;&gt;Xsession extra&lt;/h2&gt;
 
-<p>Here's the optional bit. I'm a big fan of <a href="https://github.com/vizs/declutter-home">decluttering</a> my home directory. Moving as many dotfiles out of <code>$HOME/</code> as possible. Moving <code>~/.Xresources</code> was easy - just source a different file from <code>~/.xsession</code>. But an annoyance is <code>~/.xsession</code> itself, which up until now I had no idea how to move. Turns out its location can be changed in <code>/etc/X11/xenodm/Xsession</code>!</p>
+&lt;p&gt;Here&#39;s the optional bit. I&#39;m a big fan of &lt;a href=&#34;https://github.com/vizs/declutter-home&#34;&gt;decluttering&lt;/a&gt; my home directory. Moving as many dotfiles out of &lt;code&gt;$HOME/&lt;/code&gt; as possible. Moving &lt;code&gt;~/.Xresources&lt;/code&gt; was easy - just source a different file from &lt;code&gt;~/.xsession&lt;/code&gt;. But an annoyance is &lt;code&gt;~/.xsession&lt;/code&gt; itself, which up until now I had no idea how to move. Turns out its location can be changed in &lt;code&gt;/etc/X11/xenodm/Xsession&lt;/code&gt;!&lt;/p&gt;
 
-<p>Look for the line that says:</p>
+&lt;p&gt;Look for the line that says:&lt;/p&gt;
 
-<pre><code>startup=$HOME/.xsession
-</code></pre>
+&lt;pre&gt;&lt;code&gt;startup=$HOME/.xsession
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Here we can change the <code>startup</code> variable to be any path we like:</p>
+&lt;p&gt;Here we can change the &lt;code&gt;startup&lt;/code&gt; variable to be any path we like:&lt;/p&gt;
 
-<pre><code>startup=${HOME}/etc/x/xsession
-</code></pre>
+&lt;pre&gt;&lt;code&gt;startup=${HOME}/etc/x/xsession
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Also, if you've themed <a href="https://man.openbsd.org/ssh-askpass"><code>ssh-askpass(1)</code></a> like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.</p>
+&lt;p&gt;Also, if you&#39;ve themed &lt;a href=&#34;https://man.openbsd.org/ssh-askpass&#34;&gt;&lt;code&gt;ssh-askpass(1)&lt;/code&gt;&lt;/a&gt; like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.&lt;/p&gt;
 
-<p>Look for this part of the script:</p>
+&lt;p&gt;Look for this part of the script:&lt;/p&gt;
 
-<pre><code># if we have private ssh key(s), start ssh-agent and add the key(s)
+&lt;pre&gt;&lt;code&gt;# if we have private ssh key(s), start ssh-agent and add the key(s)
 id1=$HOME/.ssh/identity
 id2=$HOME/.ssh/id_dsa
 id3=$HOME/.ssh/id_rsa
 id4=$HOME/.ssh/id_ecdsa
 id5=$HOME/.ssh/id_ed25519
-if [ -z &quot;$SSH_AGENT_PID&quot; ];
+if [ -z &amp;quot;$SSH_AGENT_PID&amp;quot; ];
 then
-	if [ -x /usr/bin/ssh-agent ] &amp;&amp; [ -f $id1 -o -f $id2 -o -f $id3 -o -f $id4 -o -f $id5 ];
+	if [ -x /usr/bin/ssh-agent ] &amp;amp;&amp;amp; [ -f $id1 -o -f $id2 -o -f $id3 -o -f $id4 -o -f $id5 ];
 	then
 		eval `ssh-agent -s`
-		ssh-add &lt; /dev/null
+		ssh-add &amp;lt; /dev/null
 	fi
 fi
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Just anywhere above this section simply add <code>xrdb -load $HOME/path/to/xresources</code>.</p>
+&lt;p&gt;Just anywhere above this section simply add &lt;code&gt;xrdb -load $HOME/path/to/xresources&lt;/code&gt;.&lt;/p&gt;
 
-<p>this is the first article I read on the subject</p>
+&lt;p&gt;this is the first article I read on the subject&lt;/p&gt;
 
-<p>this article is the basis for my configuration, stylistically and config-wise.</p>
+&lt;p&gt;this article is the basis for my configuration, stylistically and config-wise.&lt;/p&gt;
 
-<div class="footnotes">
+&lt;div class=&#34;footnotes&#34;&gt;
 
-<hr />
+&lt;hr /&gt;
 
-<ol>
-<li id="fn:1"><a href="https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/">https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/</a><br />
-</li>
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/&#34;&gt;https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
 
-<li id="fn:2"><a href="https://www.vincentdelft.be/post/post_20190720">https://www.vincentdelft.be/post/post_20190720</a></li>
+&lt;li id=&#34;fn:2&#34;&gt;&lt;a href=&#34;https://www.vincentdelft.be/post/post_20190720&#34;&gt;https://www.vincentdelft.be/post/post_20190720&lt;/a&gt;&lt;/li&gt;
 
-<li id="fn:3"><a href="https://www.romanzolotarev.com/openbsd/xenodm.html">https://www.romanzolotarev.com/openbsd/xenodm.html</a><br />
-</li>
-</ol>
+&lt;li id=&#34;fn:3&#34;&gt;&lt;a href=&#34;https://www.romanzolotarev.com/openbsd/xenodm.html&#34;&gt;https://www.romanzolotarev.com/openbsd/xenodm.html&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 
-</div>
+&lt;/div&gt;
 
 </description>
 </item><item>
@@ -1309,91 +1309,91 @@ fi
 <title>OpenBSD Notes</title>
 <pubDate>Tue, 08 Dec 2020 00:00:00 &#43;0000</pubDate>
 <description>
-<h1 id="openbsd-notes">OpenBSD notes</h1>
+&lt;h1 id=&#34;openbsd-notes&#34;&gt;OpenBSD notes&lt;/h1&gt;
 
-<p>Random notes on running <a href="https://openbsd.org/">OpenBSD</a> (some notes may only be useful for a laptop install). Updated frequently.</p>
+&lt;p&gt;Random notes on running &lt;a href=&#34;https://openbsd.org/&#34;&gt;OpenBSD&lt;/a&gt; (some notes may only be useful for a laptop install). Updated frequently.&lt;/p&gt;
 
-<h2 id="table-of-contents">Table of Contents</h2>
+&lt;h2 id=&#34;table-of-contents&#34;&gt;Table of Contents&lt;/h2&gt;
 
-<ul>
-<li><a href="#Power%2fBattery">Power/Battery</a>
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Power%2fBattery&#34;&gt;Power/Battery&lt;/a&gt;
 
-<ul>
-<li><a href="#Hibernate%20on%20low%20battery">Hibernate on low battery</a></li>
-<li><a href="#User%20power%20commands">User power commands</a></li>
-</ul></li>
-<li><a href="#Multimedia">Multimedia</a>
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Hibernate%20on%20low%20battery&#34;&gt;Hibernate on low battery&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#User%20power%20commands&#34;&gt;User power commands&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Multimedia&#34;&gt;Multimedia&lt;/a&gt;
 
-<ul>
-<li><a href="#Microphone%20Setup">Microphone Setup</a></li>
-</ul></li>
-<li><a href="#X">X</a></li>
-<li><a href="#PF">PF</a>
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Microphone%20Setup&#34;&gt;Microphone Setup&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#X&#34;&gt;X&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#PF&#34;&gt;PF&lt;/a&gt;
 
-<ul>
-<li><a href="#Standard%20preamble">Standard preamble</a></li>
-<li><a href="#Allow%20NTP">Allow NTP</a></li>
-<li><a href="#VMs">VMs</a></li>
-</ul></li>
-<li><a href="#Misc">Misc</a></li>
-<li><a href="#Manual%20pages%20as%20beautifully%20typeset%20PDFs">Manual pages as beautifully typeset PDFs</a></li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Standard%20preamble&#34;&gt;Standard preamble&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Allow%20NTP&#34;&gt;Allow NTP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#VMs&#34;&gt;VMs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Misc&#34;&gt;Misc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Manual%20pages%20as%20beautifully%20typeset%20PDFs&#34;&gt;Manual pages as beautifully typeset PDFs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-<h2 id="power-battery">Power/Battery</h2>
+&lt;h2 id=&#34;power-battery&#34;&gt;Power/Battery&lt;/h2&gt;
 
-<h3 id="hibernate-on-low-battery">Hibernate on low battery</h3>
+&lt;h3 id=&#34;hibernate-on-low-battery&#34;&gt;Hibernate on low battery&lt;/h3&gt;
 
-<p>To hibernate at 5% remaining battery add in <code>/etc/rc.conf.local</code>:</p>
+&lt;p&gt;To hibernate at 5% remaining battery add in &lt;code&gt;/etc/rc.conf.local&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code class="language-bash">apmd_flags=-A -Z 5
-</code></pre>
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;apmd_flags=-A -Z 5
+&lt;/code&gt;&lt;/pre&gt;
 
-<h3 id="user-power-commands">User power commands</h3>
+&lt;h3 id=&#34;user-power-commands&#34;&gt;User power commands&lt;/h3&gt;
 
-<p>In <code>/etc/doas.conf</code>:</p>
+&lt;p&gt;In &lt;code&gt;/etc/doas.conf&lt;/code&gt;:&lt;/p&gt;
 
-<pre><code>permit nopass :staff as root cmd zzz
+&lt;pre&gt;&lt;code&gt;permit nopass :staff as root cmd zzz
 permit nopass :staff as root cmd ZZZ
 permit nopass :staff as root cmd reboot args
 permit nopass :staff as root cmd shutdown args -p now
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="multimedia">Multimedia</h2>
+&lt;h2 id=&#34;multimedia&#34;&gt;Multimedia&lt;/h2&gt;
 
-<h3 id="microphone-setup">Microphone setup</h3>
+&lt;h3 id=&#34;microphone-setup&#34;&gt;Microphone setup&lt;/h3&gt;
 
-<p>I have a fancy microphone that has a headphone passthrough. So it is both USB &quot;speaker&quot; and a USB microphone. Good news, that makes using it with sndio a <em>bit</em> easier.</p>
+&lt;p&gt;I have a fancy microphone that has a headphone passthrough. So it is both USB &amp;quot;speaker&amp;quot; and a USB microphone. Good news, that makes using it with sndio a &lt;em&gt;bit&lt;/em&gt; easier.&lt;/p&gt;
 
-<p>Change primary sndiod device to the microphone (check dmesg for <code>audio[0-9]</code> device id):</p>
+&lt;p&gt;Change primary sndiod device to the microphone (check dmesg for &lt;code&gt;audio[0-9]&lt;/code&gt; device id):&lt;/p&gt;
 
-<pre><code># rcctl set sndiod flags -f rsnd/1
+&lt;pre&gt;&lt;code&gt;# rcctl set sndiod flags -f rsnd/1
 # rcctl restart sndiod
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>Switch mixer sources:</p>
+&lt;p&gt;Switch mixer sources:&lt;/p&gt;
 
-<pre><code># mixerctl outputs.hp_source=dac-2:3
-outputs.hp_source: dac-0:1 -&gt; dac-2:3
-</code></pre>
+&lt;pre&gt;&lt;code&gt;# mixerctl outputs.hp_source=dac-2:3
+outputs.hp_source: dac-0:1 -&amp;gt; dac-2:3
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>To switch back, remove the sndiod flag, and change the source back to it's original value (<code>dac-0:1</code>).</p>
+&lt;p&gt;To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (&lt;code&gt;dac-0:1&lt;/code&gt;).&lt;/p&gt;
 
-<h2 id="x">X</h2>
+&lt;h2 id=&#34;x&#34;&gt;X&lt;/h2&gt;
 
-<p>See <a href="/posts/2021-01-04-xenodm.html">full post</a> for xenodm themeing.</p>
+&lt;p&gt;See &lt;a href=&#34;/posts/2021-01-04-xenodm.html&#34;&gt;full post&lt;/a&gt; for xenodm themeing.&lt;/p&gt;
 
-<h2 id="pf">PF</h2>
+&lt;h2 id=&#34;pf&#34;&gt;PF&lt;/h2&gt;
 
-<p>Packet Filter (firewall). General stuff to remember:</p>
+&lt;p&gt;Packet Filter (firewall). General stuff to remember:&lt;/p&gt;
 
-<ul>
-<li>last rule 'wins'*</li>
-<li><code>egress</code> = interface(s) that hold the default route(s)</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;last rule &#39;wins&#39;*&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;egress&lt;/code&gt; = interface(s) that hold the default route(s)&lt;/li&gt;
+&lt;/ul&gt;
 
-<h3 id="standard-preamble">Standard preamble</h3>
+&lt;h3 id=&#34;standard-preamble&#34;&gt;Standard preamble&lt;/h3&gt;
 
-<pre><code># options 
+&lt;pre&gt;&lt;code&gt;# options 
 set block-policy drop
 set skip on lo
 
@@ -1403,20 +1403,20 @@ block all
 # antispoofing
 antispoof for egress
 antispoof for $vm_int
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h3 id="allow-ntp">Allow NTP</h3>
+&lt;h3 id=&#34;allow-ntp&#34;&gt;Allow NTP&lt;/h3&gt;
 
-<p>In rare cases ntp can use tcp apparently...</p>
+&lt;p&gt;In rare cases ntp can use tcp apparently...&lt;/p&gt;
 
-<pre><code>pass quick inet proto { tcp, udp } to port ntp
-</code></pre>
+&lt;pre&gt;&lt;code&gt;pass quick inet proto { tcp, udp } to port ntp
+&lt;/code&gt;&lt;/pre&gt;
 
-<h3 id="vms">VMs</h3>
+&lt;h3 id=&#34;vms&#34;&gt;VMs&lt;/h3&gt;
 
-<p>Don't forget to <code>sysctl net.inet.ip.forwarding=1</code>!</p>
+&lt;p&gt;Don&#39;t forget to &lt;code&gt;sysctl net.inet.ip.forwarding=1&lt;/code&gt;!&lt;/p&gt;
 
-<pre><code># where:
+&lt;pre&gt;&lt;code&gt;# where:
 # vm_int        = vm interface (vether[0-9])
 # vm_dns_server = dns server to be used by vms
 
@@ -1434,14 +1434,14 @@ pass in on $vm_int proto tcp to port { www, https }
 
 # only allow X11 forwarding on the vm interface
 pass in on $vm_int proto tcp to port 6000:6010
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<h2 id="misc">Misc</h2>
+&lt;h2 id=&#34;misc&#34;&gt;Misc&lt;/h2&gt;
 
-<h3 id="manual-pages-as-beautifully-typeset-pdfs">Manual pages as beautifully typeset PDFs</h3>
+&lt;h3 id=&#34;manual-pages-as-beautifully-typeset-pdfs&#34;&gt;Manual pages as beautifully typeset PDFs&lt;/h3&gt;
 
-<pre><code class="language-console">$ MANPAGER=zathura man -T pdf style
-</code></pre>
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ MANPAGER=zathura man -T pdf style
+&lt;/code&gt;&lt;/pre&gt;
 
 </description>
 </item>
