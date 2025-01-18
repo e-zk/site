@@ -52,3 +52,50 @@ disallow: /
 user-Agent: SlySearch
 disallow: /
 
+# Don't allow """AI""" to train on my shit:
+# https://github.com/ai-robots-txt/ai.robots.txt
+user-agent: AI2Bot
+user-agent: Ai2Bot-Dolma
+user-agent: Amazonbot
+user-agent: anthropic-ai
+user-agent: Applebot
+user-agent: Applebot-Extended
+user-agent: Bytespider
+user-agent: CCBot
+user-agent: ChatGPT-User
+user-agent: Claude-Web
+user-agent: ClaudeBot
+user-agent: cohere-ai
+user-agent: cohere-training-data-crawler
+user-agent: Diffbot
+user-agent: DuckAssistBot
+user-agent: FacebookBot
+user-agent: FriendlyCrawler
+user-agent: Google-Extended
+user-agent: GoogleOther
+user-agent: GoogleOther-Image
+user-agent: GoogleOther-Video
+user-agent: GPTBot
+user-agent: iaskspider/2.0
+user-agent: ICC-Crawler
+user-agent: ImagesiftBot
+user-agent: img2dataset
+user-agent: ISSCyberRiskCrawler
+user-agent: Kangaroo Bot
+user-agent: Meta-ExternalAgent
+user-agent: Meta-ExternalFetcher
+user-agent: OAI-SearchBot
+user-agent: omgili
+user-agent: omgilibot
+user-agent: PanguBot
+user-agent: PerplexityBot
+user-agent: PetalBot
+user-agent: Scrapy
+user-agent: SemrushBot
+user-agent: Sidetrade indexer bot
+user-agent: Timpibot
+user-agent: VelenPublicWebCrawler
+user-agent: Webzio-Extended
+user-agent: YouBot
+disallow: /
+
