@@ -2,9 +2,7 @@
 
 List of books I am currenly reading:
 
-- _Notes from the Underground_ by Fyodor Dostoyevsky
-- _The Plague_ by Albert Camus
-- _Against White Feminism: Notes on Disruption_ by Rafia [Zakaria](# "no relation")
+- _The Fall_ by Albert Camus
 
 ## Collecting dust
 
@@ -14,6 +12,7 @@ I have read (and forgotten) so much over the years so this list is not exhaustiv
 This table is highly inspired by [icyphox](https://icyphox.sh/reading/ "reading - icyphox").  
 
 |----|----|----|
+|The Plague|Albert Camus| •••• |
 |Wuthering Heights |Emily Bronte| [dnf](# "will come back to at some point") |
 |Bobok| Fyodor Dostoyevsky (transl. Ronald Meyer) | •••• |
 |White Nights|Fyodor Dostoyevsky (transl. Ronald Meyer) | ••••• |

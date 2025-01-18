@@ -23,13 +23,12 @@ A select list of my software endevours can be found on the [projects](/projects.
 ## Contact
 
 You can contact me via email at `contact [at} zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).  
-I can be reached via Matrix at `zk:envs.net`, though, I will almost definitely be slow to respond (seriously, just email me first).
 
 # About this website
 
 Hosting of this server is provided by [Vultr](https://vultr.com/).
 
-The site is a static one; running on [OpenBSD](https://openbsd.org/), [httpd and relayd](https://bsd.plumbing/). HTML content is generated from Markdown. Source for the custom site generation program can be found [here](https://github.com/e-zk/site-gen "site generator"), and the site's content is managed on git [here](https://github.com/e-zk/site "site content").
+The site is a static one; running on [OpenBSD](https://openbsd.org/), httpd and relayd. HTML content is generated from Markdown. Source for the custom site generation program can be found [here](https://github.com/e-zk/site-gen "site generator"), and the site's content is managed on git [here](https://github.com/e-zk/site "site content").
 
 A hidden service mirror of this site can be accessed through Tor here: http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion.
 
