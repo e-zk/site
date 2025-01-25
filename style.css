@@ -156,12 +156,13 @@ a[href]:not(:where(
 }
 
 /*tables*/
-table { border-collapse: collapse; width: 100%; overflow-x: auto; table-layout: fixed }
+table { border-collapse: collapse; overflow-x: auto; table-layout: fixed }
 td, th { padding: 0.3rem 1ch }
 th { border-bottom: 2px solid var(--c); color: var(--d); font-weight: 500; text-align: inherit }
 td:first-child, th:first-child { padding-left: 0 }
-td:last-child, th:first-child { padding-right: 0 }
+td:last-child, th:first-child { padding-right: 0; white-space: nowrap; }
 
 /*index table*/
-.postdate { white-space: nowrap; width: 10ch; font-family: var(--e) }
+td.postdate { white-space: nowrap; width: 10ch; font-family: var(--e) }
+td.postlink { white-space: normal }
 
