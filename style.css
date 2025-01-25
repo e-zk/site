@@ -20,27 +20,6 @@
 	::selection { color: var(--a); background: #e1ff00f0 }
 }
 
-@media not (prefers-reduced-motion) {
-	@keyframes slide-up {
-		0% {
-			translate: 0 2vh;
-			opacity: 0;
-		}
-		50% { opacity: 0 }
-		100% {
-			translate: 0 0;
-			opacity: 1;
-		}
-	}
-	main {
-		animation: 0.5s;
-		animation-name: slide-up;
-		animation-iteration-count: 1;
-		animation-direction: alternate;
-		animation-timing-function: ease-out;
-	}
-}
-
 html {
 	height: 100%;
 	scroll-behavior: smooth;
@@ -80,7 +59,6 @@ h3 { font-size: 1.296rem }
 h4 { font-size: 1.215rem }
 h5 { font-size: 1.138rem }
 h6 { font-size: 1.067rem }
-p { font-size: 1rem }
 b, strong { font-weight: 600 }
 ul, ol { padding-inline-start: var(--t) }
 li { padding-inline-start: calc(var(--t)/4) }
@@ -90,7 +68,7 @@ blockquote {
 	font-family: inherit;
 	font-style: italic;
 	font-weight: normal;
-	padding: var(--t) calc(var(--t)*2);
+	padding: calc(var(--t)/4) var(--t);
 	margin: 0;
 
 	border-right: none;
