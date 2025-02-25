@@ -24,7 +24,7 @@ A select list of my software endevours can be found on the [projects](/projects.
 
 You can contact me via email at `contact [at} zakaria.org`. I [don't](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) [use](https://efail.de/) [PGP](https://latacora.singles/2019/07/16/the-pgp-problem.html).  
 
-# About this website
+# Colophon
 
 Hosting of this server is provided by [Vultr](https://vultr.com/).
 
@@ -36,5 +36,7 @@ A hidden service mirror of this site can be accessed through Tor here: http://64
 
 The site's design is inspired by many other personal sites, too many to remember. Inspiration has also been taken from any number of sites on [Dead Simple Sites](https://deadsimplesites.com/).
 
-Font is [Inter](https://rsms.me/inter/). CSS is hand-written by yours truly.
+Body font is [Inter](https://rsms.me/inter/).  
+Headings font is [Lora](https://github.com/cyrealtype/Lora-Cyrillic).  
+CSS is hand-written by yours truly.
 
