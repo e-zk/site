@@ -1,23 +1,22 @@
 :root {
-	--a: #fff;
-	--b: #ddd;
+	--a: #fffef3;
+	--b: #cccbc3;
 	--c: #555;
 	--d: #222;
 	--s: 2rem;
 	--t: 1rem;
 	--f: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco",Roboto,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 	--e: Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
-
 }
-::selection { color: var(--d); background: #e1ff00 }
+::selection { color: #222; background: #bcbeb4 }
 @media(prefers-color-scheme:dark) {
 	:root {
 		--a: #000;
-		--b: #333;
-		--c: #aaa;
-		--d: #eee;
+		--b: #252525;
+		--c: #bcbbb5;
+		--d: #cccbc3;
 	}
-	::selection { color: var(--a); background: #e1ff00f0 }
+	::selection { color: #222; background: #bcbeb4 }
 }
 
 html {
@@ -33,11 +32,11 @@ html {
 }
 body {
 	word-break: break-word;
-	max-width: 640px;
+	max-width: 600px;
 	min-height: 100vh;
 	margin: var(--t) auto; padding: 0 var(--s) var(--s);
 	font-family: var(--f);
-	font-size: 15px;
+	font-size: 16px;
 	font-weight: 400;
 	line-height: 1.6;
 	background: var(--a);
@@ -46,7 +45,8 @@ body {
 
 /*text styles*/
 h1,h2,h3,h4,h5,h6 {
-	font-weight: 500;
+	font-weight: 400;
+	font-family: "Lora",serif;
 	text-wrap: balance;
 	line-height: 1.1;
 	color: var(--d);
