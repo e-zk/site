@@ -4,6 +4,83 @@
 <description/>
 <link>https://zakaria.org/posts/</link>
 <item>
+<link>https://zakaria.org/posts/paste-plaintext.html</link>
+<title>Paste as plaintext</title>
+<pubDate>Fri, 28 Feb 2025 00:00:00 &#43;0000</pubDate>
+<description>
+&lt;h1 id=&#34;paste-as-plaintext&#34;&gt;Paste as plaintext&lt;/h1&gt;
+
+&lt;p&gt;I use Windows for work. I used to use it at home. But now I only use it at
+work&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;Anyways, for quite a while (many years now) in &amp;quot;modern&amp;quot; GUI
+applications+operating systems there&#39;s been this feature where if you copy some
+styled text, usually from the web, it tries to copy that formatting across to
+wherever you&#39;re pasting it as well (if it supports styled text).&lt;/p&gt;
+
+&lt;p&gt;For example if I select and ctrl+c copy some &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; from an article on a
+website, and I ctrl+v paste that in MS Teams, that &lt;code&gt;h1&lt;/code&gt;&#39;s basic CSS/rich-text
+styling (text size, sometimes font, colour, hrefs, etc) will get pasted into
+my Teams text-input. This happens for pasting in a many other GUI applications
+too.&lt;/p&gt;
+
+&lt;p&gt;The worst is when it pastes white-coloured text from a site that uses white on
+black&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. Teams by default has a &#39;bright&#39; interface, so... you can&#39;t see shit.&lt;/p&gt;
+
+&lt;p&gt;The only very very rare time it is ever useful is copying across a table into
+an email or Teams message.&lt;/p&gt;
+
+&lt;p&gt;My question is; who the fuck asked for this? Who makes use of this on the
+daily and is very impressed by its addition to our lives?&lt;br /&gt;
+I mean, it just seems like it&#39;d be useless for everyone:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;If you&#39;re copying some text from a site into your Word document -- surely
+you&#39;d want it to match the style of your Word document, right?&lt;/li&gt;
+&lt;li&gt;If you&#39;re pasting that text in a Teams message -- do you &lt;em&gt;really enjoy&lt;/em&gt; the
+weird out-of-place style the text has in contrast to the rest of your
+default-styled message? (Same goes for pasting into rich-text emails).&lt;/li&gt;
+&lt;li&gt;Do you really just absolutely &lt;em&gt;love it&lt;/em&gt; when after pasting that styled text
+the rest of your following typed text inherits that awful, out-of-pace
+style of the text you pasted? Oh, &lt;em&gt;you do&lt;/em&gt; like that, huh? Freak.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Who decided it should be rich-text by default? And am I the only one who
+&lt;em&gt;doesn&#39;t like it?&lt;/em&gt; Am I the only one who this frustrates on the daily? Am I
+the only one who can&#39;t stand having to open Notepad and paste shit in there
+first to get rid of formatting? Maybe there&#39;s just a simple solution I&#39;m not
+aware of.&lt;/p&gt;
+
+&lt;p&gt;Yeah, I can right click and &amp;quot;paste as plaintext&amp;quot;. There probably is a keybind
+to do this, but it depends on the application:
+Is it ctrl+alt+v? or ctrl+shift+v? or is it something completely different?&lt;br /&gt;
+The clipboard should just be plaintext-by-default! Everything else
+should be under an optional keybind or context menu. &lt;em&gt;Not the other way around&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you enjoy the copy with formatting &amp;quot;feature&amp;quot;, please don&#39;t hesitate to email
+me. Just know I will take great pleasure putting that email straight into the
+trash.&lt;/p&gt;
+
+&lt;p&gt;Peace.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;p&gt;&amp;quot;use&amp;quot; is too pleasant a word, actually. I &amp;quot;deal with it&amp;quot;. I &amp;quot;deal&amp;quot; with
+  Windows.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;&lt;p&gt;Not usually actually white foreground on black background -- most sites
+  know not to assault their user&#39;s eyes with such contrast (unless for
+  &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Accessibility&#34;&gt;a11y&lt;/a&gt;
+  reasons).&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+
+</description>
+</item><item>
 <link>https://zakaria.org/posts/resident-ssh-keys-on-windows.html</link>
 <title>YubiKey resident SSH keys on Windows&#43;WSL</title>
 <pubDate>Wed, 23 Mar 2022 00:00:00 &#43;0000</pubDate>
