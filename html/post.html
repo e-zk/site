@@ -1,4 +1,3 @@
 {{define "title"}}{{.Title}}{{end}}
-{{define "body"}}{{if .Date }}<p><small>{{.Date}}</small></p>{{end}}
-{{.Content}}{{end}}
+{{define "body"}}{{.Content}}{{if .Date }}<hr/><p>posted: {{.Date}} &bullet; modified: {{.Modified}} (<a href="https://github.com/e-zk/site/commit/{{.MarkdownFileHash}}">commit</a>)</p>{{end}}{{end}}
 {{define "footer"}}{{.Footer}}{{end}}

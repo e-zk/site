@@ -14,7 +14,7 @@ most of that from these lists.
 
 List of books I am currenly reading:
 
-- _Notes from Underground_, by Fyodor Dostoyevsky
+- _Before the Coffee Gets Cold: Tales from the Cafe_, by Toshikazu Kawaguchi
 
 ## Collecting dust
 
@@ -36,6 +36,8 @@ I have read (and forgotten) so much over the years so this list is not exhaustiv
 This table is highly inspired by [icyphox](https://icyphox.sh/reading/ "reading - icyphox").  
 
 |----|----|
+|_A Spy in the House of Love_<br>by Anais Nin | ••••• | 
+|_Notes from Underground_<br>by Fyodor Dostoyevsky | •••• |
 |_The Fall_<br>by Albert Camus | ••• | 
 |_The Plague_<br>by Albert Camus| •••• |
 |_Wuthering Heights_<br>by Emily Bronte| [dnf](# "will come back to at some point") |
