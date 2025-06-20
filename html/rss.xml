@@ -3,10 +3,11 @@
 <title>zakaria's web log</title>
 <description/>
 <link>https://zakaria.org/posts/</link>
-{{ range .Posts }}<item>
-<link>{{ .Permalink }}</link>
-<title>{{ .Title }}</title>
-<pubDate>{{ .Date }}</pubDate>
+{{ range .List }}
+<item>
+<link>https://zakaria.org/{{ .RelativeURL }}</link>
+<title>{{ .Metadata.Title }}</title>
+<pubDate>{{ .Metadata.Date }}</pubDate>
 <description>
 {{ .Content }}
 </description>
