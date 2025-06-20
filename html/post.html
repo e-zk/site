@@ -1,3 +1,5 @@
-{{define "title"}}{{.Title}}{{end}}
-{{define "body"}}{{.Content}}{{if .Date }}<hr/><p>posted: {{.Date}} &bullet; modified: {{.Modified}} (<a href="https://github.com/e-zk/site/commit/{{.MarkdownFileHash}}">commit</a>)</p>{{end}}{{end}}
-{{define "footer"}}{{.Footer}}{{end}}
+{{define "onionurl"}}http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/{{.RelativeURL}}{{end}}
+{{define "title"}}{{.Metadata.Title}}{{end}}
+{{define "body"}}{{.Content}}{{end}}
+{{define "date"}}{{if .Metadata.Date}}<hr/><p>Published on {{.Metadata.Date}}{{if .LastModified}}{{if ne .Metadata.Date .LastModified}} and updated on {{.LastModified}}{{end}}{{end}}{{if .GitHash}} (<a href="https://github.com/e-zk/site/commit/{{.GitHash}}">commit</a>){{end}}</p>{{end}}{{end}}
+{{define "footer"}}<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="/{{.Metadata.Path}}">plaintext</a> <a href="{{template "onionurl" .}}">onion</a></p>{{end}}

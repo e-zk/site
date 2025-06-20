@@ -1,15 +1,16 @@
-<!--{{define "title"}}Blog{{end}}-->
+{{define "onionurl"}}http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/{{end}}
+{{define "title"}}{{.Title}}{{end}}
 {{define "body"}}
-<h1>{{ .Title }}</h1>
-{{ .Before }}
+<h1>{{ template "title" . }}</h1>
+<p>Writings... Subscribe to the <a href="/rss.xml">rss feed.</a></p>
 <table width="100%">
 {{range .List }}
 <tr>
-<td class="postdate">{{.Date}}</td>
-<td class="postlink"><a href="./{{.Rellink}}">{{.Title}}</a></td>
+<td class="postdate">{{.Metadata.Date}}</td>
+<td class="postlink"><a href="/{{.RelativeURL}}">{{.Metadata.Title}}</a></td>
 </tr>
 {{end}}
 </table>
-{{ .After }}
 {{end}}
-{{define "footer" }}{{ .Footer }}{{end}}
+{{define "date"}}{{end}}
+{{define "footer"}}<a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="{{template "onionurl" .}}">onion</a>{{end}}
