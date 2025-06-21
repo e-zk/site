@@ -22,13 +22,16 @@ Turns out Windows has this "fast startup" thing. As far as I can tell, when
 you go Start > Shutdown it closes all running processes, logs out, and then
 hibernates the system so that it can startup faster next time. That
 basically means to Windows it's not been "really" shutdown so the uptime isn't
- reset.
+reset. I don't know why you'd want this, generally for decent spec'd windows 
+laptops the startup time is pretty good, and the difference with this feature
+enabled is negligible -- but I don't manage this laptop, so not much I can do
+really.
 
-So how do you tell how long your machine has been "on" (like, since you pressed
+So how do I tell how long my laptop has been "on" (like, since I pressed
 the power button)?
 
 Well, there's one pretty ubiquitous process on Windows that's generally one of
-the first user-facing applications: Explorer.
+the first user-facing applications: explorer.
 So to get a better idea of when I powered on my machine today, I wrote a
 function to check the explorer.exe process start time: `Get-SoftUptime`.
 
@@ -52,7 +55,7 @@ function Get-SoftUptime {
 ```
 
 The `-Since` option mirrors the behaviour of `Get-Uptime -Since`: it'll just
-output the start time of explorer.
+spit out the start time of explorer.
 
 This gives me a better idea of when I started up my laptop. The output is the
 same format (a `[datetime]`) as `Get-Uptime` too if that is helpful. 
