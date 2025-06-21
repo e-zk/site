@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<link rel="preload" as="font" href="/static/fonts/InterVariable.woff2" crossorigin="" type="font/woff2">
+<link rel="preload" as="font" href="/static/fonts/Lora-latin.woff2" crossorigin="" type="font/woff2">
+<link href="/style.css" rel="stylesheet" type="text/css">
+<link href="/static/fonts/inter.css" rel="stylesheet" type="text/css">
+<link href="/static/fonts/lora.css" rel="stylesheet" type="text/css">
+<link href="/rss.xml" rel="alternate" type="application/rss+xml">
+<title>Soft Uptime</title>
+</head>
+<body>
+<header>
+<nav>
+<p>
+<a href="/" class="index">zakaria.org</a> <a href="/posts">Blog</a> <a href="/projects.html">Projects</a> <a href="/about.html">About</a>
+</p>
+</nav>
+</header>
+<main>
+<h1 id="soft-uptime">Soft Uptime</h1>
+
+<pre><code class="language-powershell">PS&gt; Get-Uptime
+
+Days              : 0
+Hours             : 20
+Minutes           : 27
+Seconds           : 48
+Milliseconds      : 0
+Ticks             : 736680000000
+TotalDays         : 0.852638888888889
+TotalHours        : 20.4633333333333
+TotalMinutes      : 1227.8
+TotalSeconds      : 73668
+TotalMilliseconds : 73668000
+</code></pre>
+
+<p>Huh? 20 hours? I just powered this thing on a few minutes ago!</p>
+
+<p>Turns out Windows has this &ldquo;fast startup&rdquo; thing. As far as I can tell, when
+you go Start &gt; Shutdown it closes all running processes, logs out, and then
+hibernates the system so that it can startup faster next time. That
+basically means to Windows it&rsquo;s not been &ldquo;really&rdquo; shutdown so the uptime isn&rsquo;t
+reset. I don&rsquo;t know why you&rsquo;d want this, generally for decent spec&rsquo;d windows
+laptops the startup time is pretty good, and the difference with this feature
+enabled is negligible &ndash; but I don&rsquo;t manage this laptop, so not much I can do
+really.</p>
+
+<p>So how do I tell how long my laptop has been &ldquo;on&rdquo; (like, since I pressed
+the power button)?</p>
+
+<p>Well, there&rsquo;s one pretty ubiquitous process on Windows that&rsquo;s generally one of
+the first user-facing applications: explorer.
+So to get a better idea of when I powered on my machine today, I wrote a
+function to check the explorer.exe process start time: <code>Get-SoftUptime</code>.</p>
+
+<pre><code class="language-powershell">function Get-SoftUptime {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [switch]
+        $Since
+    )
+
+    $started = [datetime](Get-Process | Where-Object { $_.Name -eq &quot;explorer&quot; } | Select-Object -ExpandPropety StartTime)
+
+    if ($PSBoundParameters.ContainsKey(&quot;Since)) {
+        return $started
+    } else {
+        return (Get-Date) - $started
+    }
+}
+</code></pre>
+
+<p>The <code>-Since</code> option mirrors the behaviour of <code>Get-Uptime -Since</code>: it&rsquo;ll just
+spit out the start time of explorer.</p>
+
+<p>This gives me a better idea of when I started up my laptop. The output is the
+same format (a <code>[datetime]</code>) as <code>Get-Uptime</code> too if that is helpful.</p>
+
+<p>I&rsquo;ve used explorer because I reckon it&rsquo;s one of the first processes to start,
+it gives me a good enough idea. I don&rsquo;t need it to be very accurate.</p>
+
+<hr/><p>Published on 2025-06-21 (<a href="https://github.com/e-zk/site/commit/31e11632c95576416d48c58dc67dcbef3535d146">commit</a>)</p>
+</main>
+<footer>
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="/posts/soft-uptime.md">plaintext</a> <a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/soft-uptime.html">onion</a></p>
+</footer>
+</body>
+</html>
