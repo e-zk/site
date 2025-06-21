@@ -5,6 +5,76 @@
 <link>https://zakaria.org/posts/</link>
 
 <item>
+<link>https://zakaria.org/posts/soft-uptime.html</link>
+<title>Soft Uptime</title>
+<pubDate>Sat, 21 Jun 2025 00:00:00 &#43;0000</pubDate>
+<description>
+&lt;h1 id=&#34;soft-uptime&#34;&gt;Soft Uptime&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-powershell&#34;&gt;PS&amp;gt; Get-Uptime
+
+Days              : 0
+Hours             : 20
+Minutes           : 27
+Seconds           : 48
+Milliseconds      : 0
+Ticks             : 736680000000
+TotalDays         : 0.852638888888889
+TotalHours        : 20.4633333333333
+TotalMinutes      : 1227.8
+TotalSeconds      : 73668
+TotalMilliseconds : 73668000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Huh? 20 hours? I just powered this thing on a few minutes ago!&lt;/p&gt;
+
+&lt;p&gt;Turns out Windows has this &amp;quot;fast startup&amp;quot; thing. As far as I can tell, when
+you go Start &amp;gt; Shutdown it closes all running processes, logs out, and then
+hibernates the system so that it can startup faster next time. That
+basically means to Windows it&#39;s not been &amp;quot;really&amp;quot; shutdown so the uptime isn&#39;t
+reset. I don&#39;t know why you&#39;d want this, generally for decent spec&#39;d windows
+laptops the startup time is pretty good, and the difference with this feature
+enabled is negligible -- but I don&#39;t manage this laptop, so not much I can do
+really.&lt;/p&gt;
+
+&lt;p&gt;So how do I tell how long my laptop has been &amp;quot;on&amp;quot; (like, since I pressed
+the power button)?&lt;/p&gt;
+
+&lt;p&gt;Well, there&#39;s one pretty ubiquitous process on Windows that&#39;s generally one of
+the first user-facing applications: explorer.
+So to get a better idea of when I powered on my machine today, I wrote a
+function to check the explorer.exe process start time: &lt;code&gt;Get-SoftUptime&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-powershell&#34;&gt;function Get-SoftUptime {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [switch]
+        $Since
+    )
+
+    $started = [datetime](Get-Process | Where-Object { $_.Name -eq &amp;quot;explorer&amp;quot; } | Select-Object -ExpandPropety StartTime)
+
+    if ($PSBoundParameters.ContainsKey(&amp;quot;Since)) {
+        return $started
+    } else {
+        return (Get-Date) - $started
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;-Since&lt;/code&gt; option mirrors the behaviour of &lt;code&gt;Get-Uptime -Since&lt;/code&gt;: it&#39;ll just
+spit out the start time of explorer.&lt;/p&gt;
+
+&lt;p&gt;This gives me a better idea of when I started up my laptop. The output is the
+same format (a &lt;code&gt;[datetime]&lt;/code&gt;) as &lt;code&gt;Get-Uptime&lt;/code&gt; too if that is helpful.&lt;/p&gt;
+
+&lt;p&gt;I&#39;ve used explorer because I reckon it&#39;s one of the first processes to start,
+it gives me a good enough idea. I don&#39;t need it to be very accurate.&lt;/p&gt;
+
+</description>
+</item>
+<item>
 <link>https://zakaria.org/posts/thoughts-on-thinking.html</link>
 <title>Thoughts on &#34;Thoughts on Thinking&#34;</title>
 <pubDate>Fri, 20 Jun 2025 00:00:00 &#43;0000</pubDate>
