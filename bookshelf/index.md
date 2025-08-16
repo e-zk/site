@@ -14,7 +14,7 @@ most of that from these lists.
 
 List of books I am currenly reading:
 
-- _Before the Coffee Gets Cold: Tales from the Cafe_, by Toshikazu Kawaguchi
+- n/a
 
 ## Collecting dust
 
@@ -33,21 +33,32 @@ and I include a rating out of 5 here as well. I'm pretty generous with my rating
 | •••••  | Excellent. Loved it.     |
 
 I have read (and forgotten) so much over the years so this list is not exhaustive.  
-This table is highly inspired by [icyphox](https://icyphox.sh/reading/ "reading - icyphox").  
+This table is highly inspired by
+[icyphox](https://icyphox.sh/reading/ "reading - icyphox").  
+
+## 2025
 
 |----|----|
+|_Endgame_<br>by Samuel Becket | ••• |
+|_Before the Coffee Gets Cold: Tales from the Cafe_<br>by Toshikazu Kawaguchi| ••• |
 |_A Spy in the House of Love_<br>by Anais Nin | ••••• | 
 |_Notes from Underground_<br>by Fyodor Dostoyevsky | •••• |
 |_The Fall_<br>by Albert Camus | ••• | 
 |_The Plague_<br>by Albert Camus| •••• |
+
+## 2024
+|----|----|
 |_Wuthering Heights_<br>by Emily Bronte| [dnf](# "will come back to at some point") |
 |_Bobok_<br>by Fyodor Dostoyevsky (transl. Ronald Meyer)| •••• |
 |_White Nights_<br>by Fyodor Dostoyevsky (transl. Ronald Meyer)| ••••• |
-|_The Stranger_<br>by Albert Camus| •••• |
 |_Before the Coffee Gets Cold_<br>by Toshikazu Kawaguchi (transl. Geoffrey Trousselot)| •••• |
+|_The Stranger_<br>by Albert Camus| •••• |
 |_The Autobiography of Malcom X_<br>by Malcolm X, Alex Haley| ••••• |
 |_Dracula_<br>by Bram Stoker| ••••• |
 |_The Iliac Crest_<br>by Cristina Rivera Garza (transl. Sarah Booker)| •••• |
+
+## ...
+|----|----|
 |_Ubik_<br>by Philip K. Dick| ••••• |
 |_A Scanner Darkly_<br>by Philip K. Dick| •••• |
 |_Do Androids Dream of Electric Sheep_<br>by Philip K. Dick| ••• |

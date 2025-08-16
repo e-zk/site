@@ -6,13 +6,14 @@
 	--s: 2rem;
 	--t: 1rem;
 	--f: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco",Roboto,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-	--e: Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
+	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
+	font-feature-settings: 'calt' 1, 'ss01' 1;
 }
 ::selection { color: #111; background: #bcbeb4 }
 @media(prefers-color-scheme:dark) {
 	:root {
 		--a: #000;
-		--b: #252525;
+		--b: #3c3b35;
 		--c: #bcbbb5;
 		--d: #cccbc3;
 	}
@@ -44,20 +45,14 @@ body {
 
 /*text styles*/
 h1,h2,h3,h4,h5,h6 {
-	font-weight: 400;
-	font-family: "Lora",serif;
+	font-weight: 600;
+	font-size: 1.15em;
 	text-wrap: balance;
 	line-height: 1.1;
 	color: var(--d);
 	margin-block-end: 1em;
 	margin-bottom: 1em;
 }
-h1 { font-size: 1.476rem }
-h2 { font-size: 1.383rem }
-h3 { font-size: 1.296rem }
-h4 { font-size: 1.215rem }
-h5 { font-size: 1.138rem }
-h6 { font-size: 1.067rem }
 b, strong { font-weight: 600 }
 ul, ol { padding-inline-start: var(--t) }
 li { padding-inline-start: calc(var(--t)/4) }
@@ -105,9 +100,10 @@ body header nav p a:hover {
 /*code styles*/
 code {
 	font-family: var(--e);
-	font-size: calc(1rem - 2px);
+	font-size: calc(1em - 2px);
 	font-weight: normal;
 	padding: 2px 4px;
+	font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1;
 }
 pre code {
 	background: transparent;
@@ -116,7 +112,7 @@ pre code {
 	line-height: 1.3;
 	overflow-x: auto;
 	overflow-y: hidden;
-	border: 1px solid var(--b);
+	border: 2px solid var(--b);
 	border-radius: 8px;
 }
 
@@ -130,7 +126,7 @@ a {
 	text-decoration: underline;
 	text-decoration-color: var(--b);
 	text-decoration-thickness: 1px;
-	text-underline-offset: .15rem;
+	text-underline-offset: .15em;
 	text-decoration-style: solid;
 }
 a:hover, a:active, a:focus {
@@ -147,7 +143,7 @@ a[href]:not(:where(
   [href*="//zakaria.org"]
 ))::after {
 	content: '  \2197';
-	font-size: 75%;
+	font-size: 0.75em;
 	display: inline-block;
 	position: relative;
 	bottom: 0.75ch;
@@ -162,6 +158,6 @@ td:first-child, th:first-child { padding-left: 0 }
 td:last-child, th:first-child { padding-right: 0; white-space: nowrap; }
 
 /*index table*/
-td.postdate { white-space: nowrap; width: 10ch; font-family: var(--e) }
+td.postdate { white-space: nowrap; width: 10ch; font-family: var(--e); font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1 }
 td.postlink { white-space: normal }
 

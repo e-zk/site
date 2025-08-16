@@ -1,4 +1,4 @@
-# Soft Uptime
+# Soft uptime
 
 ```powershell
 PS> Get-Uptime

@@ -37,7 +37,7 @@ I mean, it just seems like it'd be useless for everyone:
    weird out-of-place style the text has in contrast to the rest of your
    default-styled message? (Same goes for pasting into rich-text emails).
  - Do you really just absolutely _love it_ when after pasting that styled text
-   the rest of your following typed text inherits that awful, out-of-pace
+   the rest of your following typed text inherits that awful, out-of-place
    style of the text you pasted? Oh, _you do_ like that, huh? Freak.
 
 Who decided it should be rich-text by default? And am I the only one who
