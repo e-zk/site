@@ -27,20 +27,15 @@ Click any of the project names to jump to their sections.</p>
 <ul>
 <li><a href="#after">after</a>       - Echo string after process death (C) (OpenBSD).</li>
 <li><a href="#hidlock">hidlock</a>   - Lock screen on HID attach (Shell) (OpenBSD).</li>
-<li><a href="#humin">humin</a>       - Convert seconds to human-readable date (C).</li>
 <li><a href="#nlcc">nlcc</a>         - Compile NIST LWC entries into executable (C).</li>
 <li><a href="#page">page</a>         - Secret storage using age encryption (Go).</li>
-<li><a href="#pledgeme">pledgeme</a> - pledge(2) arbitrary programs (C) (OpenBSD).</li>
-<li><a href="#recreg">recreg</a>     - <strong>Rec</strong>ord <strong>reg</strong>ion of an X11 screen (Shell).</li>
-<li><a href="#reprose">reprose</a>   - Basic Go package server (Go).</li>
 <li><a href="#sghs">sghs</a>         - Shitty Go HTTP Server (Go).</li>
 <li><a href="#shite">shite</a>       - Static site generation scripts in <code>/bin/sh</code> (Shell).</li>
 <li><a href="#stsd">stsd</a>         - Secure Time Sync Daemon (Go).</li>
 <li><a href="#subc">subc</a>         - Subcommands package (Go).</li>
 <li><a href="#wslcheck">wslcheck</a> - Package that can test whether it is running on WSL (Go).</li>
-<li><a href="#yubilock">yubilock</a> - Lock X11 screen on YubiKey detach (Shell) (OpenBSD).</li>
 </ul>
-
+<section class="box">
 <h2 id="after">after</h2>
 
 <p><a href="https://github.com/e-zk/after"><strong>after</strong></a> is an
@@ -67,7 +62,9 @@ wanted to shutdown your machine after your <code>program</code> is finished:</p>
 
 <p>The only reason <code>after</code> is OpenBSD-specific is because at the time I mainly
 used OpenBSD.</p>
+</section>
 
+<section class="box">
 <h2 id="hidlock">hidlock</h2>
 
 <p><a href="https://github.com/e-zk/hidlock"><strong>hidlock</strong></a> is an OpenBSD-specific
@@ -81,21 +78,11 @@ get sent straight to the lockscreen and nowhere near the user&rsquo;s environmen
 See the project&rsquo;s <a href="https://github.com/e-zk/hidlock/blob/master/README.md">README</a>
 for screenshots and a more in-depth explanation.</p>
 
-<h2 id="humin">humin</h2>
+<p><a href="https://github.com/e-zk/yubilock"><strong>yubilock</strong></a> is another hotplugd(8) script similar to
+hidlock, except it locks the display when a YubiKey device is removed.</p>
+</section>
 
-<p>Inspired by <a href="http://z3bra.org/">human</a> - which prints number in human-readable
-format - <a href="https://github.com/e-zk/humin"><strong>humin</strong></a> is a simple CLI program to convert
-seconds to human readable time. It&rsquo;s one of my first publicly published C
-programs and so it isn&rsquo;t very good. The conversion logic is not very
-efficient and possibly just plain wrong. I have plans to rewrite it from scratch.
-Simply put this is what it can do:</p>
-
-<pre><code>$ humin 10000
-02:46:40
-$ humin 100000
-01 days 03:46:40
-</code></pre>
-
+<section class="box">
 <h2 id="nlcc">nlcc</h2>
 
 <p><a href="https://github.com/e-zk/nlcc"><strong>nlcc</strong></a> was written while on semester break
@@ -120,7 +107,9 @@ AD    = 61646164616461646164 (80)
 PT    = 74657374696e67206d657373616765 (&quot;testing message&quot;) (120)
 CT    = 87e649bf2c3e6c83cbb1ee7120c419a1f58b03b0386258
 </code></pre>
+</section>
 
+<section class="box">
 <h2 id="page">page</h2>
 
 <p>A command-line password manager written in Go that uses the
@@ -135,31 +124,16 @@ CLI password managers including its predecessor, <a href="https://github.com/e-z
 <p>I&rsquo;ve switched to Bitwarden for password management these days, but I spent
 a lot of time building and &ldquo;perfecting&rdquo; <a href="https://github.com/e-zk/page"><strong>page</strong></a>
 for my own use.</p>
+</section>
 
-<h2 id="pledgeme">pledgeme</h2>
-
-<p>A super small command-line program to pledge(2) arbitrary programs on OpenBSD.
-See the <a href="https://github.com/e-zk/pledgeme">README</a> for more info.</p>
-
-<h2 id="recreg">recreg</h2>
-
-<p><a href="https://github.com/e-zk/recreg"><strong>recreg</strong></a> is a small <a href="https://ffmpeg.org/">ffmpeg</a>
-script that makes recording a specific region of an X11 screen a little less painful:</p>
-
-<pre><code>rr 260x320+0+760 bottom_right_corner.mkv
-</code></pre>
-
-<h2 id="reprose">reprose</h2>
-
-<p><a href="https://github.com/e-zk/go-reprose"><strong>reprose</strong></a> is a super basic Go package
-server that essentially just redirects go-get requests to git repos. It powers
-<a href="https://go.zakaria.org/">go.zakaria.org</a>.</p>
-
+<section class="box">
 <h2 id="sghs">sghs</h2>
 
 <p><a href="https://github.com/e-zk/sghs"><strong>Shitty Go HTTP Server</strong></a> - a super simple Go HTTP fileserver for just serving
 files. Supports TLS too, if you&rsquo;ve got the cert files for it.</p>
+</section>
 
+<section class="box">
 <h2 id="shite">shite</h2>
 
 <p>A collection of <a href="https://github.com/e-zk/shite"><strong>shell scripts</strong></a> used to generate this static site.
@@ -167,42 +141,32 @@ It uses standard Unix stuff like <code>find</code>, <code>sed</code>, and uses <
 Markdown into HTML.</p>
 
 <p>Very opinionated, you probably don&rsquo;t want to use it <code>:P</code>.</p>
+</section>
 
+<section class="box">
 <h2 id="stsd">stsd</h2>
 
 <p><a href="https://github.com/e-zk/stsd"><strong>Secure Time Sync Daemon</strong></a>. A system daemon
 that uses HTTP date headers over TLS (HTTPS) to set system date as opposed to NTP.
 Why not NTP? See the <a href="https://raw.githubusercontent.com/e-zk/stsd/trunk/README">README</a>.</p>
+</section>
 
+<section class="box">
 <h2 id="subc">subc</h2>
 
 <p>A super small, super simple <a href="https://github.com/e-zk/subc"><strong>subc</strong></a>ommand package for Go. It wraps the standard
 <code>flag</code> package and uses FlagSets to create arbitrary &ldquo;subcommands&rdquo; for CLI
 projects. It&rsquo;s used by <a href="#page"><code>page</code></a>.</p>
+</section>
 
+<section class="box">
 <h2 id="wlscheck">wlscheck</h2>
 
 <p><a href="https://github.com/e-zk/wslcheck"><strong>Go package</strong></a> that tests whether you&rsquo;re running on WSL based on the kernel
 version string. It&rsquo;s used in <a href="#page"><code>page</code></a> to know whether to use
 Windows&rsquo; <code>clip.exe</code>.</p>
+</section>
 
-<h2 id="yubilock">yubilock</h2>
-
-<p><a href="https://github.com/e-zk/yubilock"><strong>yubilock</strong></a> is another hotplugd(8) script similar to
-<a href="#hidlock">hidlock</a>, except it locks the display when a YubiKey device is removed.</p>
-
-<h1 id="contributions">Contributions</h1>
-
-<p>List of open-source projects I have contributed to in some capacity.<br>
-Spelling mistakes/formatting changes not included.</p>
-
-<ul>
-<li><a href="https://github.com/jonjomckay/fritter">jonjomckay/fritter</a></li>
-<li><a href="https://github.com/juanfont/headscale">juanfont/headscale</a></li>
-<li><a href="https://github.com/foxtrot/scuzzy">foxtrot/scuzzy</a></li>
-<li><a href="https://github.com/standardnotes/standalone">standardnotes/standalone</a></li>
-<li><a href="https://github.com/nkanaev/yarr">nkanaev/yarr</a></li>
-</ul>
 
 
 </main>

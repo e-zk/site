@@ -5,19 +5,15 @@ Click any of the project names to jump to their sections.
 
   * [after](#after)       - Echo string after process death \(C) (OpenBSD).
   * [hidlock](#hidlock)   - Lock screen on HID attach (Shell) (OpenBSD).
-  * [humin](#humin)       - Convert seconds to human-readable date \(C).
   * [nlcc](#nlcc)         - Compile NIST LWC entries into executable \(C).
   * [page](#page)         - Secret storage using age encryption (Go).
-  * [pledgeme](#pledgeme) - pledge(2) arbitrary programs \(C) (OpenBSD).
-  * [recreg](#recreg)     - **Rec**ord **reg**ion of an X11 screen (Shell).
-  * [reprose](#reprose)   - Basic Go package server (Go).
   * [sghs](#sghs)         - Shitty Go HTTP Server (Go).
   * [shite](#shite)       - Static site generation scripts in `/bin/sh` (Shell).
   * [stsd](#stsd)         - Secure Time Sync Daemon (Go).
   * [subc](#subc)         - Subcommands package (Go).
   * [wslcheck](#wslcheck) - Package that can test whether it is running on WSL (Go).
-  * [yubilock](#yubilock) - Lock X11 screen on YubiKey detach (Shell) (OpenBSD).
 
+:box
 ## after
 
 [**after**](https://github.com/e-zk/after) is an 
@@ -41,7 +37,9 @@ wanted to shutdown your machine after your `program` is finished:
 
 The only reason `after` is OpenBSD-specific is because at the time I mainly
 used OpenBSD. 
+::
 
+:box
 ## hidlock
 
 [**hidlock**](https://github.com/e-zk/hidlock) is an OpenBSD-specific 
@@ -55,21 +53,11 @@ get sent straight to the lockscreen and nowhere near the user's environment.
 See the project's [README](https://github.com/e-zk/hidlock/blob/master/README.md)
 for screenshots and a more in-depth explanation.
 
-## humin
+[**yubilock**](https://github.com/e-zk/yubilock) is another hotplugd(8) script similar to 
+hidlock, except it locks the display when a YubiKey device is removed.
+::
 
-Inspired by [human](http://z3bra.org/) - which prints number in human-readable 
-format - [**humin**](https://github.com/e-zk/humin) is a simple CLI program to convert 
-seconds to human readable time. It's one of my first publicly published C
-programs and so it isn't very good. The conversion logic is not very 
-efficient and possibly just plain wrong. I have plans to rewrite it from scratch.
-Simply put this is what it can do:
-
-	$ humin 10000
-	02:46:40
-	$ humin 100000
-	01 days 03:46:40
-
-
+:box
 ## nlcc
 
 [**nlcc**](https://github.com/e-zk/nlcc) was written while on semester break 
@@ -93,7 +81,9 @@ decryption and shows a summary of the algorithm inputs:
 	AD    = 61646164616461646164 (80)
 	PT    = 74657374696e67206d657373616765 ("testing message") (120)
 	CT    = 87e649bf2c3e6c83cbb1ee7120c419a1f58b03b0386258
+::
 
+:box
 ## page
 
 A command-line password manager written in Go that uses the 
@@ -108,31 +98,16 @@ CLI password managers including its predecessor, [cpass](https://github.com/e-zk
 I've switched to Bitwarden for password management these days, but I spent
 a lot of time building and "perfecting" [**page**](https://github.com/e-zk/page) 
 for my own use.
+::
 
-## pledgeme
-
-A super small command-line program to pledge(2) arbitrary programs on OpenBSD.
-See the [README](https://github.com/e-zk/pledgeme) for more info.
-
-
-## recreg
-
-[**recreg**](https://github.com/e-zk/recreg) is a small [ffmpeg](https://ffmpeg.org/) 
-script that makes recording a specific region of an X11 screen a little less painful:
-
-	rr 260x320+0+760 bottom_right_corner.mkv
-
-## reprose
-
-[**reprose**](https://github.com/e-zk/go-reprose) is a super basic Go package 
-server that essentially just redirects go-get requests to git repos. It powers 
-[go.zakaria.org](https://go.zakaria.org/).
-
+:box
 ## sghs
 
 [**Shitty Go HTTP Server**](https://github.com/e-zk/sghs) - a super simple Go HTTP fileserver for just serving 
 files. Supports TLS too, if you've got the cert files for it.
+::
 
+:box
 ## shite
 
 A collection of [**shell scripts**](https://github.com/e-zk/shite) used to generate this static site.
@@ -140,38 +115,28 @@ It uses standard Unix stuff like `find`, `sed`, and uses [lowdown](https://krist
 Markdown into HTML.
 
 Very opinionated, you probably don't want to use it `:P`.
+::
 
+:box
 ## stsd
 
 [**Secure Time Sync Daemon**](https://github.com/e-zk/stsd). A system daemon 
 that uses HTTP date headers over TLS (HTTPS) to set system date as opposed to NTP.
 Why not NTP? See the [README](https://raw.githubusercontent.com/e-zk/stsd/trunk/README).
+::
 
+:box
 ## subc
 
 A super small, super simple [**subc**](https://github.com/e-zk/subc)ommand package for Go. It wraps the standard 
 `flag` package and uses FlagSets to create arbitrary "subcommands" for CLI 
 projects. It's used by [`page`](#page).
+::
 
+:box
 ## wlscheck
 
 [**Go package**](https://github.com/e-zk/wslcheck) that tests whether you're running on WSL based on the kernel 
 version string. It's used in [`page`](#page) to know whether to use 
 Windows' `clip.exe`.
-
-## yubilock
-
-[**yubilock**](https://github.com/e-zk/yubilock) is another hotplugd(8) script similar to 
-[hidlock](#hidlock), except it locks the display when a YubiKey device is removed.
-
-# Contributions
-
-List of open-source projects I have contributed to in some capacity.  
-Spelling mistakes/formatting changes not included. 
-
-- [jonjomckay/fritter](https://github.com/jonjomckay/fritter)
-- [juanfont/headscale](https://github.com/juanfont/headscale)
-- [foxtrot/scuzzy](https://github.com/foxtrot/scuzzy)
-- [standardnotes/standalone](https://github.com/standardnotes/standalone)
-- [nkanaev/yarr](https://github.com/nkanaev/yarr)
-
+::
