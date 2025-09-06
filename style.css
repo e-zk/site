@@ -161,3 +161,12 @@ td:last-child, th:first-child { padding-right: 0; white-space: nowrap; }
 td.postdate { white-space: nowrap; width: 10ch; font-family: var(--e); font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1 }
 td.postlink { white-space: normal }
 
+.box {
+	display: block;
+	background: transparent;
+	padding: 1em 2em;
+	margin-block-end: 1em;
+	margin-block-start: 1em;
+	border: 2px solid var(--b);
+	border-radius: 8px;
+}
