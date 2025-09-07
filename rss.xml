@@ -15,7 +15,7 @@
 
 &lt;p&gt;I setup &lt;a href=&#34;https://wiki.zakaria.org/&#34;&gt;wiki.zakaria.org&lt;/a&gt; some time ago. It&#39;s
 ended up becoming really really stale and unused&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. I&#39;m going to
-&amp;quot;decomission&amp;quot; it soon. I thought I&#39;d make this post on the main blog to
+&amp;quot;decommission&amp;quot; it soon. I thought I&#39;d make this post on the main blog to
 reflect a little bit on what its purpose was, and to archive some of the
 things I had written on there.&lt;/p&gt;
 
@@ -25,7 +25,7 @@ things I had written on there.&lt;/p&gt;
 as I could into it: rough notes, useful command flags, config files, code
 snippets, anything and everything I wanted to just take note of for later.&lt;/p&gt;
 
-&lt;p&gt;I wanted the style ofit to be more &amp;quot;hacker&amp;quot;-y than the blog here. So
+&lt;p&gt;I wanted the style of it to be more &amp;quot;hacker&amp;quot;-y than the blog here. So
 naturally that means dark background + green, monospaced text.&lt;/p&gt;
 
 &lt;p&gt;The rest of this post will just be a breakdown of every page I had on there
@@ -61,7 +61,7 @@ pretty fun to write about, I love showing off my workflow and customisation.&lt;
 
 &lt;p&gt;&lt;img src=&#34;/static/img/wiki-bip39.png&#34; alt=&#34;bip39 notes&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;As the title says (albeit originally misspelt). I had some interest in how
+&lt;p&gt;As the title says (albeit originally misspelled). I had some interest in how
 Monero, and other cryptocurrencies converted their private key seeds to
 phrase-based seeds.&lt;/p&gt;
 

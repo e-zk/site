@@ -4,7 +4,7 @@
 
 I setup [wiki.zakaria.org](https://wiki.zakaria.org/) some time ago. It's
 ended up becoming really really stale and unused[^1]. I'm going to
-"decomission" it soon. I thought I'd make this post on the main blog to
+"decommission" it soon. I thought I'd make this post on the main blog to
 reflect a little bit on what its purpose was, and to archive some of the
 things I had written on there.
 
@@ -16,7 +16,7 @@ So I had this idea for a personal wiki. I'd basically dump as much knowledge
 as I could into it: rough notes, useful command flags, config files, code
 snippets, anything and everything I wanted to just take note of for later.
 
-I wanted the style ofit to be more "hacker"-y than the blog here. So
+I wanted the style of it to be more "hacker"-y than the blog here. So
 naturally that means dark background + green, monospaced text.
 
 The rest of this post will just be a breakdown of every page I had on there
@@ -53,7 +53,7 @@ pretty fun to write about, I love showing off my workflow and customisation.
 
 ![bip39 notes](/static/img/wiki-bip39.png)
 
-As the title says (albeit originally misspelt). I had some interest in how
+As the title says (albeit originally misspelled). I had some interest in how
 Monero, and other cryptocurrencies converted their private key seeds to
 phrase-based seeds.
 
