@@ -5,6 +5,110 @@
 <link>https://zakaria.org/posts/</link>
 
 <item>
+<link>https://zakaria.org/posts/wiki-archive.html</link>
+<title>Goodbye wiki.zakaria.org</title>
+<pubDate>Sun, 07 Sep 2025 00:00:00 &#43;0000</pubDate>
+<description>
+&lt;h1 id=&#34;goodbye-wiki-zakaria-org-for-now&#34;&gt;Goodbye wiki.zakaria.org (for now)&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki.png&#34; alt=&#34;wiki homepage&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I setup &lt;a href=&#34;https://wiki.zakaria.org/&#34;&gt;wiki.zakaria.org&lt;/a&gt; some time ago. It&#39;s
+ended up becoming really really stale and unused&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. I&#39;m going to
+&amp;quot;decomission&amp;quot; it soon. I thought I&#39;d make this post on the main blog to
+reflect a little bit on what its purpose was, and to archive some of the
+things I had written on there.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-idea-of-the-personal-wiki&#34;&gt;The idea of the personal wiki&lt;/h2&gt;
+
+&lt;p&gt;So I had this idea for a personal wiki. I&#39;d basically dump as much knowledge
+as I could into it: rough notes, useful command flags, config files, code
+snippets, anything and everything I wanted to just take note of for later.&lt;/p&gt;
+
+&lt;p&gt;I wanted the style ofit to be more &amp;quot;hacker&amp;quot;-y than the blog here. So
+naturally that means dark background + green, monospaced text.&lt;/p&gt;
+
+&lt;p&gt;The rest of this post will just be a breakdown of every page I had on there
+(there weren&#39;t many).&lt;/p&gt;
+
+&lt;h2 id=&#34;the-stat-command-https-archive-md-uracs&#34;&gt;&lt;a href=&#34;https://archive.md/uRACS&#34;&gt;The stat command&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-stat.png&#34; alt=&#34;stat command&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This one was pretty simple. I just noticed that BSD and non-BSD &lt;code&gt;stat&lt;/code&gt;
+commands had different flags for formatting. Often I&#39;d like to get the octal
+representation of a file&#39;s Unix permissions, so I documented the differences.&lt;/p&gt;
+
+&lt;h2 id=&#34;devices-laptop-setup-https-archive-md-ytylb&#34;&gt;Devices / &lt;a href=&#34;https://archive.md/Ytylb&#34;&gt;Laptop setup&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-laptop.png&#34; alt=&#34;laptop setup&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The basic idea here was to document my Laptop&#39;s config. I&#39;m typing on that
+same X1 Carbon right now, actually. But I ditched Windows completely and just
+run OpenBSD on it now.&lt;/p&gt;
+
+&lt;h2 id=&#34;devices-mobile-device-setup-https-archive-md-bpncq&#34;&gt;Devices / &lt;a href=&#34;https://archive.md/BPnCq&#34;&gt;Mobile device setup&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-phone.png&#34; alt=&#34;phone setup&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This one I was pretty proud of. I documented my Pixel 4a setup: OS, installed
+apps, etc. I took a cool photo of my phone on the homescreen too. My setup has
+changed quite a lot since.&lt;br /&gt;
+I&#39;ll  probably re-do these device setup ones at some point, I think it&#39;s
+pretty fun to write about, I love showing off my workflow and customisation.&lt;/p&gt;
+
+&lt;h2 id=&#34;notes-bip39-and-mnemonic-seeds-https-archive-md-lqcmc&#34;&gt;Notes / &lt;a href=&#34;https://archive.md/LQcMC&#34;&gt;BIP39 and Mnemonic Seeds&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-bip39.png&#34; alt=&#34;bip39 notes&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As the title says (albeit originally misspelt). I had some interest in how
+Monero, and other cryptocurrencies converted their private key seeds to
+phrase-based seeds.&lt;/p&gt;
+
+&lt;h2 id=&#34;notes-yubikey-notes-https-archive-md-zzsms&#34;&gt;Notes / &lt;a href=&#34;https://archive.md/zzsMs&#34;&gt;YubiKey notes&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-yubikey.png&#34; alt=&#34;yubikey notes&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notes on setting up resident SSH keys on the YubiKey&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-changing-home-https-archive-md-3dbxr&#34;&gt;Privsec / &lt;a href=&#34;https://archive.md/3dbXR&#34;&gt;Changing $HOME&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-home.png&#34; alt=&#34;changing HOME&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is about a cool trick I use all the time. Most applications
+use the &lt;code&gt;$HOME&lt;/code&gt; environment variable to determine the current home directory
+(naturally). You can change &lt;code&gt;$HOME&lt;/code&gt; to whatever you want. Can be useful.&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-nft-https-archive-md-acxnf&#34;&gt;Privsec / &lt;a href=&#34;https://archive.md/aCxnf&#34;&gt;NFT&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-nft.png&#34; alt=&#34;NFT&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notes + template for Linux NFT.&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-windows-sandbox&#34;&gt;Privsec / Windows Sandbox&lt;/h2&gt;
+
+&lt;p&gt;This just became the &lt;a href=&#34;/posts/winsandbox.html&#34;&gt;Windows Sandbox&lt;/a&gt; post here on
+the main blog. It&#39;s the same thing.&lt;/p&gt;
+
+&lt;h2 id=&#34;going-forward&#34;&gt;Going forward&lt;/h2&gt;
+
+&lt;p&gt;Yeah so I might revive the wiki subdomain but it&#39;s not gonna have the same
+stuff. I don&#39;t really have the time at the moment to invest too heavily into a
+new side project either. We&#39;ll see.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;It hasn&#39;t been updated in four (4) years! damn!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+
+</description>
+</item>
+<item>
 <link>https://zakaria.org/posts/nothing-to-do.html</link>
 <title>There&#39;s nothing to do</title>
 <pubDate>Sat, 16 Aug 2025 00:00:00 &#43;0000</pubDate>
