@@ -1,6 +1,6 @@
 # About me
 
-I am Zakaria. My friends sometimes call me Zak.
+I am Zakaria. People often call me Zak.
 
 I am a CS graduate with an interest in information security, digital privacy,
 and cryptography. I currently work in cyber security, I write [code](#code)
