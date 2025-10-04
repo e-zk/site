@@ -36,7 +36,7 @@ body {
 	min-height: 100vh;
 	margin: var(--t) auto; padding: 0 var(--s) var(--s);
 	font-family: var(--f);
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 400;
 	line-height: 1.6;
 	background: var(--a);
@@ -46,13 +46,14 @@ body {
 /*text styles*/
 h1,h2,h3,h4,h5,h6 {
 	font-weight: 600;
-	font-size: 1.15em;
+	font-size: 1em;
 	text-wrap: balance;
 	line-height: 1.1;
 	color: var(--d);
 	margin-block-end: 1em;
 	margin-bottom: 1em;
 }
+h1 { display: inline-block; background: var(--c); color: var(--a); padding: 2px 4px }
 b, strong { font-weight: 600 }
 ul, ol { padding-inline-start: var(--t) }
 li { padding-inline-start: calc(var(--t)/4) }
