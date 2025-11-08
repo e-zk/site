@@ -1,6 +1,6 @@
 :root {
-	--a: #fffef3;
-	--b: #cccbc3;
+	--a: #fff;
+	--b: #ccc;
 	--c: #555;
 	--d: #222;
 	--s: 2rem;
@@ -53,7 +53,7 @@ h1,h2,h3,h4,h5,h6 {
 	margin-block-end: 1em;
 	margin-bottom: 1em;
 }
-h1 { display: inline-block; background: var(--c); color: var(--a); padding: 2px 4px }
+h1 { display: inline-block; background: var(--d); color: var(--a); padding: 2px 4px }
 b, strong { font-weight: 600 }
 ul, ol { padding-inline-start: var(--t) }
 li { padding-inline-start: calc(var(--t)/4) }
