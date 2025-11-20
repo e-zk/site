@@ -20,6 +20,21 @@
 </header>
 <main>
 <h1 id="installing-headscale-on-openbsd">Installing headscale on OpenBSD</h1>
+<section class="box">
+<p><strong>This guide is severely out of date:</strong> I&rsquo;ve received a couple emails about
+getting relayd to cooperate with headscale. Tailscale, and therefore headscale
+has gone through a major protocol change since this post, and as such it
+relies heavily on web-sockets. While web-sockets are supported by relayd, I
+could not get it to work.
+Instead of relayd, just for headscale, I use
+<a href="https://github.com/suyashkumar/ssl-proxy">ssl-proxy</a>. I just point it to my
+TLS certs, and specify the ports + addresses I need to get it listening.</p>
+
+<p>Oh, also, the Android client supports custom Control Server URLs out of the
+box now, and has done for some time. Yay!</p>
+
+<p>I&rsquo;m hoping to re-do my setup and post about it at a later date.</p>
+</section>
 
 <p>In this post I&rsquo;ll detail the steps I took to install and configure
 <a href="https://github.com/juanfont/headscale">headscale</a>, an open-source self-hostable implementation of the <a href="https://tailscale.com/">Tailscale</a> control server, on OpenBSD.</p>
