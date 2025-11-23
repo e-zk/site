@@ -5,7 +5,7 @@ I am Zakaria. People often call me Zak.
 I am a CS graduate with an interest in information security, digital privacy,
 and cryptography. I currently work in cyber security, I write
 [code](/projects.html) for fun, and I try to
-[read](/bookshelf/ "link to my bookshelf") in my spare time I also
+[read](/bookshelf/ "link to my bookshelf") in my spare time. I also
 [blog](/posts/) about anything I feel like. Opinions are my own.  
 
 You can find me on:
