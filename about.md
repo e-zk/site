@@ -19,12 +19,14 @@ I use Signal too.
 
 # Colophon
 
-- This is a static site.
-- The site runs on [OpenBSD](https://openbsd.org/), httpd and relayd.
-- Source for the custom static site generator can be found [here](https://github.com/e-zk/site-gen "site generator")
-- The site's content is managed on git [here](https://github.com/e-zk/site "site content").
-- A [hidden service](https://en.wikipedia.org/wiki/Tor_(network)#Onion_services) mirror of this site can be accessed here:  
-  http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion.
+This is a static site. It runs on [OpenBSD](https://openbsd.org/)'s, httpd and
+relayd.  
+The site's content is converted from Markdown by a
+[custom generator](https://github.com/e-zk/site-gen "site generator").  
+Content is managed on [Git](https://github.com/e-zk/site "site content").  
+A [hidden service](https://en.wikipedia.org/wiki/Tor_(network)#Onion_services)
+mirror of this site can be accessed at:
+http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion.
 
 ## Design
 
