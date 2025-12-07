@@ -1,7 +1,7 @@
 # I don't like it when computers talk to me
 
 The recent, ongoing, AI-chatbot boom has made me realise how annoying I think
-it is when software tries to "talk to me", like its a fellow human being.
+it is when software tries to "talk to me", like it's a fellow human being.
 But it isn't just annoying -- it feels wrong to me now. 
 
 When I was much younger I used to enjoy and even write my own software[^1]
