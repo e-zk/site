@@ -4,7 +4,7 @@
 	--c: #555;
 	--d: #222;
 	--s: 1rem;
-	--t: 1rem;
+	--t: var(--s);
 	--f: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco",Roboto,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
 	font-feature-settings: 'calt' 1, 'ss01' 1;
@@ -27,6 +27,8 @@ html {
 	-moz-text-size-adjust: none;
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
+	line-height: 1.5;
+	font-size: 14px;
 }
 *, *::before, *::after {
 	box-sizing: inherit;
@@ -37,28 +39,35 @@ body {
 	min-height: 100vh;
 	margin: var(--t) auto; padding: 0 var(--s) var(--s);
 	font-family: var(--f);
-	font-size: 14px;
 	font-weight: 400;
-	line-height: 1.6;
 	background: var(--a);
 	color: var(--c);
 }
 
 /*text styles*/
 h1,h2,h3,h4,h5,h6 {
-	font-weight: 600;
+	font-weight: 500;
 	font-size: 1em;
 	text-wrap: balance;
-	line-height: 1.1;
+	line-height: 1.125;
 	color: var(--d);
 	margin-block-end: 1em;
 	margin-bottom: 1em;
 }
 h1 { border-bottom: var(--bw) solid var(--b); padding: 0 0 var(--t) 0 }
-b, strong { font-weight: 600 }
-ul, ol { padding-inline-start: var(--t) }
-li { padding-inline-start: calc(var(--t)/4) }
-li::marker { color: var(--d) }
+h2 { font-weight: 600 }
+b, strong { font-weight: 500 }
+ul, ol {
+	padding-inline-start: var(--t);
+	margin: 0 0 0 calc(var(--s)/2);
+}
+ul > li, ol > li {
+	padding-inline-start: calc(var(--t)/4)
+}
+ol > li::marker, ul > li::marker {
+	color: var(--d);
+}
+
 blockquote {
 	display: block;
 	font-family: inherit;
@@ -66,7 +75,6 @@ blockquote {
 	font-weight: normal;
 	padding: calc(var(--t)/4) var(--t);
 	margin: 0;
-
 	border-right: none;
 	border-left: var(--bw) solid var(--b);
 	border-inline-start: var(--bw) solid var(--b);
@@ -82,7 +90,7 @@ blockquote footer {
 }
 
 /*header + footer + nav*/
-body header, body footer { padding: var(--s) 0 }
+body header, body footer { padding: var(--t) 0 }
 body header nav p,
 body footer p {
 	display: flex;
@@ -91,7 +99,7 @@ body footer p {
 }
 body header nav p a,
 body footer p a {
-	font-weight: 600;
+	font-weight: 500;
 	color: var(--c);
 	text-decoration: none;
 }
@@ -153,14 +161,13 @@ a[href]:not(:where(
 }
 
 /*tables*/
-table { border-collapse: collapse; overflow-x: auto; table-layout: fixed }
-td, th { padding: 0.3rem 1ch }
+table { border-collapse: collapse;  table-layout: fixed }
+td, th { padding: 0.3rem 1ch; vertical-align: top }
+td { overflow-wrap: break-word }
 th { border-bottom: var(--bw) solid var(--b); color: var(--d); font-weight: 500; text-align: inherit }
-td:first-child, th:first-child { padding-left: 0 }
-td:last-child, th:first-child { padding-right: 0; white-space: nowrap; }
 
 /*index table*/
-td.postdate { white-space: nowrap; width: 10ch; font-family: var(--e); font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1 }
+td.postdate { padding-left: 0; white-space: nowrap; width: 10ch; font-family: var(--e); font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1 }
 td.postlink { white-space: normal }
 
 .box {
