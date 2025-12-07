@@ -22,8 +22,8 @@ screens, and gave us direct, almost brutal messaging like "ENTER PIN",
 "INCORRECT PIN", "ACCESS DENIED". In a way, honestly think we had it right
 back then.
 
-My use of LLM chatbot is basically negligible. I have used them on very rare
-occasion for mundane tasks like converting some unwieldy Markdown table to
+My use of LLM chatbots is basically negligible. I have used them on very rare
+occasion for mundane tasks like converting an un unwieldy Markdown table to
 TOML. I rarely actually "converse" with LLMs for any kind of research or code 
 generation or anything like that. I just feel like chat is such a weird medium
 for "AI". I'm aware that due to the nature of LLMs it is basically
