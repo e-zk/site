@@ -22,9 +22,9 @@ screens, and gave us direct, almost brutal messaging like "ENTER PIN",
 "INCORRECT PIN", "ACCESS DENIED". In a way, honestly think we had it right
 back then.
 
-My use of LLM chatbost is basically negligble. I have used them on very rare
-occasion for mundane tasks like converting some unweildly Markdown table to
-TOML. I rarely actualy "converse" with LLMs for any kind of research or code 
+My use of LLM chatbot is basically negligible. I have used them on very rare
+occasion for mundane tasks like converting some unwieldy Markdown table to
+TOML. I rarely actually "converse" with LLMs for any kind of research or code 
 generation or anything like that. I just feel like chat is such a weird medium
 for "AI". I'm aware that due to the nature of LLMs it is basically
 the most direct interface for it (I think?). I can't think of a better idea,
@@ -34,7 +34,7 @@ know it isn't, even though the LLM itself knows it isn't a person[^3].
 It's like we're both playing pretend.
 
 Purely as an interface to a tool chat seems lossy.
-It is easy for either side of the conversation to be "misinterpereted", for
+It is easy for either side of the conversation to be "misinterpreted", for
 context to be lost. Further it just feels plain weird to me to speak to a
 computer, and I hate it when it "speaks" back.
 
