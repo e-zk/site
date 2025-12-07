@@ -38,8 +38,8 @@ It is easy for either side of the conversation to be "misinterpereted", for
 context to be lost. Further it just feels plain weird to me to speak to a
 computer, and I hate it when it "speaks" back.
 
-[^1]: "software" like Rainmeter skins and new-tab pages for Chrome.
-[^2]: [flavour text](https://en.wiktionary.org/wiki/flavor_text) in a gaming
+[^1]: "Software" like Rainmeter skins and new-tab pages for Chrome.
+[^2]: [Flavour text](https://en.wiktionary.org/wiki/flavor_text) in a gaming
       context adds to the game's atmosphere but not to the game mechanics.
       In the context of this post, I
       mean that it tries to add "atmosphere" or "conversation" to the "data"
