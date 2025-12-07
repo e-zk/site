@@ -5,6 +5,73 @@
 <link>https://zakaria.org/posts/</link>
 
 <item>
+<link>https://zakaria.org/posts/talking-computers.html</link>
+<title>I don&#39;t like it when computers talk to me</title>
+<pubDate>Sun, 07 Dec 2025 00:00:00 &#43;0000</pubDate>
+<description>
+&lt;h1 id=&#34;i-don-t-like-it-when-computers-talk-to-me&#34;&gt;I don&#39;t like it when computers talk to me&lt;/h1&gt;
+
+&lt;p&gt;The recent, ongoing, AI-chatbot boom has made me realise how annoying I think
+it is when software tries to &amp;quot;talk to me&amp;quot;, like its a fellow human being.
+But it isn&#39;t just annoying -- it feels wrong to me now.&lt;/p&gt;
+
+&lt;p&gt;When I was much younger I used to enjoy and even write my own software&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+that would include flavour text&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; abundantly. Things like &amp;quot;Welcome,
+${user}!&amp;quot;, &amp;quot;Good {morning|evening}&amp;quot;, &amp;quot;What would you like to do today?&amp;quot;, etc.
+It gave a cool futuristic vibe; &amp;quot;Wow! My computer is talking to me!&amp;quot;
+But as the years go on I find I just want straight answers from computers.&lt;/p&gt;
+
+&lt;p&gt;Some other real examples of flavour text that I don&#39;t like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;Enter your password to unlock your account&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Something went wrong when trying to access your account&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Let&#39;s get you set up!&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Hey there! You might want to enable backups. Click here to find out more&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We managed to understand Eftpos machines when they had crappy monochrome LCD
+screens, and gave us direct, almost brutal messaging like &amp;quot;ENTER PIN&amp;quot;,
+&amp;quot;INCORRECT PIN&amp;quot;, &amp;quot;ACCESS DENIED&amp;quot;. In a way, honestly think we had it right
+back then.&lt;/p&gt;
+
+&lt;p&gt;My use of LLM chatbost is basically negligble. I have used them on very rare
+occasion for mundane tasks like converting some unweildly Markdown table to
+TOML. I rarely actualy &amp;quot;converse&amp;quot; with LLMs for any kind of research or code
+generation or anything like that. I just feel like chat is such a weird medium
+for &amp;quot;AI&amp;quot;. I&#39;m aware that due to the nature of LLMs it is basically
+the most direct interface for it (I think?). I can&#39;t think of a better idea,
+and I&#39;m certain you can tune down the conversationality of LLM models, but it
+still just seems weird. Like it&#39;s pretending to be a person, even though I
+know it isn&#39;t, even though the LLM itself knows it isn&#39;t a person&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+It&#39;s like we&#39;re both playing pretend.&lt;/p&gt;
+
+&lt;p&gt;Purely as an interface to a tool chat seems lossy.
+It is easy for either side of the conversation to be &amp;quot;misinterpereted&amp;quot;, for
+context to be lost. Further it just feels plain weird to me to speak to a
+computer, and I hate it when it &amp;quot;speaks&amp;quot; back.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&amp;quot;software&amp;quot; like Rainmeter skins and new-tab pages for Chrome.&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;&lt;p&gt;&lt;a href=&#34;https://en.wiktionary.org/wiki/flavor_text&#34;&gt;flavour text&lt;/a&gt; in a gaming
+  context adds to the game&#39;s atmosphere but not to the game mechanics.
+  In the context of this post, I
+  mean that it tries to add &amp;quot;atmosphere&amp;quot; or &amp;quot;conversation&amp;quot; to the &amp;quot;data&amp;quot;
+  that the software is actually trying to present.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:3&#34;&gt;They don&#39;t &amp;quot;know&amp;quot; anything, but hopefully my point still resonates.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+
+</description>
+</item>
+<item>
 <link>https://zakaria.org/posts/wiki-archive.html</link>
 <title>Goodbye wiki.zakaria.org</title>
 <pubDate>Sun, 07 Sep 2025 00:00:00 &#43;0000</pubDate>
@@ -570,6 +637,21 @@ ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
 <pubDate>Tue, 15 Feb 2022 00:00:00 &#43;0000</pubDate>
 <description>
 &lt;h1 id=&#34;installing-headscale-on-openbsd&#34;&gt;Installing headscale on OpenBSD&lt;/h1&gt;
+&lt;section&gt;
+&lt;p&gt;&lt;strong&gt;This guide is severely out of date:&lt;/strong&gt; I&#39;ve received a couple emails about
+getting relayd to cooperate with headscale. Tailscale, and therefore headscale
+has gone through a major protocol change since this post, and as such it
+relies heavily on web-sockets. While web-sockets are supported by relayd, I
+could not get it to work.
+Instead of relayd, just for headscale, I use
+&lt;a href=&#34;https://github.com/suyashkumar/ssl-proxy&#34;&gt;ssl-proxy&lt;/a&gt;. I just point it to my
+TLS certs, and specify the ports + addresses I need to get it listening.&lt;/p&gt;
+
+&lt;p&gt;Oh, also, the Android client supports custom Control Server URLs out of the
+box now, and has done for some time. Yay!&lt;/p&gt;
+
+&lt;p&gt;I&#39;m hoping to re-do my setup and post about it at a later date.&lt;/p&gt;
+&lt;/section&gt;
 
 &lt;p&gt;In this post I&#39;ll detail the steps I took to install and configure
 &lt;a href=&#34;https://github.com/juanfont/headscale&#34;&gt;headscale&lt;/a&gt;, an open-source self-hostable implementation of the &lt;a href=&#34;https://tailscale.com/&#34;&gt;Tailscale&lt;/a&gt; control server, on OpenBSD.&lt;/p&gt;
