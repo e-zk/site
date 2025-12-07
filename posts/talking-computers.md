@@ -23,7 +23,7 @@ screens, and gave us direct, almost brutal messaging like "ENTER PIN",
 back then.
 
 My use of LLM chatbots is basically negligible. I have used them on very rare
-occasion for mundane tasks like converting an un unwieldy Markdown table to
+occasion for mundane tasks like converting an unwieldy Markdown table to
 TOML. I rarely actually "converse" with LLMs for any kind of research or code 
 generation or anything like that. I just feel like chat is such a weird medium
 for "AI". I'm aware that due to the nature of LLMs it is basically
@@ -33,8 +33,8 @@ still just seems weird. Like it's pretending to be a person, even though I
 know it isn't, even though the LLM itself knows it isn't a person[^3].
 It's like we're both playing pretend.
 
-Purely as an interface to a tool chat seems lossy.
-It is easy for either side of the conversation to be "misinterpreted", for
+Purely as an interface to a tool -- chat seems "lossy".
+It is easy for either side of the conversation to be misinterpreted, for
 context to be lost. Further it just feels plain weird to me to speak to a
 computer, and I hate it when it "speaks" back.
 
