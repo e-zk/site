@@ -1,0 +1,2345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <feed xmlns="http://www.w3.org/2005/Atom">
+  <title>zakaria&#39;s web log</title>
+  <subtitle>that means blog</subtitle>
+  <id>https://zakaria.org/posts/</id>
+  <updated>2026-04-06T15:23:15+10:00</updated>
+  <link href="https://zakaria.org/feed.xml" rel="self"></link>
+  <author>
+   <name>zakaria</name>
+   <email>contact@zakaria.org</email>
+  </author>
+  <entry>
+   <title>Using Firefox as a PDF editor</title>
+   <updated>2026-04-06T00:00:00Z</updated>
+   <id>tag:zakaria.org,2026-04-06:posts/firefox-pdf.html</id>
+   <link href="https://zakaria.org/posts/firefox-pdf.html"></link>
+   <summary type="html">&lt;section id=&#34;Using-Firefox-as-a-PDF-editor&#34;&gt;
+&lt;h1&gt;Using Firefox as a PDF editor&lt;/h1&gt;
+&lt;p&gt;I had to sign some documents recently. As most people do at some point in
+their lives. What I tend to do in this situation is use a browser. Because
+browsers are ubiquitous now, and most come with in-built PDF viewers.
+Usually they not only let you view PDFs, but also highlight text, add text,
+and add signatures. It&amp;rsquo;s pretty cool. I don&amp;rsquo;t need to
+touch the Adobe or Microsoft suite of crap. Plus, since I run OpenBSD, none
+of those are available anyway (that&amp;rsquo;s for better, defintely not for worse).&lt;/p&gt;
+&lt;p&gt;I wrote a helper script that opens a new instance of Firefox with a fresh
+&lt;a href=&#34;/posts/temporarybrowsing.html#1-temporary-profile&#34;&gt;browser profile in a temporary directory&lt;/a&gt;) for this purpose:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/sh
+# pdfedit [options]
+
+trap cleanup 1 2 3 6 15
+
+PROFILE_DIR=&#34;$(mktemp -d -p /tmp &#39;pdfedit.XXXXXX&#39;)&#34;
+
+cleanup() {
+        rm -rf &#34;$PROFILE_DIR&#34;
+}
+
+cat &amp;lt;&amp;lt;EOF &amp;gt; &#34;${PROFILE_DIR}/user.js&#34;
+// user.js
+// disable javascript by default
+user_pref(&#34;javascript.enabled&#34;, false);
+EOF
+
+firefox --new-instance --no-remote --offline --profile &#34;$PROFILE_DIR&#34; &#34;$@&#34;
+cleanup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The script passes through any arguments you give it directly to Firefox, but I
+find running the script then opening PDFs through the &amp;ldquo;file open&amp;rdquo; dialog more
+intuitive.&lt;/p&gt;
+&lt;p&gt;To minimise the attack surface available to potentially malicious PDFs the
+script also uses an
+undocumented flag the puts Firefox in &amp;ldquo;offline mode&amp;rdquo; so it can&amp;rsquo;t access
+the internet (I don&amp;rsquo;t need that when opening PDFs). JavaScript is also
+disabled in user.js, however I&amp;rsquo;m unsure if that actually disables embedded JS
+from running in PDFs.&lt;/p&gt;
+&lt;/section&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>I don&#39;t like it when computers talk to me</title>
+   <updated>2025-12-07T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-12-07:posts/talking-computers.html</id>
+   <link href="https://zakaria.org/posts/talking-computers.html"></link>
+   <summary type="html">&lt;h1 id=&#34;i-don-t-like-it-when-computers-talk-to-me&#34;&gt;I don&#39;t like it when computers talk to me&lt;/h1&gt;
+
+&lt;p&gt;The recent, ongoing, AI-chatbot boom has made me realise how annoying I think
+it is when software tries to &amp;quot;talk to me&amp;quot;, like it&#39;s a fellow human being.
+But it isn&#39;t just annoying -- it feels wrong to me now.&lt;/p&gt;
+
+&lt;p&gt;When I was much younger I used to enjoy and even write my own software&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+that would include flavour text&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; abundantly. Things like &amp;quot;Welcome,
+${user}!&amp;quot;, &amp;quot;Good {morning|evening}&amp;quot;, &amp;quot;What would you like to do today?&amp;quot;, etc.
+It gave a cool futuristic vibe; &amp;quot;Wow! My computer is talking to me!&amp;quot;
+But as the years go on I find I just want straight answers from computers.&lt;/p&gt;
+
+&lt;p&gt;Some other real examples of flavour text that I don&#39;t like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;Enter your password to unlock your account&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Something went wrong when trying to access your account&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Let&#39;s get you set up!&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Hey there! You might want to enable backups. Click here to find out more&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We managed to understand Eftpos machines when they had crappy monochrome LCD
+screens, and gave us direct, almost brutal messaging like &amp;quot;ENTER PIN&amp;quot;,
+&amp;quot;INCORRECT PIN&amp;quot;, &amp;quot;ACCESS DENIED&amp;quot;. In a way, honestly think we had it right
+back then.&lt;/p&gt;
+
+&lt;p&gt;My use of LLM chatbots is basically negligible. I have used them on very rare
+occasion for mundane tasks like converting an unwieldy Markdown table to
+TOML. I rarely actually &amp;quot;converse&amp;quot; with LLMs for any kind of research or code
+generation or anything like that. I just feel like chat is such a weird medium
+for &amp;quot;AI&amp;quot;. I&#39;m aware that due to the nature of LLMs it is basically
+the most direct interface for it (I think?). I can&#39;t think of a better idea,
+and I&#39;m certain you can tune down the conversationality of LLM models, but it
+still just seems weird. Like it&#39;s pretending to be a person, even though I
+know it isn&#39;t, even though the LLM itself knows it isn&#39;t a person&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+It&#39;s like we&#39;re both playing pretend.&lt;/p&gt;
+
+&lt;p&gt;Purely as an interface to a tool -- chat seems &amp;quot;lossy&amp;quot;.
+It is easy for either side of the conversation to be misinterpreted, for
+context to be lost. Further it just feels plain weird to me to speak to a
+computer, and I hate it when it &amp;quot;speaks&amp;quot; back.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&amp;quot;Software&amp;quot; like Rainmeter skins and new-tab pages for Chrome.&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;&lt;p&gt;&lt;a href=&#34;https://en.wiktionary.org/wiki/flavor_text&#34;&gt;Flavour text&lt;/a&gt; in a gaming
+  context adds to the game&#39;s atmosphere but not to the game mechanics.
+  In the context of this post, I
+  mean that it tries to add &amp;quot;atmosphere&amp;quot; or &amp;quot;conversation&amp;quot; to the &amp;quot;data&amp;quot;
+  that the software is actually trying to present.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:3&#34;&gt;They don&#39;t &amp;quot;know&amp;quot; anything, but hopefully my point still resonates.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Goodbye wiki.zakaria.org</title>
+   <updated>2025-09-07T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-09-07:posts/wiki-archive.html</id>
+   <link href="https://zakaria.org/posts/wiki-archive.html"></link>
+   <summary type="html">&lt;h1 id=&#34;goodbye-wiki-zakaria-org-for-now&#34;&gt;Goodbye wiki.zakaria.org (for now)&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki.png&#34; alt=&#34;wiki homepage&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I setup &lt;a href=&#34;https://wiki.zakaria.org/&#34;&gt;wiki.zakaria.org&lt;/a&gt; some time ago. It&#39;s
+ended up becoming really really stale and unused&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. I&#39;m going to
+&amp;quot;decommission&amp;quot; it soon. I thought I&#39;d make this post on the main blog to
+reflect a little bit on what its purpose was, and to archive some of the
+things I had written on there.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-idea-of-the-personal-wiki&#34;&gt;The idea of the personal wiki&lt;/h2&gt;
+
+&lt;p&gt;So I had this idea for a personal wiki. I&#39;d basically dump as much knowledge
+as I could into it: rough notes, useful command flags, config files, code
+snippets, anything and everything I wanted to just take note of for later.&lt;/p&gt;
+
+&lt;p&gt;I wanted the style of it to be more &amp;quot;hacker&amp;quot;-y than the blog here. So
+naturally that means dark background + green, monospaced text.&lt;/p&gt;
+
+&lt;p&gt;The rest of this post will just be a breakdown of every page I had on there
+(there weren&#39;t many).&lt;/p&gt;
+
+&lt;h2 id=&#34;the-stat-command-https-archive-md-uracs&#34;&gt;&lt;a href=&#34;https://archive.md/uRACS&#34;&gt;The stat command&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-stat.png&#34; alt=&#34;stat command&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This one was pretty simple. I just noticed that BSD and non-BSD &lt;code&gt;stat&lt;/code&gt;
+commands had different flags for formatting. Often I&#39;d like to get the octal
+representation of a file&#39;s Unix permissions, so I documented the differences.&lt;/p&gt;
+
+&lt;h2 id=&#34;devices-laptop-setup-https-archive-md-ytylb&#34;&gt;Devices / &lt;a href=&#34;https://archive.md/Ytylb&#34;&gt;Laptop setup&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-laptop.png&#34; alt=&#34;laptop setup&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The basic idea here was to document my Laptop&#39;s config. I&#39;m typing on that
+same X1 Carbon right now, actually. But I ditched Windows completely and just
+run OpenBSD on it now.&lt;/p&gt;
+
+&lt;h2 id=&#34;devices-mobile-device-setup-https-archive-md-bpncq&#34;&gt;Devices / &lt;a href=&#34;https://archive.md/BPnCq&#34;&gt;Mobile device setup&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-phone.png&#34; alt=&#34;phone setup&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This one I was pretty proud of. I documented my Pixel 4a setup: OS, installed
+apps, etc. I took a cool photo of my phone on the homescreen too. My setup has
+changed quite a lot since.&lt;br /&gt;
+I&#39;ll  probably re-do these device setup ones at some point, I think it&#39;s
+pretty fun to write about, I love showing off my workflow and customisation.&lt;/p&gt;
+
+&lt;h2 id=&#34;notes-bip39-and-mnemonic-seeds-https-archive-md-lqcmc&#34;&gt;Notes / &lt;a href=&#34;https://archive.md/LQcMC&#34;&gt;BIP39 and Mnemonic Seeds&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-bip39.png&#34; alt=&#34;bip39 notes&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As the title says (albeit originally misspelled). I had some interest in how
+Monero, and other cryptocurrencies converted their private key seeds to
+phrase-based seeds.&lt;/p&gt;
+
+&lt;h2 id=&#34;notes-yubikey-notes-https-archive-md-zzsms&#34;&gt;Notes / &lt;a href=&#34;https://archive.md/zzsMs&#34;&gt;YubiKey notes&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-yubikey.png&#34; alt=&#34;yubikey notes&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notes on setting up resident SSH keys on the YubiKey&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-changing-home-https-archive-md-3dbxr&#34;&gt;Privsec / &lt;a href=&#34;https://archive.md/3dbXR&#34;&gt;Changing $HOME&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-home.png&#34; alt=&#34;changing HOME&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is about a cool trick I use all the time. Most applications
+use the &lt;code&gt;$HOME&lt;/code&gt; environment variable to determine the current home directory
+(naturally). You can change &lt;code&gt;$HOME&lt;/code&gt; to whatever you want. Can be useful.&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-nft-https-archive-md-acxnf&#34;&gt;Privsec / &lt;a href=&#34;https://archive.md/aCxnf&#34;&gt;NFT&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/wiki-nft.png&#34; alt=&#34;NFT&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notes + template for Linux NFT.&lt;/p&gt;
+
+&lt;h2 id=&#34;privsec-windows-sandbox&#34;&gt;Privsec / Windows Sandbox&lt;/h2&gt;
+
+&lt;p&gt;This just became the &lt;a href=&#34;/posts/winsandbox.html&#34;&gt;Windows Sandbox&lt;/a&gt; post here on
+the main blog. It&#39;s the same thing.&lt;/p&gt;
+
+&lt;h2 id=&#34;going-forward&#34;&gt;Going forward&lt;/h2&gt;
+
+&lt;p&gt;Yeah so I might revive the wiki subdomain but it&#39;s not gonna have the same
+stuff. I don&#39;t really have the time at the moment to invest too heavily into a
+new side project either. We&#39;ll see.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;It hasn&#39;t been updated in four (4) years! damn!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>There&#39;s nothing to do</title>
+   <updated>2025-08-16T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-08-16:posts/nothing-to-do.html</id>
+   <link href="https://zakaria.org/posts/nothing-to-do.html"></link>
+   <summary type="html">&lt;h1 id=&#34;there-s-nothing-to-do&#34;&gt;There&#39;s nothing to do&lt;/h1&gt;
+
+&lt;p&gt;You ever feel like there&#39;s nothing to do?&lt;/p&gt;
+
+&lt;p&gt;Of course there&#39;s things you &lt;em&gt;should&lt;/em&gt; be doing... but you don&#39;t want to do any
+of that. You want something else... Something stimulating but not... work.
+Not housework, not study work, and not &amp;quot;work&amp;quot; work.
+(Definitely not that last one).
+Maybe you have a hobby (you do have one, right?) but you just can&#39;t be
+bothered with that either?&lt;/p&gt;
+
+&lt;p&gt;You ever feel like you&#39;ve &amp;quot;finished the internet,&amp;quot; as my mother says?&lt;/p&gt;
+
+&lt;p&gt;You&#39;ve caught up with all your feeds. You&#39;ve read all the blogs. Checked all
+the forums. You&#39;ve even run out of YouTube videos to watch!
+Of course the internet is virtually infinite and yet... it feels like
+you&#39;ve seen it all today?&lt;/p&gt;
+
+&lt;p&gt;If any of that is you I have the solution! Pick up a book.
+A real, physical, in your hands book. You do have some of those, right?&lt;/p&gt;
+
+&lt;p&gt;Oh. You can&#39;t be bothered with that either?&lt;br /&gt;
+To be honest, me neither.&lt;/p&gt;
+
+&lt;p&gt;So then... What do we do now?&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Soft uptime</title>
+   <updated>2025-06-21T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-06-21:posts/soft-uptime.html</id>
+   <link href="https://zakaria.org/posts/soft-uptime.html"></link>
+   <summary type="html">&lt;h1 id=&#34;soft-uptime&#34;&gt;Soft uptime&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-powershell&#34;&gt;PS&amp;gt; Get-Uptime
+
+Days              : 0
+Hours             : 20
+Minutes           : 27
+Seconds           : 48
+Milliseconds      : 0
+Ticks             : 736680000000
+TotalDays         : 0.852638888888889
+TotalHours        : 20.4633333333333
+TotalMinutes      : 1227.8
+TotalSeconds      : 73668
+TotalMilliseconds : 73668000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Huh? 20 hours? I just powered this thing on a few minutes ago!&lt;/p&gt;
+
+&lt;p&gt;Turns out Windows has this &amp;quot;fast startup&amp;quot; thing. As far as I can tell, when
+you go Start &amp;gt; Shutdown it closes all running processes, logs out, and then
+hibernates the system so that it can startup faster next time. That
+basically means to Windows it&#39;s not been &amp;quot;really&amp;quot; shutdown so the uptime isn&#39;t
+reset. I don&#39;t know why you&#39;d want this, generally for decent spec&#39;d windows
+laptops the startup time is pretty good, and the difference with this feature
+enabled is negligible -- but I don&#39;t manage this laptop, so not much I can do
+really.&lt;/p&gt;
+
+&lt;p&gt;So how do I tell how long my laptop has been &amp;quot;on&amp;quot; (like, since I pressed
+the power button)?&lt;/p&gt;
+
+&lt;p&gt;Well, there&#39;s one pretty ubiquitous process on Windows that&#39;s generally one of
+the first user-facing applications: explorer.
+So to get a better idea of when I powered on my machine today, I wrote a
+function to check the explorer.exe process start time: &lt;code&gt;Get-SoftUptime&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-powershell&#34;&gt;function Get-SoftUptime {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [switch]
+        $Since
+    )
+
+    $started = [datetime](Get-Process | Where-Object { $_.Name -eq &amp;quot;explorer&amp;quot; } | Select-Object -ExpandPropety StartTime)
+
+    if ($PSBoundParameters.ContainsKey(&amp;quot;Since)) {
+        return $started
+    } else {
+        return (Get-Date) - $started
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;-Since&lt;/code&gt; option mirrors the behaviour of &lt;code&gt;Get-Uptime -Since&lt;/code&gt;: it&#39;ll just
+spit out the start time of explorer.&lt;/p&gt;
+
+&lt;p&gt;This gives me a better idea of when I started up my laptop. The output is the
+same format (a &lt;code&gt;[datetime]&lt;/code&gt;) as &lt;code&gt;Get-Uptime&lt;/code&gt; too if that is helpful.&lt;/p&gt;
+
+&lt;p&gt;I&#39;ve used explorer because I reckon it&#39;s one of the first processes to start,
+it gives me a good enough idea. I don&#39;t need it to be very accurate.&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Thoughts on &#34;Thoughts on Thinking&#34;</title>
+   <updated>2025-06-20T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-06-20:posts/thoughts-on-thinking.html</id>
+   <link href="https://zakaria.org/posts/thoughts-on-thinking.html"></link>
+   <summary type="html">&lt;h1 id=&#34;thoughts-on-thoughts-on-thinking&#34;&gt;Thoughts on &amp;quot;Thoughts on Thinking&amp;quot;&lt;/h1&gt;
+
+&lt;p&gt;I came across &lt;a href=&#34;https://dcurt.is/thinking&#34;&gt;this post&lt;/a&gt;
+on &lt;a href=&#34;https://news.ycombinator.com/item?id=44008843&#34;&gt;the orange site&lt;/a&gt; about
+someone feeling &amp;quot;stuck&amp;quot; because they&#39;ve relied on AI way too much.
+It got me thinking of how defeatist, and pathetic it kind of sounded to me.
+This article is not directed at the author, Dustin, personally, it&#39;s my
+thoughts on his thoughts. When I say &amp;quot;you&amp;quot;, I really mean &lt;em&gt;you&lt;/em&gt;, dear reader.
+My tone in this article/rebuttal/review or whatever may come across as rude,
+mean-spirited, but I mean no harm to the author, Dustin Curtis.
+It may sound like I have just called him pathetic, but I don&#39;t think he&#39;s
+pathetic at all, I think the tone of his post is kind of pathetic (sorry).
+I&#39;d like to preface that My tone is meant to be &amp;quot;tough love&amp;quot;, rather than
+cynical, or bullish, don&#39;t take it personally &lt;code&gt;:)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I have been stuck. Every time I sit down to write a blog post, code a
+feature, or start a project, I come to the same realization: in the context
+of AI, what I’m doing is a waste of time. It’s horrifying. The fun has been
+sucked out of the process of creation because nothing I make organically can
+compete with what AI already produces&amp;amp;emdash;or soon will. All of my original
+thoughts feel like early drafts of better, more complete thoughts that simply
+haven’t yet formed inside an LLM.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To start off how about don&#39;t do that?&lt;br /&gt;
+How about &lt;em&gt;not&lt;/em&gt; starting a project or blog post thinking about it in
+&amp;quot;the context of AI&amp;quot;.&lt;br /&gt;
+How about &lt;em&gt;not&lt;/em&gt; thinking that your thoughts have to be run through into an LLM
+to be &amp;quot;complete&amp;quot;?&lt;/p&gt;
+
+&lt;p&gt;Your thoughts &lt;em&gt;are&lt;/em&gt; incomplete, they &lt;em&gt;are all early drafts&lt;/em&gt;. That&#39;s okay.
+Human thought is unstructured, chaotic, and just kind of inconsistent and crap
+half the time. That&#39;s what we are, that&#39;s how we think, that&#39;s reality.
+Hell, I&#39;m still not even sure if writing this post is a good idea.&lt;/p&gt;
+
+&lt;p&gt;And come to think of it, I don&#39;t understand how people think LLM slop isn&#39;t
+inconsistent and crap either?
+I don&#39;t understand how an LLM output is anymore &amp;quot;complete&amp;quot; or &amp;quot;better&amp;quot; than the
+&amp;quot;early drafts&amp;quot; (minus say spelling + grammar corrections I suppose). Because as
+people have shown often, LLMs spit out bullshit and LLMs have the same monotone
+&amp;quot;cadence&amp;quot;, the same prose. This writing style of LLMs is noticeable to many.&lt;br /&gt;
+Please write stuff in your own words, your own tone, your own style, LLMs are
+so boring.&lt;/p&gt;
+
+&lt;p&gt;You can tell, with 90% accuracy, when a post or a comment online or an email
+or a presentation is written by AI. (I can tell, anyway &lt;code&gt;:P&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;I think maybe the benefit of me personally staying clear of all AI/LLM-related
+software, &amp;quot;helpers&amp;quot;, &amp;quot;assistants&amp;quot;, is that I really don&#39;t think about it at
+all. I don&#39;t think about plugging an idea into there. I just write it down, and
+it gets lost for a few months, or never comes to fruition. Maybe I&#39;m wrong but
+I think that&#39;s completely okay.&lt;br /&gt;
+We don&#39;t need to take very idea and iron it out and push it out as a product or
+a project or whatever. We can just sit on things,
+forget things, let them rot and never even consider them again. Again, it&#39;s just
+fine... A fact of life... Whatever happens will happen. That&#39;s my opinion,
+anyway.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I used to write prolifically. I’d have ideas, write them down, massage them
+slowly and carefully into cohesive pieces of work over time, and then–when
+they were ready–share them with the world. I’d obsess for hours before
+sharing anything, working through the strengths and weaknesses of my
+thinking.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;WTF? &lt;em&gt;You can still do this&lt;/em&gt;, all of this, by exercising some goddamn
+discipline! Don&#39;t login to ChatGPT (or whatever). For one day just don&#39;t open
+it up. Don&#39;t use AI tools.
+Then after that one day... Do it again the next day.
+It will probably be hard at first if you rely on it so much.
+But your brain will benefit and you&#39;ll get out of your creative rut.&lt;/p&gt;
+
+&lt;p&gt;Your thoughts are stupid. All of our thoughts are stupid. This post of mine
+here is &lt;em&gt;really stupid&lt;/em&gt;. LLMs kind of just sugar coat the stupid, don&#39;t they?&lt;/p&gt;
+
+&lt;p&gt;Following from the quote above;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Early in my career, that process brought a lot of external validation. And
+because I think when I write, and writing is how I form opinions and work
+through holes in my arguments, my writing would lead to more and better
+thoughts over time. Thinking is compounding–the more you think, the better
+your thoughts become.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Yes! Not even the brightest minds in history would think in perfect ideas. Good
+writers write, and re-write, and proof read and re-write again, and again, and
+again. And each time they do that they gain some kind of something --
+knowledge, insight, skill, &amp;quot;better writing&amp;quot;, whatever. I say this without any
+hard evidence to back it up (just like an LLM, I guess) but it&#39;s true, and you
+know it&#39;s true.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;But now, when my brain spontaneously forms a tiny sliver of a potentially
+interesting concept or idea, I can just shove a few sloppy words into a
+prompt and almost instantly get a fully reasoned, researched, and completed
+thought.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Well, you need to stop doing this mate...&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Minimal organic thinking required. This has had a dramatic and profound
+effect on my brain. My thinking systems have atrophied, and I can feel
+it–I can sense my slightly diminishing intuition, cleverness, and rigor.
+And because AI can so easily flesh out ideas, I feel less inclined to share
+my thoughts–no matter how developed.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Yeah... This is pretty scary, for everyone, actually. And I&#39;ve noticed it with
+people in my life too. This needs to be unlearned.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I thought I was using AI in an incredibly positive and healthy way, as a
+bicycle for my mind and a way to vastly increase my thinking capacity.
+But LLMs are insidious–using them to explore ideas feels like work, but it’s
+not real work. Developing a prompt is like scrolling Netflix, and reading the
+output is like watching a TV show. Intellectual rigor comes from the journey:
+the dead ends, the uncertainty, and the internal debate. Skip that, and you
+might still get the insight–but you’ll have lost the infrastructure for
+meaningful understanding. Learning by reading LLM output is cheap. Real
+exercise for your mind comes from building the output yourself.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Totally agreed on this. Dennis, you kind of put my thoughts above into better
+words.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;And I’m still stuck. But at least I’m here, writing this, and conveying my
+raw thoughts directly into your brain. And that means something, I think,
+even though an AI could probably have written this post far more quickly,
+eloquently, and concisely. It’s horrifying.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The only thing that&#39;s horrifying is the fact that people think that something
+being generated quickly, eloquently and concisely, means that its worth more
+than human-written text. When people write, and other people read it,
+it&#39;s like lofi consciousness to consciousness communication. I&#39;m not trying to
+get metaphysical or spiritual here but a writer benefits from writing, and a
+reader benefits similarly too. Writing style/prose can be an art, even on
+a techbro blog post. And I&#39;ve kind of already said what I feel about LLM&#39;s
+&amp;quot;prose&amp;quot;.&lt;br /&gt;
+Besides, I don&#39;t really think it really could write your post more eloquently.
+It conveys your feelings, in &amp;quot;your language&amp;quot;, your prose.&lt;/p&gt;
+
+&lt;p&gt;And that&#39;s kinda... cool? We need to keep doing this.&lt;/p&gt;
+
+&lt;p&gt;To conclude, are you just going to sit there and be &amp;quot;stuck&amp;quot;? Or are you going
+to create? Are you going to write more posts like that one?
+(Yes, the one I just called pathetic).&lt;br /&gt;
+Write flawed shit. Write with spelling mistakes, and grammatical errors and
+logical inconsistencies. Write code, brain to editor. Scratch shit down on
+pen and paper, with your hands. Make it messy, unstructured notes, arrows
+pointing backwards and forwards and scribbling &amp;quot;what the fuck?&amp;quot; next to
+something you don&#39;t understand so you can search it up later.&lt;/p&gt;
+
+&lt;p&gt;If you&#39;re serious about fighting against your self-described atrophy, you need
+to be disciplined. Do not reach for the ChatGPT, disable AI code suggestions.
+Use your hands, your brain.&lt;br /&gt;
+Have bad ideas and fail often.&lt;br /&gt;
+Have bad ideas and forget them.&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Paste as plaintext</title>
+   <updated>2025-02-28T00:00:00Z</updated>
+   <id>tag:zakaria.org,2025-02-28:posts/paste-plaintext.html</id>
+   <link href="https://zakaria.org/posts/paste-plaintext.html"></link>
+   <summary type="html">&lt;h1 id=&#34;paste-as-plaintext&#34;&gt;Paste as plaintext&lt;/h1&gt;
+
+&lt;p&gt;I use Windows for work. I used to use it at home. But now I only use it at
+work&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;Anyways, for quite a while (many years now) in &amp;quot;modern&amp;quot; GUI
+applications+operating systems there&#39;s been this feature where if you copy some
+styled text, usually from the web, it tries to copy that formatting across to
+wherever you&#39;re pasting it as well (if it supports styled text).&lt;/p&gt;
+
+&lt;p&gt;For example if I select and ctrl+c copy some &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; from an article on a
+website, and I ctrl+v paste that in MS Teams, that &lt;code&gt;h1&lt;/code&gt;&#39;s basic CSS/rich-text
+styling (text size, sometimes font, colour, hrefs, etc) will get pasted into
+my Teams text-input. This happens for pasting in a many other GUI applications
+too.&lt;/p&gt;
+
+&lt;p&gt;The worst is when it pastes white-coloured text from a site that uses white on
+black&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. Teams by default has a &#39;bright&#39; interface, so... you can&#39;t see shit.&lt;/p&gt;
+
+&lt;p&gt;The only very very rare time it is ever useful is copying across a table into
+an email or Teams message.&lt;/p&gt;
+
+&lt;p&gt;My question is; who the fuck asked for this? Who makes use of this on the
+daily and is very impressed by its addition to our lives?&lt;br /&gt;
+I mean, it just seems like it&#39;d be useless for everyone:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;If you&#39;re copying some text from a site into your Word document -- surely
+you&#39;d want it to match the style of your Word document, right?&lt;/li&gt;
+&lt;li&gt;If you&#39;re pasting that text in a Teams message -- do you &lt;em&gt;really enjoy&lt;/em&gt; the
+weird out-of-place style the text has in contrast to the rest of your
+default-styled message? (Same goes for pasting into rich-text emails).&lt;/li&gt;
+&lt;li&gt;Do you really just absolutely &lt;em&gt;love it&lt;/em&gt; when after pasting that styled text
+the rest of your following typed text inherits that awful, out-of-place
+style of the text you pasted? Oh, &lt;em&gt;you do&lt;/em&gt; like that, huh? Freak.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Who decided it should be rich-text by default? And am I the only one who
+&lt;em&gt;doesn&#39;t like it?&lt;/em&gt; Am I the only one who this frustrates on the daily? Am I
+the only one who can&#39;t stand having to open Notepad and paste shit in there
+first to get rid of formatting? Maybe there&#39;s just a simple solution I&#39;m not
+aware of.&lt;/p&gt;
+
+&lt;p&gt;Yeah, I can right click and &amp;quot;paste as plaintext&amp;quot;. There probably is a keybind
+to do this, but it depends on the application:
+Is it ctrl+alt+v? or ctrl+shift+v? or is it something completely different?&lt;br /&gt;
+The clipboard should just be plaintext-by-default! Everything else
+should be under an optional keybind or context menu. &lt;em&gt;Not the other way around&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you enjoy the copy with formatting &amp;quot;feature&amp;quot;, please don&#39;t hesitate to email
+me. Just know I will take great pleasure putting that email straight into the
+trash.&lt;/p&gt;
+
+&lt;p&gt;Peace.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;p&gt;&amp;quot;use&amp;quot; is too pleasant a word, actually. I &amp;quot;deal with it&amp;quot;. I &amp;quot;deal&amp;quot; with
+  Windows.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;&lt;p&gt;Not usually actually white foreground on black background -- most sites
+  know not to assault their user&#39;s eyes with such contrast (unless for
+  &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Accessibility&#34;&gt;a11y&lt;/a&gt;
+  reasons).&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>YubiKey resident SSH keys on Windows+WSL</title>
+   <updated>2022-03-23T00:00:00Z</updated>
+   <id>tag:zakaria.org,2022-03-23:posts/resident-ssh-keys-on-windows.html</id>
+   <link href="https://zakaria.org/posts/resident-ssh-keys-on-windows.html"></link>
+   <summary type="html">&lt;h1 id=&#34;yubikey-resident-ssh-keys-on-windows-wsl&#34;&gt;YubiKey resident SSH keys on Windows+WSL&lt;/h1&gt;
+
+&lt;p&gt;This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via &lt;code&gt;npiperelay&lt;/code&gt; and &lt;code&gt;socat&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It&#39;s important to understand that with this setup, WSL is using the ssh-agent service running on Windows, not WSL. However, because of the magic of Unix pipes+sockets, you shouldn&#39;t notice any functional differences.&lt;/p&gt;
+
+&lt;h2 id=&#34;download-openssh&#34;&gt;Download OpenSSH&lt;/h2&gt;
+
+&lt;p&gt;As of writing, OpenSSH 8.1p1 (the default on Windows 10), does not support importing resident SSH keys from YubiKeys via &lt;code&gt;ssh-add&lt;/code&gt; or &lt;code&gt;ssh-keygen&lt;/code&gt;. So first we need to update OpenSSH for Windows:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Download the latest .zip from the &lt;a href=&#34;https://github.com/PowerShell/Win32-OpenSSH/releases&#34;&gt;Win32-OpenSSH GitHub releases page&lt;/a&gt;. (OpenSSH-Win64.zip in my case).&lt;/li&gt;
+&lt;li&gt;Unzip it, and run the &lt;code&gt;install-sshd.ps1&lt;/code&gt; script as Administrator.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This script will update the appropriate Windows system services (&lt;code&gt;sshd&lt;/code&gt; and &lt;code&gt;ssh-agent&lt;/code&gt;) to use the executables in the current directory instead of the default ones. The script will not, however install the the executables into your PATH (of which &lt;code&gt;ssh-add&lt;/code&gt; and &lt;code&gt;ssh-keygen&lt;/code&gt; we&#39;ll need later on) so remember where you&#39;ve unzipped it.&lt;/p&gt;
+
+&lt;p&gt;Next restart the &lt;code&gt;ssh-agent&lt;/code&gt; Windows service:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open &lt;code&gt;services.msc&lt;/code&gt; from Run (&lt;code&gt;Win+R&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Find &amp;quot;OpenSSH Authentication Agent&amp;quot;, right click and select &amp;quot;Restart&amp;quot;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;configuring-wsl2&#34;&gt;Configuring WSL2&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install &lt;code&gt;socat&lt;/code&gt; using your package manager (e.g. &lt;code&gt;sudo apt install socat&lt;/code&gt;).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Download the latest npiperelay from the &lt;a href=&#34;https://github.com/jstarks/npiperelay/releases&#34;&gt;GitHub releases page&lt;/a&gt;. Unzip it, and copy npiperelay.exe to somewhere in your WSL&#39;s &lt;code&gt;$PATH&lt;/code&gt; (&lt;code&gt;~/bin/npiperelay.exe&lt;/code&gt; in my case).&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;In your &lt;code&gt;~/.profile&lt;/code&gt;, or &lt;code&gt;~/.bashrc&lt;/code&gt; shell startup script add the following (adapted from the &lt;a href=&#34;https://github.com/rupor-github/wsl-ssh-agent&#34;&gt;&lt;code&gt;wsl-ssh-agent&lt;/code&gt; README&lt;/a&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;export NPIPE_CMD=$(command -v npiperelay.exe)
+export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+
+
+# setup socat
+ss -a | grep -q $SSH_AUTH_SOCK
+if [ &amp;quot;$?&amp;quot; -ne &amp;quot;0&amp;quot; ]; then
+	rm -f $SSH_AUTH_SOCK
+	( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:&amp;quot;$NPIPE_CMD -ei -s //./pipe/openssh-ssh-agent&amp;quot;,nofork &amp;amp; ) &amp;gt;/dev/null 2&amp;gt;&amp;amp;1
+fi
+
+
+# add your ssh private key paths here ...
+ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;importing-resident-ssh-keys&#34;&gt;Importing resident SSH keys&lt;/h2&gt;
+
+&lt;p&gt;Importing resident ssh private keys from the YubiKey via &lt;code&gt;ssh-keygen -K&lt;/code&gt; isn&#39;t supported on the default version of OpenSSH installed on Windows 10. However, we can make use of the updated binaries we downloaded previously, which do support importing resident ssh keys:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open a privileged &lt;strong&gt;Administrator&lt;/strong&gt; PowerShell window. It must be a privileged PowerShell window, otherwise it will fail with an &amp;quot;invalid format&amp;quot; error.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cd&lt;/code&gt; to the directory the previously downloaded OpenSSH binaries reside (the path I told you to keep a not of).&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;.\ssh-keygen -K&lt;/code&gt;, and follow the prompts:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&#34;/static/img/import-resident-key.png&#34; alt=&#34;screencap of PowerShell window showing the steps to import a resident ssh key&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is another method that requires a second device running anything that isn&#39;t Windows (Linux, *BSD, etc). I did this way before realising I could use the updated &lt;code&gt;ssh-keygen&lt;/code&gt; binary:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Import the resident keys to a file; &lt;code&gt;ssh-keygen -K -f ./id_ed25519_sk&lt;/code&gt;, (make sure to set a password).&lt;/li&gt;
+&lt;li&gt;Either copy the resulting file to a USB drive, or upload it somewhere private (this is, after all, your &lt;em&gt;private&lt;/em&gt; key).&lt;/li&gt;
+&lt;li&gt;Copy/download the file onto your Windows machine, and add it to the authentication agent via &lt;code&gt;ssh-add c:\path\to\file&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;adding-keys-to-the-agent&#34;&gt;Adding keys to the agent&lt;/h2&gt;
+
+&lt;p&gt;Adding keys to the agent is fairly simple, whether in WSL or Windows. Just use the &lt;code&gt;ssh-add&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;In WSL2:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ssh-add /path/to/file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Windows (PowerShell):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;PS C:\Windows\system32&amp;gt; ssh-add C:\path\to\file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;automating&#34;&gt;Automating&lt;/h3&gt;
+
+&lt;p&gt;If like me you have named your SSH keys in a non-standard way, or for some other reason ssh-agent won&#39;t load your keys on startup, we can write a simple PowerShell one-liner that runs at login:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;C:\Users\zzz\Documents\bin\OpenSSH-Win64\ssh-add.exe &amp;quot;$env:USERPROFILE\.ssh\id_yubikey&amp;quot; &amp;quot;$env:USERPROFILE\.ssh\id_something_nonstandard&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You will need to replace &lt;code&gt;C:\Users\zzz\Documents\bin\OpenSSH-Win64\&lt;/code&gt; with the path to where you unzipped Win32-OpenSSH previously (hope you didn&#39;t forget!).&lt;/p&gt;
+
+&lt;p&gt;Save this script as &lt;code&gt;ssh-keys.ps1&lt;/code&gt; in: &lt;code&gt;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp&lt;/code&gt;, and it should run at startup, prompting you for a password in a PowerShell window if your keys are password protected.&lt;/p&gt;
+
+&lt;p&gt;Similarly, for adding the private keys in WSL2 you can add a &lt;code&gt;ssh-add /path/to/key1 /path/to/key1&lt;/code&gt; line to your shell rc.&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Installing Headscale on OpenBSD</title>
+   <updated>2022-02-15T00:00:00Z</updated>
+   <id>tag:zakaria.org,2022-02-15:posts/headscale-setup.html</id>
+   <link href="https://zakaria.org/posts/headscale-setup.html"></link>
+   <summary type="html">&lt;h1 id=&#34;installing-headscale-on-openbsd&#34;&gt;Installing headscale on OpenBSD&lt;/h1&gt;
+&lt;section&gt;
+&lt;p&gt;&lt;strong&gt;This guide is severely out of date:&lt;/strong&gt; I&#39;ve received a couple emails about
+getting relayd to cooperate with headscale. Tailscale, and therefore headscale
+has gone through a major protocol change since this post, and as such it
+relies heavily on web-sockets. While web-sockets are supported by relayd, I
+could not get it to work.
+Instead of relayd, just for headscale, I use
+&lt;a href=&#34;https://github.com/suyashkumar/ssl-proxy&#34;&gt;ssl-proxy&lt;/a&gt;. I just point it to my
+TLS certs, and specify the ports + addresses I need to get it listening.&lt;/p&gt;
+
+&lt;p&gt;Oh, also, the Android client supports custom Control Server URLs out of the
+box now, and has done for some time. Yay!&lt;/p&gt;
+
+&lt;p&gt;I&#39;m hoping to re-do my setup and post about it at a later date.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;p&gt;In this post I&#39;ll detail the steps I took to install and configure
+&lt;a href=&#34;https://github.com/juanfont/headscale&#34;&gt;headscale&lt;/a&gt;, an open-source self-hostable implementation of the &lt;a href=&#34;https://tailscale.com/&#34;&gt;Tailscale&lt;/a&gt; control server, on OpenBSD.&lt;/p&gt;
+
+&lt;p&gt;Code blocks prefixed with &lt;code&gt;#&lt;/code&gt; imply that the command should be run as a privileged user/root.&lt;/p&gt;
+
+&lt;p&gt;If you get stuck, it&#39;ll be probably worthwhile to have a read of headscale&#39;s documentation available in their GitHub repo: &lt;a href=&#34;https://github.com/juanfont/headscale/tree/main/docs&#34;&gt;https://github.com/juanfont/headscale/tree/main/docs&lt;/a&gt; .&lt;/p&gt;
+
+&lt;h2 id=&#34;compilation&#34;&gt;Compilation&lt;/h2&gt;
+
+&lt;p&gt;Since my server is on OpenBSD-stable, headscale is only available via &lt;code&gt;pkg_add&lt;/code&gt; on -current, I need to compile the headscale binary by hand and upload it to the server.
+I&#39;m doing this on an OpenBSD machine, so compiling and uploading it to the server
+should be a breeze.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone git@github.com:juanfont/headscale.git
+$ cd headscale
+$ make generate
+$ make build
+$ sftp user@server &amp;lt;&amp;lt;EOF
+&amp;gt; put ./headscale
+&amp;gt; bye
+EOF
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then login, get root access, and copy the binary to &lt;code&gt;/usr/local/bin&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ssh user@server
+$ doas -s
+...
+# cp ./headscale /usr/local/bin
+# chown root:bin /usr/local/bin/headscale
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
+
+&lt;p&gt;Next we need to setup:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;a &lt;code&gt;_headscale&lt;/code&gt; daemon user that headscale will run as.&lt;/li&gt;
+&lt;li&gt;directories for headscale to store its sqlite database, private key, and socket (making sure they have the correct permissions/owner).&lt;/li&gt;
+&lt;li&gt;copy the example config from GitHub, and edit it to our liking&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;First we setup some directories:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# mkdir -p /etc/headscale
+# touch /etc/headscale/config.yaml
+# mkdir -p /var/headscale
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then we add our &lt;code&gt;_headscale&lt;/code&gt; daemon user, and &lt;code&gt;chown&lt;/code&gt; all the necessary dirs.&lt;br /&gt;
+Here we also run &lt;code&gt;doas&lt;/code&gt; to get us a shell as &lt;code&gt;_headscale&lt;/code&gt; so I can create the db.sqlite file. Note doing it this way requires some &lt;code&gt;doas.conf&lt;/code&gt; rules.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# useradd -L daemon -s /sbin/nologin -d /var/headscale _headscale
+# chown -R _headscale:_headscale /var/headscale 
+# doas -u _headscale /bin/ksh
+$ touch /var/headscale/db.sqlite
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally we can edit the headscale config. I highly recommend copying the &lt;a href=&#34;https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml&#34;&gt;example config&lt;/a&gt; and using that as a starting point.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# vi /etc/headscale/config.yaml
+# # copy the example config
+# # change domain, IPs, ports
+# # change sock location to /var/headscale/headscale.sock 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;m currently using &lt;a href=&#34;https://man.openbsd.org/relayd&#34;&gt;relayd(8)&lt;/a&gt; as a TLS proxy, so I don&#39;t need to
+configure any TLS-related stuff.&lt;/p&gt;
+
+&lt;p&gt;Run &lt;code&gt;headscale serve&lt;/code&gt; to see if the config works, and all the directories and permissions are correct:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# doas -u _headscale headscale serve
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If all is well we can move onto setting up an init script for the headscale daemon.&lt;/p&gt;
+
+&lt;h2 id=&#34;rc-d&#34;&gt;rc.d&lt;/h2&gt;
+
+&lt;p&gt;I&#39;ve made an init script to making stopping/starting and running at boot
+a lot easier. Drop this simple script into &lt;code&gt;/etc/rc.d/headscale&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/ksh
+#
+# /etc/rc.d/headscale
+
+daemon_user=&amp;quot;_headscale&amp;quot;
+daemon=&amp;quot;/usr/local/bin/headscale&amp;quot;
+daemon_flags=&amp;quot;serve&amp;quot;
+
+. /etc/rc.d/rc.subr
+
+rc_cmd $1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;chmod&lt;/code&gt;, enable and start it as usual:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# chmod +x /etc/rc.d/headscale
+# rcctl enable headscale
+# rcctl start headscale
+headscale(ok)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;clients&#34;&gt;Clients&lt;/h2&gt;
+
+&lt;p&gt;So here&#39;s where you may run into some problems. Depending on the OS your client is going to be running on, it might be a little difficult to get Tailscale to use your custom control server. On Android, this editing the hardcoded Tailscale control server URL, and compiling the client from source.&lt;/p&gt;
+
+&lt;h3 id=&#34;openbsd-client&#34;&gt;OpenBSD client&lt;/h3&gt;
+
+&lt;p&gt;It&#39;s pretty easy to get the Tailscale client on OpenBSD to use your control server.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# pkg_add tailscale
+# rcctl enable tailscaled; rcctl start tailscaled
+# tailscale --login-server &amp;quot;https://headscale.example.com:443&amp;quot;
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Where &lt;code&gt;https://headscale.example.com:443&lt;/code&gt; is your control server URL.&lt;/p&gt;
+
+&lt;h3 id=&#34;android-client&#34;&gt;Android client&lt;/h3&gt;
+
+&lt;p&gt;You can find the instructions for patching and building the custom APK &lt;a href=&#34;https://github.com/juanfont/headscale/issues/58#issuecomment-950386833&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I didn&#39;t bother even attempting to install the android sdk, ndk, and all the other required (garbage) on OpenBSD to compile the Android client. So I booted into Windows, then logged into Ubuntu on WSL, then had to install Go manually (since Ubuntu 20.04 packages are old AF and I can&#39;t be bothered to move all the junk I&#39;ve accumulated in my WSL distro&#39;s $HOME). Then i installed the sdkmanager manually, then i installed the ndk through that manually, then I ran &lt;code&gt;make tailscale-debug.apk&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Quite frankly this was painful, but it isn&#39;t supposed to be. Wrangling with old documentation I found online about installing the android sdk on the outdated WSL Ubuntu setup I have set me back a few hours.&lt;/p&gt;
+
+&lt;p&gt;In the end it was quite rewarding to install the APK file, open it up and see it all working!&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>My stagit setup</title>
+   <updated>2022-02-14T00:00:00Z</updated>
+   <id>tag:zakaria.org,2022-02-14:posts/stagit-setup.html</id>
+   <link href="https://zakaria.org/posts/stagit-setup.html"></link>
+   <summary type="html">&lt;h1 id=&#34;stagit-setup-on-openbsd&#34;&gt;stagit setup on OpenBSD&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://codemadness.org/stagit.html&#34;&gt;stagit&lt;/a&gt; is a static page generator for git repos. It&#39;s very minimal - which I like.&lt;/p&gt;
+
+&lt;p&gt;In this post I&#39;ll detail how I set up &lt;a href=&#34;https://git.zakaria.org/&#34;&gt;git.zakaria.org&lt;/a&gt; on my OpenBSD server.&lt;/p&gt;
+
+&lt;p&gt;The majority of my setup is based upon a post by &lt;code&gt;poptart&lt;/code&gt;. Be sure to check out the original post here: &lt;a href=&#34;https://hosakacorp.net/p/stagit-server.html&#34;&gt;https://hosakacorp.net/p/stagit-server.html&lt;/a&gt;. It&#39;s pretty well done, and easy to follow (unlike my post here - which is really more for my sake when I inevitably bork my server again and have to re-do it all). &lt;code&gt;poptart&lt;/code&gt; has some other great OpenBSD-related posts on there as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;setup&#34;&gt;Setup&lt;/h2&gt;
+
+&lt;p&gt;On the server install &lt;code&gt;git&lt;/code&gt;, create the &lt;code&gt;_git&lt;/code&gt; user, and make some directories:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server# pkg_add git libgit2
+server# groupadd _git
+server# mkdir -p -m 744 /var/git/repos /var/git/template
+server# useradd -g _git -L daemon -c &amp;quot;git backend user&amp;quot; -d /var/git/repos -s /usr/local/bin/git-shell _git
+server# chown _git:_git /var/git/repos
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The directories we created:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/var/www/repos&lt;/code&gt; contains the bare git files (also the &lt;code&gt;$HOME&lt;/code&gt; of user &lt;code&gt;_git&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/var/git/template&lt;/code&gt; will contain the template for new repositories.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The next steps are only if like me you&#39;ve made source changes to stagit and you&#39;d like to use your custom version. If you want to use plain stagit, install it on the server with &lt;code&gt;pkg_add stagit&lt;/code&gt;.&lt;br /&gt;
+On another machine, compile stagit and &lt;code&gt;sftp&lt;/code&gt; it over to the server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;laptop$ make
+laptop$ md5 stagit stagit-index
+laptop$ # remember these checksums for verifying it&#39;s been copied over correctly
+laptop$ sftp enderman &amp;lt;&amp;lt;EOF
+&amp;gt; put stagit
+&amp;gt; put stagit-index
+&amp;gt; bye
+EOF
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Back on the server, verify the binaries were copied over correctly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server# md5 stagit stagit-index
+server# # verify the checksums
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Copy these binaries to &lt;code&gt;/usr/local/bin&lt;/code&gt; and set permissions appropriately:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server# cp stagit{,-index} /usr/local/bin
+server# chown root:bin /usr/local/bin/stagit{,-index} 
+server# chmod 755 /usr/local/bin/stagit{,-index}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following is a message from the future:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I wrote this post a while ago. But I recall abandoning the modified stagit binary setup
+purely because the libraries on my laptop were newer than my server, and I
+could not get static compilation to work...
+So I gave up and installed stagit via &lt;code&gt;pkg_add stagit&lt;/code&gt; on the server :P&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;scripts&#34;&gt;Scripts&lt;/h2&gt;
+
+&lt;p&gt;Next we&#39;ll configure a few scripts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/var/git/repos/template/post-receive&lt;/code&gt;&lt;br /&gt;
+Will be executed every time we push to a repo.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-gen-index&lt;/code&gt;&lt;br /&gt;
+A helper script to generate the index page.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-newrepo&lt;/code&gt;&lt;br /&gt;
+Script to run to create a new repository.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/usr/local/bin/stagit-chdesc&lt;/code&gt;&lt;br /&gt;
+Script to change the description of an existing repository.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Some internal variables will be shared between these scripts, for instance the
+git user, htdocs path, etc. Instead of writing these out into each script we
+can create a config file that each script will source before running anything.&lt;br /&gt;
+In &lt;code&gt;/var/git/config.rc&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# shared variables
+GIT_HOME=&amp;quot;/var/git&amp;quot;
+GIT_REPOS=&amp;quot;${GIT_HOME}/repos&amp;quot;
+WWW_HOME=&amp;quot;/var/www/htdocs/git.zakaria.org
+CLONE_URI=&amp;quot;_git@git.zakaria.org&amp;quot;
+DEFAULT_OWNER=&amp;quot;zakaria&amp;quot;
+DEFAULT_DESC=&amp;quot;&amp;quot;
+GIT_USER=&amp;quot;_git&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We restrict access to this file to &lt;code&gt;root:wheel&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server# chown root:wheel /var/git/config.rc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After a &lt;code&gt;git push&lt;/code&gt; we want the server to (re)generate the static html pages. To do this, we write a script in &lt;code&gt;/var/git/template/post-receive&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# Author: Cale &amp;quot;poptart&amp;quot; Black
+# Modified by: zakaria @ zakaria.org
+# License: MIT
+
+set -euf
+
+. /var/git/config.rc
+
+export LC_TYPE=&amp;quot;en_US.UTF-8&amp;quot;
+src=&amp;quot;$(pwd)&amp;quot;
+name=&amp;quot;$(basename &amp;quot;$src&amp;quot;)&amp;quot;
+dest=&amp;quot;${WWW_HOME}/$(basename &amp;quot;$name&amp;quot; &#39;.git&#39;)&amp;quot;
+mkdir -p &amp;quot;$dest&amp;quot;
+cd &amp;quot;$dest&amp;quot; || exit 1
+
+echo &amp;quot;[stagit] building $dest&amp;quot;
+/usr/local/bin/stagit &amp;quot;$src&amp;quot;
+
+echo &amp;quot;[stagit] linking $dest&amp;quot;
+# if a README.html exists use that as the index.html
+# if not use log.html
+if [ -f &amp;quot;README.html&amp;quot; ]; then
+	ln -sf README.html index.html
+else
+	ln -sf log.html index.html
+fi
+ln -sf ../style.css style.css
+ln -sf ../logo.png logo.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next, we need a script to generate the stagit &lt;code&gt;/index.html&lt;/code&gt;. In &lt;code&gt;/usr/local/bin/stagit-gen-index&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh 
+# Author: Cale &amp;quot;poptart&amp;quot; Black
+# License: MIT
+
+set -eu
+
+. /var/git/config.rc
+stagit-index &amp;quot;${GIT_REPOS}/*.git&amp;quot; &amp;gt; &amp;quot;${WWW_HOME}/index.html&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The next script will be used to setup a new repository. In &lt;code&gt;/usr/local/bin/stagit-newrepo&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# Author: Cale &amp;quot;poptart&amp;quot; Black
+# Modified by: zakaria @ zakaria.org
+# License: MIT
+# Usage: stagit-newrepo &amp;lt;name&amp;gt; [desc] [author]
+
+set -eu
+
+. /var/git/config.rc
+
+log() {
+	printf &#39;%s\n&#39; &amp;quot;$*&amp;quot; &amp;gt;&amp;amp;2
+}
+die() {
+	log &amp;quot;error: $*&amp;quot;
+	printf &#39;exiting...\n&#39;
+	exit 1
+}
+
+REPO=&amp;quot;$1&amp;quot;
+DESC=&amp;quot;${2:-$DEFAULT_DESC}&amp;quot;
+OWNER=&amp;quot;${3:-$DEFAULT_OWNER}&amp;quot;
+
+if [ -z &amp;quot;$REPO&amp;quot; ]; then
+	die &amp;quot;no repo name given&amp;quot;
+fi
+
+REPO_PATH=&amp;quot;${GIT_REPOS}/${REPO}.git&amp;quot;
+
+git init --bare &amp;quot;$REPO_PATH&amp;quot;
+cp &amp;quot;${GIT_HOME}/template/post-receive&amp;quot; &amp;quot;${REPO_PATH}/hooks/post-receive&amp;quot;
+echo &amp;quot;${CLONE_URI}/${REPO}.git&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/url&amp;quot;
+echo &amp;quot;$OWNER&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/owner&amp;quot;
+echo &amp;quot;$DESC&amp;quot; &amp;gt; &amp;quot;${REPO_PATH}/description&amp;quot;
+
+chmod u+x &amp;quot;${REPO_PATH}/hooks/post-receive&amp;quot;
+mkdir &amp;quot;${WWW_HOME}/${REPO}&amp;quot;
+/usr/local/bin/stagit-gen-index
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;At the end of this script we call our &lt;code&gt;stagit-gen-index&lt;/code&gt; helper script to regenerate
+the &lt;code&gt;index.html&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The last script is a simple wrapper that will allow us to change a repo&#39;s description:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# Author: zakaria / zakaria.org
+# License: MIT
+# Usage: stagit-chdesc &amp;lt;repo&amp;gt; &amp;lt;new_description&amp;gt;
+
+set -eu
+
+. /var/git/config.rc
+
+log() {
+	printf &#39;%s\n&#39; &amp;quot;$*&amp;quot; &amp;gt;&amp;amp;2
+}
+die() {
+	log &amp;quot;error: $*&amp;quot;
+	printf &#39;exiting...\n&#39;
+	exit 1
+}
+
+REPO=&amp;quot;$1&amp;quot;
+DESC=&amp;quot;$2&amp;quot;
+
+if [ -z &amp;quot;$REPO&amp;quot; ]; then
+	die &amp;quot;no repo name provided&amp;quot;
+fi
+if [ -z &amp;quot;$DESC&amp;quot; ]; then
+	die &amp;quot;no new description provided&amp;quot;
+fi
+
+REPO_PATH=&amp;quot;${GIT_REPOS}/${REPO}.git&amp;quot;
+
+echo &amp;quot;$DESC&amp;quot; &amp;gt; ${REPO_PATH}/description
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then set the appropriate permissions and restrictions for these scripts:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ chmod +x /usr/local/bin/stagit-{gen-index,newrepo,chdesc}
+$ chown -R _git:_git /var/git/template
+$ chmod +x $GIT_HOME/template
+$ chown -R _git:_git $WWW_HOME
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Replacing &lt;code&gt;GIT_HOME&lt;/code&gt; and &lt;code&gt;WWW_HOME&lt;/code&gt; with the variables we configured previously in &lt;code&gt;config.rc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally we configure our &lt;a href=&#34;https://man.openbsd.org/doas.conf&#34;&gt;doas.conf(5)&lt;/a&gt; to allow our main user to run these commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;permit nopass mite as _git cmd /usr/local/bin/stagit-newrepo
+permit nopass mite as _git cmd /usr/local/bin/stagit-gen-index
+permit nopass mite as _git cmd /usr/local/bin/stagit-chdesc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&#39;ve made a git repository for these scripts (and maybe a few more) available on &lt;a href=&#34;https://github.com/e-zk/stagit-scripts&#34;&gt;GitHub&lt;/a&gt; which is mirrored on &lt;a href=&#34;https://git.zakaria.org/stagit-scripts/log.html&#34;&gt;git.zakaria.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;httpd-config&#34;&gt;httpd config&lt;/h2&gt;
+
+&lt;p&gt;To actually serve the generated static files we need to configure &lt;a href=&#34;https://man.openbsd.org/httpd&#34;&gt;httpd(8)&lt;/a&gt;. In &lt;a href=&#34;https://man.openbsd.org/httpd.conf&#34;&gt;&lt;code&gt;/etc/httpd.conf&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...snip...
+
+server &amp;quot;git.zakaria.org&amp;quot; {
+	listen on 127.0.0.1 on 8080
+
+	# for letsencrypt
+	location &amp;quot;/.well-known/acme-challenge/*&amp;quot; {
+		root &amp;quot;/acme&amp;quot;
+		request strip 2
+	}
+
+	root &amp;quot;/htdocs/git.zakaria.org&amp;quot;
+}
+
+...snip...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I use &lt;a href=&#34;https://man.openbsd.org/relayd&#34;&gt;relayd(8)&lt;/a&gt; as a TLS proxy, so I don&#39;t need to configure TLS certs in httpd.conf.&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Temporary web browsing</title>
+   <updated>2021-12-13T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-12-13:posts/temporarybrowsing.html</id>
+   <link href="https://zakaria.org/posts/temporarybrowsing.html"></link>
+   <summary type="html">&lt;h1 id=&#34;temporary-web-browsing&#34;&gt;Temporary web browsing&lt;/h1&gt;
+
+&lt;p&gt;Here&#39;s a few ways of scripting an ephemeral browser environment.&lt;/p&gt;
+
+&lt;p&gt;The idea is that the entire state of the browser is ephemeral - on exit
+everything should be removed from storage including cookies, history
+bookmarks, etc. This is more aggressive than your standard incognito mode
+as it directly removes all files associated with the browser instance.&lt;/p&gt;
+
+&lt;p&gt;I use this all the time because for some things I don&#39;t find it necessary
+for history, bookmarks, etc to be saved (a quick web search, logging into
+personal, sensitive services like online banking). Some might find it
+over-the-top but I think its a useful scripting exercise if anything.&lt;/p&gt;
+
+&lt;h2 id=&#34;1-temporary-profile&#34;&gt;1. Temporary profile&lt;/h2&gt;
+
+&lt;p&gt;Browsers typically have a user &amp;quot;profile&amp;quot;, where all bookmarks, history, and
+other required state is stored.&lt;br /&gt;
+Most browsers that matter (Firefox, Chromium) allow the directory this profile
+information is stored in to be configured via a CLI flag. For firefox this is
+&lt;code&gt;---profile &amp;lt;path&amp;gt;&lt;/code&gt;, which defaults to somewhere in &lt;code&gt;~/.local&lt;/code&gt; if my memory
+serves correct. Similarly, Chromium (and I assume other Chromium-based browsers
+by proxy) support this via the &lt;code&gt;--user-data-dir=&amp;lt;path&amp;gt;&lt;/code&gt;, which defaults to
+&lt;code&gt;~/.config/chromium&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This feature can be used to create a fresh, new profile in a custom directory.
+On exit this directory can be aggressively removed by a simple &lt;code&gt;rm -rf &amp;lt;path&amp;gt;&lt;/code&gt;
+command. Here&#39;s a short script to facilitate all this for Firefox:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+# make temporary profile directory
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
+
+cleanup() {
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
+}
+
+firefox-esr --new-instance --no-remote --profile &amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
+
+cleanup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First the script creates a temporary directory via &lt;code&gt;mktemp&lt;/code&gt;, where the profile
+will be. Next we define a cleanup function to be run after Firefox, so that on
+exit the profile is simply &lt;code&gt;rm -rf&lt;/code&gt;&#39;d. Then &lt;code&gt;firefox-esr&lt;/code&gt; is run (replace this
+with &lt;code&gt;firefox&lt;/code&gt; if you don&#39;t use the ESR variant), and the profile directory is
+specified with &lt;code&gt;--profile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I also included the &lt;code&gt;--new-instance&lt;/code&gt; flag to make sure Firefox didn&#39;t just
+open a tab in an already running instance, and &lt;code&gt;--no-remote&lt;/code&gt; to dissallow
+remote commands.&lt;/p&gt;
+
+&lt;p&gt;Additional arguments can be passed to the script - these will be directly added to
+&lt;code&gt;firefox-esr&lt;/code&gt;&#39;s arguments.&lt;/p&gt;
+
+&lt;p&gt;I also like to add a &lt;code&gt;trap&lt;/code&gt; to the script, so if it ever exits unexpectedly,
+the clean-up process will still take place. This is what that looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# trap everything; clean up on exit
+trap cleanup 1 2 3 6 15
+
+# make temporary profile directory
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
+
+cleanup() {
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
+}
+
+firefox-esr --new-instance --no-remote --profile &amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
+
+cleanup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The equivalent final script for Chromium/Chrome:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# trap everything; clean up on exit
+trap cleanup 1 2 3 6 15
+
+# make temporary profile directory
+PROFILE_DIR=&amp;quot;$(mktemp -d -p /tmp &#39;chrome.XXXXXX&#39;)&amp;quot;
+
+cleanup() {
+	rm -rvf &amp;quot;$PROFILE_DIR&amp;quot;
+}
+
+chromium --user-data-dir=&amp;quot;$PROFILE_DIR&amp;quot; &amp;quot;$@&amp;quot;
+
+cleanup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;2-temporary-home-directory&#34;&gt;2. Temporary home directory&lt;/h2&gt;
+
+&lt;p&gt;Instead of specifying a custom profile, then removing it, why not create an
+entire ephemeral home directory, then remove &lt;em&gt;that&lt;/em&gt;?&lt;/p&gt;
+
+&lt;p&gt;This trick is fairly simple and works on &lt;em&gt;any program&lt;/em&gt;, not just browsers.
+Just re-define the &lt;code&gt;$HOME&lt;/code&gt; environment variable to &lt;code&gt;$FAKEHOME&lt;/code&gt;, and any program that runs
+after that will &amp;quot;think&amp;quot; that&#39;s the real home directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ FAKEHOME=/tmp/firefox
+$ HOME=$FAKEHOME firefox [...] https://zakaria.org/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note this method means removing &lt;code&gt;$FAKEHOME/Downloads&lt;/code&gt; and &lt;em&gt;any&lt;/em&gt; directory the
+program creates in its dedicated home directory on exit. If you&#39;ve downloaded
+something you&#39;d like to keep you&#39;ll need to copy it out of &lt;code&gt;$FAKEHOME/Downloads&lt;/code&gt;
+&lt;em&gt;BEFORE&lt;/em&gt; closing the browser.&lt;br /&gt;
+Since the program runs in a new home directory, if you use X11 it won&#39;t have
+access to &lt;code&gt;~/.Xauthority&lt;/code&gt;, so it won&#39;t be able to actually be graphically useful.
+To fix this simply symlink &lt;code&gt;~/.Xauthority&lt;/code&gt; to &lt;code&gt;$FAKEHOME/.Xauthority&lt;/code&gt; before running.&lt;/p&gt;
+
+&lt;p&gt;A script that does all this, plus some more:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+# trap everything; clean up on exit
+trap cleanup 1 2 3 6 15
+
+# setup fake home dir
+FAKEHOME=&amp;quot;$(mktemp -d -p /tmp &#39;firefox.XXXXXX&#39;)&amp;quot;
+
+# clean up after exit
+cleanup() {
+	rm -rvf &amp;quot;$FAKEHOME&amp;quot;
+}
+
+# link Xauthority
+ln -s &amp;quot;${HOME}/.Xauthority&amp;quot; &amp;quot;${FAKEHOME}/.Xauthority&amp;quot;
+
+# unset XDG dirs as these can intefere with the fake $HOME if they&#39;re set
+# to something non-default
+unset XDG_CONFIG_HOME
+unset XDG_CACHE_HOME
+
+# set the fake home dir
+export HOME=${FAKEHOME}
+
+# run firefox w/ given args
+firefox-esr --new-instance --no-remote &amp;quot;$@&amp;quot;
+
+# uncomment for chrome
+# chromium &amp;quot;$@&amp;quot;
+
+cleanup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;extra-stuff&#34;&gt;Extra stuff&lt;/h2&gt;
+
+&lt;p&gt;To add to these scripts, one could also:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Force a specific user-agent string&lt;/li&gt;
+&lt;li&gt;Configure &lt;code&gt;user.js&lt;/code&gt; used by Firefox by writing to &lt;code&gt;$PROFILE_DIR/user.js&lt;/code&gt;
+before actually running the Firefox command&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;My personal scripts do just that, for &lt;a href=&#34;https://git.zakaria.org/bin-obsd/file/tmpchrome.html&#34;&gt;Chromium&lt;/a&gt; and &lt;a href=&#34;https://git.zakaria.org/bin-obsd/file/tmpfox.html&#34; title=&#34;maybe uses outdated user.js flags&#34;&gt;Firefox&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-methods&#34;&gt;Other methods&lt;/h2&gt;
+
+&lt;p&gt;Some other methods to look into include:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Mounting a new &lt;strong&gt;in-memory filesystem&lt;/strong&gt; dedicated to a fake home dir or browser
+profile
+
+&lt;ul&gt;
+&lt;li&gt;OpenBSD does not support mounting filesystems as non-root
+users, so this isn&#39;t ideal for my setup.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Ephemeral &lt;strong&gt;containers&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;While the security aspects of Linux containers are overrated IMO, using
+one as the basis for an ephemeral browser instance doesn&#39;t sound like an awful
+idea.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Dedicated &lt;strong&gt;virtual machine&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I&#39;ve actually accomplished this in the past on an Alpine Linux VM running on OpenBSD&#39;s
+&lt;a href=&#34;https://man.openbsd.org/vmd&#34;&gt;vmd(8)&lt;/a&gt; and X11 forwarding. But I never fleshed out
+any scripts for making it truly ephemeral - that might be the focus of a future blog post.
+&lt;a href=&#34;/static/img/linuxwebvm.png&#34;&gt;Here&#39;s&lt;/a&gt; an old screenshot of that running on OpenBSD 6.7.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Breaking promises with LD_PRELOAD</title>
+   <updated>2021-12-07T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-12-07:posts/breaking_promises.html</id>
+   <link href="https://zakaria.org/posts/breaking_promises.html"></link>
+   <summary type="html">&lt;h1 id=&#34;breaking-promises-with-ld-preload&#34;&gt;Breaking promises with LD_PRELOAD&lt;/h1&gt;
+
+&lt;p&gt;In this post I show how to simply &lt;a href=&#34;https://wikipedia.org/wiki/NOP_(code)&#34;&gt;noop&lt;/a&gt; calls to OpenBSD&#39;s &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;pledge(1)&lt;/a&gt; using LD_PRELOAD.&lt;/p&gt;
+
+&lt;p&gt;I only focus on pledge(2), only because that&#39;s what I first tried this out on.
+But this will also work for &lt;a href=&#34;https://man.openbsd.org/unveil&#34;&gt;unveil(2)&lt;/a&gt;, and any syscall you want for that matter.&lt;/p&gt;
+
+&lt;p&gt;Before we get into it, this doesn&#39;t actually make pledge(2) completely useless, nor is it an oversight by the developers of OpenBSD - LD_PRELOAD can be used to break any and every system call. I just thought it was a neat trick that might be useful for CTFs or something. In regard to the title, I just couldn&#39;t pass on the fantastic opportunity for some word play+clickbait.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-pledge&#34;&gt;What is pledge?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;pledge(2)&lt;/a&gt; is a system call created for OpenBSD for the purpose of application sandboxing.
+When called, pledge(2) &amp;quot;promises&amp;quot; that the current process will only make use of certain system calls - if the process violates these promises after pledge(2) has been called the process is killed with a SIGABT signal.
+Using this system call appropriately facilitates the &lt;a href=&#34;https://wikipedia.org/wiki/Principle_of_least_privilege&#34;&gt;security principle of least privilege&lt;/a&gt;; only allowing the process access to the parts of the system it needs to operate, and denying it access to functionality it does not need.&lt;/p&gt;
+
+&lt;p&gt;Subsequent calls to pledge(2) can reduce the abilities of a program further, but abilities cannot be regained.&lt;br /&gt;
+This can be useful when writing daemon programs - during initialisation system daemons often need access to a lot of the more &amp;quot;priviledged&amp;quot; system calls, but after initialisation access to these abilities is no longer required. So typically daemon programs on OpenBSD call pledge(2) multiple times. Once to allow access to the initial system calls, then again, once the process is initialised, to deny access to ever use those system calls again.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-the-ld-preload-trick&#34;&gt;What is the LD_PRELOAD trick?&lt;/h2&gt;
+
+&lt;p&gt;I reccommend reading this article by baeldung to understand what LD_PRELOAD is: &lt;a href=&#34;https://www.baeldung.com/linux/ld_preload-trick-what-is&#34;&gt;What is the LD_PRELOAD Trick?&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Simply put, LD_PRELOAD influences the &amp;quot;linkage&amp;quot; of shared libraries and resolution of functions at runtime. This can be useful for debugging, reversing, and profiling dynamically linked programs.&lt;/p&gt;
+
+&lt;h2 id=&#34;crafting-a-shared-object&#34;&gt;Crafting a shared object&lt;/h2&gt;
+
+&lt;p&gt;LD_PRELOAD works by loading a shared object file that can essentially re-define whatever dynamically linked C function or syscall during the running of the program.&lt;/p&gt;
+
+&lt;p&gt;To craft our shared object to use with LD_PRELOAD first we have to look up the function signature of pledge(2) in the &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;man page&lt;/a&gt; and plop it into a .c file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;unistd.h&amp;gt;
+
+int
+pledge(const char *promises, const char *execpromises)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next, we want to make sure when called pledge(2) does absolutely nothing and returns success every time it&#39;s called. Alternatively, you could add additional &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;promises&lt;/a&gt;, or remove specific promises, but I think its more jarring to make it do absolutely nothing.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;// pledge_override.c
+#include &amp;lt;unistd.h&amp;gt; 
+
+int 
+pledge(const char *promises, const char *execpromises) {
+	// noop
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Compile it into a shared object &lt;code&gt;override.so&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cc -shared -fPIC -o override.so pledge_override.c
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, with this shared object file, you can run anything you want ignoring it&#39;s pledge(2) promises:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ LD_PRELOAD=$PWD/override.so &amp;lt;program&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;testing-it-out&#34;&gt;Testing it out&lt;/h2&gt;
+
+&lt;p&gt;Here we have an example use of pledge(2) (yes, I should be checking return values, but this is just an example).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;// test.c
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+
+int
+main(void) {
+	// promise to only use stdio
+	pledge(&amp;quot;stdio&amp;quot;, NULL);
+	printf(&amp;quot;Hello! I will abort now :3\n&amp;quot;);
+
+	// revoke all promises
+	pledge(&amp;quot;&amp;quot;, NULL);
+
+	// should abort here
+	printf(&amp;quot;You should not be seeing this :O\n&amp;quot;);
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When run normally the program should abort at the second call to printf(3) since after the
+first one we&#39;ve revoked the privilege to call &lt;code&gt;stdio&lt;/code&gt; functions.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ ./a.out
+Hello! I will abort now :3
+Abort trap (core dumped)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, when we add our specially crafted &lt;code&gt;override.so&lt;/code&gt; to the equation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ LD_PRELOAD=$PWD/override.so ./a.out
+Hello! I will abort now :3
+You should not be seeing this :O
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;when-this-won-t-work&#34;&gt;When this won&#39;t work&lt;/h2&gt;
+
+&lt;p&gt;Using LD_PRELOAD like this to get around pledge doesn&#39;t work when:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;You statically link your binary
+
+&lt;ul&gt;
+&lt;li&gt;If you statically link your binary, LD_PRELOAD does not have any effect.&lt;/li&gt;
+&lt;li&gt;To test this out, compile the above example program with &lt;code&gt;-static&lt;/code&gt;, then try and do the LD_PRELOAD trick again. It&#39;ll always abort at the correct &lt;code&gt;printf(3)&lt;/code&gt; call.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;SUID / SGID
+
+&lt;ul&gt;
+&lt;li&gt;SUID or SGID binaries aren&#39;t affected by LD_PRELOAD according to the OpenBSD &lt;a href=&#34;https://man.openbsd.org/ld.so#LD_PRELOAD&#34;&gt;man page&lt;/a&gt;.&lt;br /&gt;
+The Linux &lt;a href=&#34;https://linux.die.net/man/8/ld.so&#34;&gt;man page&lt;/a&gt; is less clear about this, but I assume its the same.&lt;/li&gt;
+&lt;li&gt;Simply put, your doas(1) and sudo(1) are safe.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;changelog&#34;&gt;Changelog&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;18-07-2022: Added &amp;quot;What is pledge?&amp;quot; and &amp;quot;What is LD_PRELOAD&amp;quot; sections.&lt;/li&gt;
+&lt;/ul&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Windows Sandbox</title>
+   <updated>2021-08-08T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-08-08:posts/winsandbox.html</id>
+   <link href="https://zakaria.org/posts/winsandbox.html"></link>
+   <summary type="html">&lt;h1 id=&#34;windows-sandbox&#34;&gt;Windows Sandbox&lt;/h1&gt;
+
+&lt;p&gt;If you[&#39;re forced to] use Windows this might be useful for compartmentalisation.&lt;/p&gt;
+
+&lt;p&gt;Windows Sandbox is a Windows 10 Pro feature that enables the use of temporary Virtual Machines. These can be used as ephemeral sandboxes for applications.&lt;/p&gt;
+
+&lt;h2 id=&#34;enabling&#34;&gt;Enabling&lt;/h2&gt;
+
+&lt;p&gt;Windows Sandbox isn&#39;t enabled by default. To enable it follow these steps:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open &amp;quot;Control Panel&amp;quot; and click the upside down caret next to the back/forward buttons&lt;/li&gt;
+&lt;li&gt;Click &amp;quot;All Control Panel Items&amp;quot;&lt;/li&gt;
+&lt;li&gt;Navigate to &amp;quot;Programs and Features&amp;quot;&lt;/li&gt;
+&lt;li&gt;On the left click &amp;quot;Turn Windows features on or off&amp;quot;&lt;/li&gt;
+&lt;li&gt;Scroll down and tick the box next to &amp;quot;Windows Sandbox&amp;quot; if it isn&#39;t already ticked&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;From the start menu search for &amp;quot;Windows Sandbox&amp;quot;. Hit enter and a fresh Sandbox window will appear.&lt;/p&gt;
+
+&lt;h2 id=&#34;configuring&#34;&gt;Configuring&lt;/h2&gt;
+
+&lt;p&gt;Once the sandbox window is closed all data is erased. Next time you open Windows Sandbox a fresh new VM is created.&lt;br /&gt;
+This can make it annoying if you wish to sandbox a single program, but have to install it every time you start a new sandbox.&lt;/p&gt;
+
+&lt;p&gt;To make it easier for these cases you can pre-configure sandbox instances via &lt;code&gt;.wsb&lt;/code&gt; files. With this file you can configure memory, networking, audio/video passthrough, among other things. See the Microsoft official documentation for Windows Sandbox configuration&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:wsb&#34;&gt;&lt;a href=&#34;#fn:wsb&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. It also supports running a script at startup, and mapping network devices and local shares.&lt;/p&gt;
+
+&lt;p&gt;I highly suggest reading through the documentation for the &lt;code&gt;.wsb&lt;/code&gt; file format. There are some good examples and interesting features.&lt;/p&gt;
+
+&lt;h3 id=&#34;example-zoom&#34;&gt;Example: Zoom&lt;/h3&gt;
+
+&lt;p&gt;Zoom is a very popular group call/video conference software (I won&#39;t bore you with the details I&#39;m sure you have &lt;em&gt;some&lt;/em&gt; idea what Zoom is by now). However, Zoom has had numerous security and privacy issues. If you&#39;re paranoid like me you may feel uneasy just seeing it&#39;s icon in the start menu - knowing you have it installed on the same machine along with all your other precious digital data. I digress, here is a configuration file for my Zoom sandbox:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;Configuration&amp;gt;
+    &amp;lt;MappedFolders&amp;gt;
+        &amp;lt;MappedFolder&amp;gt;
+            &amp;lt;HostFolder&amp;gt;C:\Sandbox\Installers&amp;lt;/HostFolder&amp;gt;
+            &amp;lt;SandboxFolder&amp;gt;C:\Installers&amp;lt;/SandboxFolder&amp;gt;
+            &amp;lt;ReadOnly&amp;gt;true&amp;lt;/ReadOnly&amp;gt;
+        &amp;lt;/MappedFolder&amp;gt;
+    &amp;lt;/MappedFolders&amp;gt;
+    &amp;lt;AudioInput&amp;gt;Enable&amp;lt;/AudioInput&amp;gt;
+    &amp;lt;VideoInput&amp;gt;Enable&amp;lt;/VideoInput&amp;gt;
+    &amp;lt;VGpu&amp;gt;Enable&amp;lt;/VGpu&amp;gt;
+    &amp;lt;MemoryInMB&amp;gt;12288&amp;lt;/MemoryInMB&amp;gt;
+    &amp;lt;LogonCommand&amp;gt;
+        &amp;lt;Command&amp;gt;C:\Installers\ZoomInstaller.exe&amp;lt;/Command&amp;gt;
+    &amp;lt;/LogonCommand&amp;gt;
+&amp;lt;/Configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It maps the local &lt;code&gt;C:\Sandbox\Installers&lt;/code&gt; directory (where I store &lt;code&gt;ZoomInstaller.exe&lt;/code&gt;) to &lt;code&gt;C:\Installers&lt;/code&gt; in the VM itself. Enables audio (mic) and video (webcam) passthrough. I allocate 12Gb to the VM - should be more than enough on my laptop with 16Gb of RAM. It then runs the Zoom installer on startup.&lt;/p&gt;
+
+&lt;p&gt;The verdict? It works fairly well. Recently however webcam passthrough has stopped working, possibly due to a driver issue. (Installing drivers requires the machine to reboot - but you can&#39;t reboot a sandbox without deleting everything).&lt;/p&gt;
+
+&lt;p&gt;I make use of a couple of these &lt;code&gt;.wsb&lt;/code&gt; files for different programs I&#39;d rather install on an ephemeral virtual machine than my main OS.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:wsb&#34;&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file&#34;&gt;https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Feb 2021 Update: Git Server + Hidden Service</title>
+   <updated>2021-02-24T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-02-24:posts/2021-02-24-feb.html</id>
+   <link href="https://zakaria.org/posts/2021-02-24-feb.html"></link>
+   <summary type="html">&lt;h1 id=&#34;update-feb-2021-git-server-hidden-service&#34;&gt;Update Feb 2021: git server + hidden service&lt;/h1&gt;
+
+&lt;p&gt;Here&#39;s a little site update.&lt;/p&gt;
+
+&lt;h2 id=&#34;css-changes&#34;&gt;CSS changes&lt;/h2&gt;
+
+&lt;p&gt;As usual the CSS of this website is ever-changing. I&#39;ve changed it to be more monochrome, with blue highlights on link hover/focus and text selection. Headings are now all &lt;code&gt;1em&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;git-server&#34;&gt;Git server&lt;/h2&gt;
+
+&lt;p&gt;I&#39;ve set up a git server on &lt;a href=&#34;https://git.zakaria.org/&#34;&gt;git.zakaria.org&lt;/a&gt; using &lt;a href=&#34;https://codemadness.org/stagit.html&#34;&gt;stagit&lt;/a&gt; to generate the pages. I followed a guide by &lt;code&gt;poptart&lt;/code&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. It&#39;s a very well written guide for setting up stagit on OpenBSD.&lt;br /&gt;
+I modified some of the scripts provided to suit my workflow.&lt;/p&gt;
+
+&lt;p&gt;I plan to move most of my projects that don&#39;t require an issue tracker over there. Namely personal configs/programs.&lt;/p&gt;
+
+&lt;h2 id=&#34;hidden-service&#34;&gt;Hidden service&lt;/h2&gt;
+
+&lt;p&gt;During January I made this site accessible over Tor via a &lt;a href=&#34;https://wikipedia.org/wiki/Tor_(anonymity_network)#Onion_services&#34;&gt;hidden service/onion service&lt;/a&gt;. I had some (layer 8) issues with the service provider and had to reset the server and so the service URL has changed a few times. The canonical onion service URL can be found on the &lt;a href=&#34;/about.html&#34;&gt;about page&lt;/a&gt; or in the footer.&lt;/p&gt;
+
+&lt;p&gt;Why have I setup an onion service? Three reasons:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Tor is a technology that interests me&lt;/li&gt;
+&lt;li&gt;I wanted to see how difficult it would be to setup a hidden service (it was not difficult&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;)&lt;/li&gt;
+&lt;li&gt;It&#39;s fun&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Because onion services can&#39;t have subdomains, I&#39;ve setup &lt;code&gt;relayd(8)&lt;/code&gt; so the git server can be accessed on the service via a &lt;code&gt;/git/&lt;/code&gt; endpoint (this is only available on the hidden service).&lt;/p&gt;
+
+&lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
+
+&lt;p&gt;Edit 20201-02-25: Apologies for those who now have duplicate RSS entries. I&#39;ve redone the RSS script, so the new feed might have merged with the old in your readers. Removing and re-adding the feed should fix this.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://hosakacorp.net/p/stagit-server.html&#34;&gt;https://hosakacorp.net/p/stagit-server.html&lt;/a&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;I referred to these two guides: &lt;a href=&#34;https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c&#34;&gt;https://medium.com/@sarala.saraswati/tor-hidden-services-on-openbsd-with-httpd-52852f49358c&lt;/a&gt;, &lt;a href=&#34;https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html&#34;&gt;https://dataswamp.org/~solene/2018-10-11-tor-hidden-service.html&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Usbkill the OpenBSD Way</title>
+   <updated>2021-01-11T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-01-11:posts/2021-01-11-usbkiller.html</id>
+   <link href="https://zakaria.org/posts/2021-01-11-usbkiller.html"></link>
+   <summary type="html">&lt;h1 id=&#34;usbkill-the-openbsd-way&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt; the OpenBSD way&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/hephaest0s/usbkill&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt;&lt;/a&gt; is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of &lt;code&gt;lsusb&lt;/code&gt; and when there is a change it runs &lt;code&gt;shutdown -h now&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Simple, right? One thing to note is that &lt;code&gt;lsusb&lt;/code&gt; is not included in OpenBSD&#39;s base packages, but &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;&lt;code&gt;hotplugd(8)&lt;/code&gt;&lt;/a&gt; is.&lt;/p&gt;
+
+&lt;h2 id=&#34;hotplugd&#34;&gt;hotplugd&lt;/h2&gt;
+
+&lt;p&gt;So what is &lt;code&gt;hotplugd&lt;/code&gt;, and how can it be useful? The &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;man page&lt;/a&gt; does a good job of explaining it. Simply put: when any device is attached to or detached from your machine &lt;code&gt;hotplugd&lt;/code&gt; will execute a script.&lt;/p&gt;
+
+&lt;p&gt;To see how simple it is to write a hotplug script we can start by simply logging device attach events. First, start by enabling and starting &lt;code&gt;hotplugd&lt;/code&gt; (as root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# rcctl enable hotplugd
+# rcctl start hotplugd
+hotplugd(ok)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we will write the script that is executed on a device attach event:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# mkdir -p /etc/hotplug
+# $EDITOR /etc/hotplug/attach
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this file we will log the device class and name:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+DEVCLASS=$1
+DEVNAME=$2
+
+# log attach event
+logger -t hotplug &amp;quot;$DEVCLASS:$DEVNAME attached&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To see this in action in another terminal type&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ tail -f /var/log/messages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then connect a USB device to your machine and you should see messages tagged &#39;hotplug&#39;. This is what I get when I plug in my Logitech USB adapter for my wireless mouse (which I usually don&#39;t use):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Jan 11 11:48:32 x1 hotplug: 0:uhid3 attached
+Jan 11 11:48:32 x1 hotplug: 5:wsmouse2 attached
+Jan 11 11:48:32 x1 hotplug: 0:ums0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid1 attached
+Jan 11 11:48:32 x1 hotplug: 5:wskbd1 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid4 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid2 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev1 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev2 attached
+Jan 11 11:48:32 x1 hotplug: 0:ukbd0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhidev0 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid5 attached
+Jan 11 11:48:32 x1 hotplug: 0:uhid6 attached
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Site note: What is happening here? Why have so many events popped up after inserting one USB device? My theory is that because it&#39;s a &lt;a href=&#34;https://www.logitech.com/product/unifying-receiver-usb&#34;&gt;Unifying Receiver&lt;/a&gt;, it allows more than one Logitech HID to be connected to a single receiver, so it must register a bunch of HIDs to the kernel.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-kill-part&#34;&gt;The &#39;kill&#39; part&lt;/h2&gt;
+
+&lt;p&gt;Now that we&#39;ve seen how &lt;code&gt;hotplugd&lt;/code&gt; works, we can work on the &lt;em&gt;kill&lt;/em&gt; part of &lt;code&gt;usbkill&lt;/code&gt;.&lt;br /&gt;
+We want to shutdown the machine on a device attach or detach event, but we also want to be able to arm and disarm the &lt;em&gt;kill&lt;/em&gt; part, since I might need to plug something in once in a while. Make the &lt;code&gt;/etc/hotplug/attach&lt;/code&gt; script as so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+arm_file=/tmp/arm_usbkill
+
+DEVCLASS=&amp;quot;$1&amp;quot;
+DEVNAME=&amp;quot;$2&amp;quot;
+
+logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;${DEVCLASS}:${DEVNAME} attached&amp;quot;
+
+if [ -f &amp;quot;$arm_file&amp;quot; ]; then
+        shutdown -p now
+else
+        logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;unarmed - aborted shutdown&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the &lt;code&gt;/tmp/arm_usbkill&lt;/code&gt; file exists then the machine will shutdown, if it doesn&#39;t exist it will just add a log entry to syslog.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hotplug&lt;/code&gt; also supports running a different script, &lt;code&gt;/etc/hotplug/detach&lt;/code&gt; on detach events. Since both scripts are exactly the same I&#39;ve symlinked the attach script to the location of the detach script.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ln -s /etc/hotplug/attach /etc/hotplug/detach
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;${0##*/}&lt;/code&gt; logger tag gets substituted to the filename of the script being executed (in this case it is either &lt;code&gt;attach&lt;/code&gt; or &lt;code&gt;detach&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;One thing to note is that this setup will execute the shutdown command on &lt;em&gt;any&lt;/em&gt; device change event. This includes USBs but also includes network devices, disk drives, and serial line interfaces&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. If that is a problem, you can implement a device class-based whitelist by checking &lt;code&gt;$DEVCLASS&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+# class whitelist (space-separated)
+class_whitelist=&amp;quot;0 2 3 5&amp;quot;
+
+# arm file
+arm_file=/tmp/arm_usbkill
+
+DEVCLASS=&amp;quot;$1&amp;quot;
+DEVNAME=&amp;quot;$2&amp;quot;
+
+whitelisted() {
+	for class in $class_whitelist; do
+		if [ &amp;quot;$class&amp;quot; = &amp;quot;$1&amp;quot; ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;${DEVCLASS}:${DEVNAME} attached&amp;quot;
+
+if [ -f &amp;quot;$arm_file&amp;quot; ]; then
+	if whitelisted &amp;quot;$DEVCLASS&amp;quot;; then
+		logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;whitelisted - aborted shutdown&amp;quot;
+		exit 0
+	fi
+	shutdown -p now
+else
+	logger -t &amp;quot;${0##*/}&amp;quot; &amp;quot;unarmed - aborted shutdown&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But this is not really useful to me since I use a laptop and I&#39;m not attaching and detaching network devices or disk drives.&lt;/p&gt;
+
+&lt;p&gt;One disadvantage of this setup is the inability to whitelist devices based on their USB IDs like you can with &lt;code&gt;usbkill&lt;/code&gt;. This could be acheived through a much more complicated script using &lt;code&gt;usbdevs&lt;/code&gt; to get USB IDs, but as of yet I have no need for that.&lt;/p&gt;
+
+&lt;h2 id=&#34;arming-and-disarming&#34;&gt;Arming and disarming&lt;/h2&gt;
+
+&lt;p&gt;To arm and disarm this script all you have to do is create or remove the &lt;code&gt;$arm_file&lt;/code&gt; respectively. Here are some shell functions to add to your shell rc to make it easier:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# arm/disarm usbkill
+arm() {
+        touch /tmp/arm_usbkill &amp;amp;&amp;amp; printf &#39;armed\\n&#39; || printf &#39;error arming\\n&#39;
+}
+disarm() {
+        rm -f /tmp/arm_usbkill &amp;amp;&amp;amp; printf &#39;disarmed\\n&#39; || printf &#39;error disarming\\n&#39;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The script can be armed or disarmed by any regular user which may or may not be preferable to you (and isn&#39;t the case for &lt;code&gt;usbkill&lt;/code&gt;, which requires root to run).&lt;br /&gt;
+Originally I had added the &lt;code&gt;uchg&lt;/code&gt; flag to the file to lock it. But this proved to be counterproductive since it wasn&#39;t cleared from &lt;code&gt;/tmp&lt;/code&gt; on reboot and when &lt;code&gt;hotplugd&lt;/code&gt; would first start up, it would immediately shutdown the machine again. That was fun to fix (not).&lt;/p&gt;
+
+&lt;h2 id=&#34;why&#34;&gt;Why?&lt;/h2&gt;
+
+&lt;p&gt;So why do all this? Why not just &lt;code&gt;pkg_add usbutils&lt;/code&gt;, download + run &lt;code&gt;usbkill&lt;/code&gt; and be done?&lt;br /&gt;
+Well for starters that isn&#39;t as fun. The main reason is that all this works in a default OpenBSD install - no additional packages needed. Why install a program to solve a problem when the default tools and services can solve the problem just as (if not more) elegantly?&lt;/p&gt;
+
+&lt;h2 id=&#34;see-also&#34;&gt;SEE ALSO&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;OpenBSD &lt;code&gt;hotplug(4)&lt;/code&gt; pseudo-device man page: &lt;a href=&#34;https://man.openbsd.org/hotplug&#34;&gt;https://man.openbsd.org/hotplug&lt;/a&gt; .&lt;/li&gt;
+&lt;li&gt;OpenBSD includes the &lt;code&gt;usbdevs(8)&lt;/code&gt; tool in base that lists connected USB devices and their IDs: &lt;a href=&#34;https://man.openbsd.org/usbdevs&#34;&gt;https://man.openbsd.org/usbdevs&lt;/a&gt; &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/li&gt;
+&lt;li&gt;OpenWRT has it&#39;s own similarly named hotplug.d service: &lt;a href=&#34;https://openwrt.org/docs/guide-user/base-system/hotplug&#34;&gt;https://openwrt.org/docs/guide-user/base-system/hotplug&lt;/a&gt;. But it&#39;s slightly different to OpenBSD&#39;s.&lt;/li&gt;
+&lt;li&gt;A couple of years ago I wrote &lt;a href=&#34;https://github.com/e-zk/hidlock&#34;&gt;a hotplug script&lt;/a&gt; that instead runs &lt;a href=&#34;https://man.openbsd.org/xlock&#34;&gt;&lt;code&gt;xlock(1)&lt;/code&gt;&lt;/a&gt; on all running X displays after a HID is attached. In theory this would to thwart HID/badusb attacks, while not being as aggressive as shutting down your machine. Might be worth looking into if you like the sound of that.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;As per the &lt;a href=&#34;https://man.openbsd.org/hotplugd&#34;&gt;&lt;code&gt;hotplugd(8)&lt;/code&gt; man page&lt;/a&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;In the future I might write a script to act more similarly to &lt;code&gt;usbkill&lt;/code&gt;, using &lt;code&gt;usbdevs&lt;/code&gt; to poll for device changes instead of &lt;code&gt;lsusb&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>My xenodm setup</title>
+   <updated>2021-01-04T00:00:00Z</updated>
+   <id>tag:zakaria.org,2021-01-04:posts/2021-01-04-xenodm.html</id>
+   <link href="https://zakaria.org/posts/2021-01-04-xenodm.html"></link>
+   <summary type="html">&lt;h1 id=&#34;my-xenodm-setup&#34;&gt;My xenodm setup&lt;/h1&gt;
+
+&lt;p&gt;OpenBSD uses the &lt;a href=&#34;https://man.openbsd.org/xenodm&#34;&gt;&lt;code&gt;xenodm(1)&lt;/code&gt;&lt;/a&gt; display manager, which is a fork of xdm.&lt;br /&gt;
+Xenodm looks quite ugly by default, and after reading a couple&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; of&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; articles&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; on themeing xenodm I&#39;ve come up with my own setup.&lt;/p&gt;
+
+&lt;p&gt;Before we get into the configs, here&#39;s what it actually looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;/static/img/xenodm.png&#34;&gt;&lt;img src=&#34;/static/img/xenodm.png&#34; alt=&#34;themed xenodm&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;(The text might be small, click to view the image file)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Clean and simple. Now that you&#39;ve seen what it looks like you can close this tab if that&#39;s all you came here to see. If you want to see how this is accomplished then continue reading.&lt;/p&gt;
+
+&lt;h2 id=&#34;files&#34;&gt;Files&lt;/h2&gt;
+
+&lt;p&gt;xenodm uses multiple files for configuration. It&#39;s quite inconvenient, and I was very confused at first I admit. The files we&#39;ll have to deal with are:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/etc/X11/xenodm/Xresources
+/etc/X11/xenodm/Xsetup_0
+/etc/X11/xenodm/Xsession
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last one is for an optional non-cosmetic change that I&#39;ll cover later. All these files require root access, so it&#39;d be wise to &lt;code&gt;doas -s&lt;/code&gt; before continuing on.&lt;/p&gt;
+
+&lt;h2 id=&#34;xresources&#34;&gt;Xresources&lt;/h2&gt;
+
+&lt;p&gt;If you&#39;ve ever dabbled in trying to rice your Unix-like operating system there&#39;s a good change you&#39;ve come across an &lt;a href=&#34;https://wikipedia.org/wiki/X_resources&#34;&gt;Xresources&lt;/a&gt; file before. The X window system uses a &amp;quot;resource database&amp;quot; as a &#39;unified&#39; way to store configuration data.&lt;/p&gt;
+
+&lt;p&gt;xenodm sources the Xresources file before loading. Using entries in the Xresources file we can configure what the login widget (the place we type our username + password) looks like.&lt;/p&gt;
+
+&lt;p&gt;First off, I&#39;d like to be able to see my password being entered as I type with little &lt;code&gt;*&lt;/code&gt; as it so commonly is.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xlogin.Login.echoPasswd: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next I don&#39;t want to be &#39;greeted&#39;, and I want the message when I put my password in incorrectly to be &lt;code&gt;ya dun goofed&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xlogin.Login.fail: ya dun goofed
+xlogin.Login.greeting:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now I&#39;ll configure the dimensions and positioning of the login box:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xlogin.Login.height:            200
+xlogin.Login.width:             400
+xlogin.Login.y:                 320
+xlogin.Login.frameWidth:        10
+xlogin.Login.innerFramesWidth:  0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add some colour (or lack thereof):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xlogin.Login.background:        #000000
+xlogin.Login.foreground:        #eeeeee
+xlogin.Login.failColor:         #b00035
+xlogin.Login.inpColor:          #000000
+xlogin.Login.promptColor:       #eeeeee
+xlogin.Login.hiColor:           #000000
+xlogin.Login.shdColor:          #000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And finally let&#39;s use a nice bitmap font to complete the look:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xlogin.Login.face:              Dina-11
+xlogin.Login.failFace:          Dina-11
+xlogin.Login.promptFace:        Dina-11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that last step requires the Dina font to be installed (it does not come with OpenBSD).&lt;/p&gt;
+
+&lt;h2 id=&#34;xsetup-0&#34;&gt;Xsetup_0&lt;/h2&gt;
+
+&lt;p&gt;Next is the Xsetup file. Why is this called Xsetup_&lt;em&gt;0&lt;/em&gt;? Because xenodm can be configured to run multiple X display servers, and the main one is 0, hence the 0 (check out &lt;code&gt;/etc/X11/xenodm/xenodm-config&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;This file is fairly simple. It&#39;s a shell script that xenodm runs. That&#39;s it. Simple as that. Through this script we can run pretty much any program we like. In my case, a simple lemonbar script:&lt;/p&gt;
+
+&lt;div&gt;&lt;code&gt;/etc/X11/xenodm/Xsetup_0:&lt;/code&gt;&lt;/div&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+# set background
+/usr/X11R6/bin/xsetroot -solid \#000000
+
+# add Dina font to font list
+/usr/X11R6/bin/xset fp+ /usr/local/share/font/dina
+ 
+# status bar
+(
+while true; do
+        reboot=&amp;quot;%{F#b00035}%{A:reboot:} r %{A}%{F-}&amp;quot;
+        shutdown=&amp;quot;%{F#b00035}%{A:shutdown -p now:} p %{A}%{F-}&amp;quot;
+
+        echo &amp;quot;  $(date &#39;+%T&#39;)  %{r}${reboot}/${shutdown}  $(date &#39;+%F&#39;)    $(apm -l)%  &amp;quot;
+        sleep 1
+done | /home/zzz/bin/lemonbar -d -g 1920x40+0+0 -f &#39;Dina:style=Medium:pixelsize=13&#39; -B \#000000 -F \#eeeeee | sh
+) &amp;amp;
+
+# uncomment to take &#39;screenshot&#39;
+#(sleep 5 &amp;amp;&amp;amp; xwd -out /tmp/xenodm.xwd -root) &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The date, time, battery percent are all piped into lemonbar. Additionally the &#39;r&#39; and &#39;p&#39; text in red allow me to reboot or power off my machine respectively.&lt;/p&gt;
+
+&lt;p&gt;It should be noted that I probably shouldn&#39;t be using a binary that&#39;s located in my user writable home directory here. Check the footnotes for other options, namely using xmessage and/or xclock. Or you can just take out the lemonbar bit entirely, which I will likely do in the future.&lt;/p&gt;
+
+&lt;h2 id=&#34;xsession-extra&#34;&gt;Xsession extra&lt;/h2&gt;
+
+&lt;p&gt;Here&#39;s the optional bit. I&#39;m a big fan of &lt;a href=&#34;https://github.com/vizs/declutter-home&#34;&gt;decluttering&lt;/a&gt; my home directory. Moving as many dotfiles out of &lt;code&gt;$HOME/&lt;/code&gt; as possible. Moving &lt;code&gt;~/.Xresources&lt;/code&gt; was easy - just source a different file from &lt;code&gt;~/.xsession&lt;/code&gt;. But an annoyance is &lt;code&gt;~/.xsession&lt;/code&gt; itself, which up until now I had no idea how to move. Turns out its location can be changed in &lt;code&gt;/etc/X11/xenodm/Xsession&lt;/code&gt;!&lt;/p&gt;
+
+&lt;p&gt;Look for the line that says:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;startup=$HOME/.xsession
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we can change the &lt;code&gt;startup&lt;/code&gt; variable to be any path we like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;startup=${HOME}/etc/x/xsession
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also, if you&#39;ve themed &lt;a href=&#34;https://man.openbsd.org/ssh-askpass&#34;&gt;&lt;code&gt;ssh-askpass(1)&lt;/code&gt;&lt;/a&gt; like I have and want to actually see those changes when it prompts for your ssh key password then you should probably source your user Xresources before running all the ssh-related stuff.&lt;/p&gt;
+
+&lt;p&gt;Look for this part of the script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# if we have private ssh key(s), start ssh-agent and add the key(s)
+id1=$HOME/.ssh/identity
+id2=$HOME/.ssh/id_dsa
+id3=$HOME/.ssh/id_rsa
+id4=$HOME/.ssh/id_ecdsa
+id5=$HOME/.ssh/id_ed25519
+if [ -z &amp;quot;$SSH_AGENT_PID&amp;quot; ];
+then
+	if [ -x /usr/bin/ssh-agent ] &amp;amp;&amp;amp; [ -f $id1 -o -f $id2 -o -f $id3 -o -f $id4 -o -f $id5 ];
+	then
+		eval `ssh-agent -s`
+		ssh-add &amp;lt; /dev/null
+	fi
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Just anywhere above this section simply add &lt;code&gt;xrdb -load $HOME/path/to/xresources&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;this is the first article I read on the subject&lt;/p&gt;
+
+&lt;p&gt;this article is the basis for my configuration, stylistically and config-wise.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/&#34;&gt;https://www.tumfatig.net/20190208/customizing-openbsd-xenodm/&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
+
+&lt;li id=&#34;fn:2&#34;&gt;&lt;a href=&#34;https://www.vincentdelft.be/post/post_20190720&#34;&gt;https://www.vincentdelft.be/post/post_20190720&lt;/a&gt;&lt;/li&gt;
+
+&lt;li id=&#34;fn:3&#34;&gt;&lt;a href=&#34;https://www.romanzolotarev.com/openbsd/xenodm.html&#34;&gt;https://www.romanzolotarev.com/openbsd/xenodm.html&lt;/a&gt;&lt;br /&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>OpenBSD Notes</title>
+   <updated>2020-12-08T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-12-08:posts/2020-12-08-openbsd-notes.html</id>
+   <link href="https://zakaria.org/posts/2020-12-08-openbsd-notes.html"></link>
+   <summary type="html">&lt;h1 id=&#34;openbsd-notes&#34;&gt;OpenBSD notes&lt;/h1&gt;
+
+&lt;p&gt;Random notes on running &lt;a href=&#34;https://openbsd.org/&#34;&gt;OpenBSD&lt;/a&gt; (some notes may only be useful for a laptop install). Updated frequently.&lt;/p&gt;
+
+&lt;h2 id=&#34;table-of-contents&#34;&gt;Table of Contents&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Power%2fBattery&#34;&gt;Power/Battery&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Hibernate%20on%20low%20battery&#34;&gt;Hibernate on low battery&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#User%20power%20commands&#34;&gt;User power commands&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Multimedia&#34;&gt;Multimedia&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Microphone%20Setup&#34;&gt;Microphone Setup&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#X&#34;&gt;X&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#PF&#34;&gt;PF&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#Standard%20preamble&#34;&gt;Standard preamble&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Allow%20NTP&#34;&gt;Allow NTP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#VMs&#34;&gt;VMs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Misc&#34;&gt;Misc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#Manual%20pages%20as%20beautifully%20typeset%20PDFs&#34;&gt;Manual pages as beautifully typeset PDFs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;power-battery&#34;&gt;Power/Battery&lt;/h2&gt;
+
+&lt;h3 id=&#34;hibernate-on-low-battery&#34;&gt;Hibernate on low battery&lt;/h3&gt;
+
+&lt;p&gt;To hibernate at 5% remaining battery add in &lt;code&gt;/etc/rc.conf.local&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;apmd_flags=-A -Z 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;user-power-commands&#34;&gt;User power commands&lt;/h3&gt;
+
+&lt;p&gt;In &lt;code&gt;/etc/doas.conf&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;permit nopass :staff as root cmd zzz
+permit nopass :staff as root cmd ZZZ
+permit nopass :staff as root cmd reboot args
+permit nopass :staff as root cmd shutdown args -p now
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;multimedia&#34;&gt;Multimedia&lt;/h2&gt;
+
+&lt;h3 id=&#34;microphone-setup&#34;&gt;Microphone setup&lt;/h3&gt;
+
+&lt;p&gt;I have a fancy microphone that has a headphone passthrough. So it is both USB &amp;quot;speaker&amp;quot; and a USB microphone. Good news, that makes using it with sndio a &lt;em&gt;bit&lt;/em&gt; easier.&lt;/p&gt;
+
+&lt;p&gt;Change primary sndiod device to the microphone (check dmesg for &lt;code&gt;audio[0-9]&lt;/code&gt; device id):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# rcctl set sndiod flags -f rsnd/1
+# rcctl restart sndiod
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Switch mixer sources:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# mixerctl outputs.hp_source=dac-2:3
+outputs.hp_source: dac-0:1 -&amp;gt; dac-2:3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To switch back, remove the sndiod flag, and change the source back to it&#39;s original value (&lt;code&gt;dac-0:1&lt;/code&gt;).&lt;/p&gt;
+
+&lt;h2 id=&#34;x&#34;&gt;X&lt;/h2&gt;
+
+&lt;p&gt;See &lt;a href=&#34;/posts/2021-01-04-xenodm.html&#34;&gt;full post&lt;/a&gt; for xenodm themeing.&lt;/p&gt;
+
+&lt;h2 id=&#34;pf&#34;&gt;PF&lt;/h2&gt;
+
+&lt;p&gt;Packet Filter (firewall). General stuff to remember:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;last rule &#39;wins&#39;*&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;egress&lt;/code&gt; = interface(s) that hold the default route(s)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;standard-preamble&#34;&gt;Standard preamble&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# options 
+set block-policy drop
+set skip on lo
+
+# default deny
+block all 
+
+# antispoofing
+antispoof for egress
+antispoof for $vm_int
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;allow-ntp&#34;&gt;Allow NTP&lt;/h3&gt;
+
+&lt;p&gt;In rare cases ntp can use tcp apparently...&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pass quick inet proto { tcp, udp } to port ntp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;vms&#34;&gt;VMs&lt;/h3&gt;
+
+&lt;p&gt;Don&#39;t forget to &lt;code&gt;sysctl net.inet.ip.forwarding=1&lt;/code&gt;!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# where:
+# vm_int        = vm interface (vether[0-9])
+# vm_dns_server = dns server to be used by vms
+
+# allow ssh traffic to vm
+pass out on $vm_int proto tcp to $vm_int:network port 22
+
+# vm nat
+match out on egress from $vm_int:network to any nat-to (egress)
+pass in proto { tcp udp } from $vm_int:network to any port domain \
+        rdr-to $vm_dns_server port domain
+
+# allow icmp + web from vms
+pass in on $vm_int proto icmp
+pass in on $vm_int proto tcp to port { www, https }
+
+# only allow X11 forwarding on the vm interface
+pass in on $vm_int proto tcp to port 6000:6010
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;misc&#34;&gt;Misc&lt;/h2&gt;
+
+&lt;h3 id=&#34;manual-pages-as-beautifully-typeset-pdfs&#34;&gt;Manual pages as beautifully typeset PDFs&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ MANPAGER=zathura man -T pdf style
+&lt;/code&gt;&lt;/pre&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>How I (almost) fixed my fonts</title>
+   <updated>2020-12-05T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-12-05:posts/2020-12-05-fonts.html</id>
+   <link href="https://zakaria.org/posts/2020-12-05-fonts.html"></link>
+   <summary type="html">&lt;h1 id=&#34;how-i-almost-fixed-my-fonts&#34;&gt;How I (almost) fixed my fonts&lt;/h1&gt;
+
+&lt;p&gt;This site goes through CSS changes daily. Yes, daily. I can&#39;t stop changing the CSS. It&#39;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it.&lt;/p&gt;
+
+&lt;p&gt;I like web fonts. But I also like simplicity and straightforwardness. Sadly, getting webfonts and CSS to work together flawlessly is no simple task.&lt;/p&gt;
+
+&lt;h2 id=&#34;google-fonts&#34;&gt;Google Fonts&lt;/h2&gt;
+
+&lt;p&gt;At first I just used Google Fonts: click, click, right click, copy, paste &lt;code&gt;@import&lt;/code&gt; URL. Done. Fixed. ...or so I thought.&lt;/p&gt;
+
+&lt;p&gt;Using Google fonts has the unfortunate side-effect that I now depend on a 3rd-party CDN for my site to look nice. That CDN is obviously Google - that&#39;s not ideal for me.&lt;/p&gt;
+
+&lt;h2 id=&#34;self-hosting-google-fonts&#34;&gt;Self-hosting Google Fonts&lt;/h2&gt;
+
+&lt;p&gt;So I decided to just host the fonts on this webserver. I came across this gem: &lt;a href=&#34;https://github.com/majodev/google-webfonts-helper/&#34;&gt;google-webfonts-helper&lt;/a&gt;. You choose your Google fonts, it generates a zip file containing the font files, and some CSS to put on your page. Perfect! ...or so I thought.&lt;/p&gt;
+
+&lt;h2 id=&#34;inline-stylesheets&#34;&gt;Inline stylesheets&lt;/h2&gt;
+
+&lt;p&gt;Wait. Now my fonts flash for a second. Oh, this is the fabled FOUT I&#39;ve been hearing about. Google Fonts didn&#39;t seem to have this issue, though I suppose their server is far more responsive than mine, and they do some CDN tricks or something. Here&#39;s a CSS-Tricks article I read: &lt;a href=&#34;https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/&#34;&gt;https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/&lt;/a&gt;. I don&#39;t recall whether it helped me in this endeavour or not since the solution requires JavaScript (eugh).&lt;/p&gt;
+
+&lt;p&gt;I decided to just inline the stylesheet to fetch the fonts and apply them since it took the browser a bit extra to download &lt;code&gt;styles.css&lt;/code&gt; and since the fonts would be loaded with the webpage it shouldn&#39;t look to bad. I added &lt;code&gt;font-display: fallback&lt;/code&gt; for some extra peace of mind.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;@font-face {
+	font-family: &#39;Charter Regular&#39;;
+	font-style: normal;
+	font-weight: normal;
+	font-display: fallback;
+	src: local(&#39;Charter Regular&#39;),          local(&#39;Charter-Regular&#39;),
+	     url(&#39;/fonts/charter_regular.woff&#39;) format(&#39;woff&#39;),     /* Modern Browsers */
+	     url(&#39;/fonts/charter_regular.ttf&#39;)  format(&#39;truetype&#39;); /* Safari, Android, iOS */
+}
+
+@font-face {
+	font-family: &#39;Charter Regular&#39;;
+	font-style: normal;
+	font-weight: bold;
+	font-display: fallback;
+	src: local(&#39;Charter Bold&#39;),          local(&#39;Charter-Bold&#39;),
+	     url(&#39;/fonts/charter_bold.woff&#39;) format(&#39;woff&#39;),     /* Modern Browsers */
+	     url(&#39;/fonts/charter_bold.ttf&#39;)  format(&#39;truetype&#39;); /* Safari, Android, iOS */
+}
+
+html, body {
+	font-family: &amp;quot;Charter Regular&amp;quot;, &amp;quot;Times New Roman&amp;quot;, serif;
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This still didn&#39;t give the desired result. There were still weird loading times and odd font flashes.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-fix-sort-of-not-really&#34;&gt;The fix (sort of... not really)&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;I give up&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;html, body {
+	font-family: sans-serif;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chances are whenever you&#39;re reading this the site has already been changed to reflect this change.&lt;br /&gt;
+Sans-serif looks better for this site anyways :P&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Malthusian Belt</title>
+   <updated>2020-11-07T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-11-07:posts/2020-11-07-malthusian-belt.html</id>
+   <link href="https://zakaria.org/posts/2020-11-07-malthusian-belt.html"></link>
+   <summary type="html">&lt;h1 id=&#34;malthusian-belt&#34;&gt;Malthusian Belt&lt;/h1&gt;
+
+&lt;p&gt;I&#39;m reading Aldous Huxtley&#39;s Brave New World and as with most books I read I&#39;ve come accross many words and phrases that I don&#39;t understand. One of which was Lenina&#39;s &amp;quot;Malthusian belt&amp;quot;. At first I thought &amp;quot;Malthusian&amp;quot; refered to the belt&#39;s geographical origin (Malta? No, that would be &lt;em&gt;Maltese&lt;/em&gt;), but the word didn&#39;t fit any place I knew of so naturally I looked it up.&lt;/p&gt;
+
+&lt;p&gt;I was surprised to find this&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; Wikipedia article on &lt;em&gt;Malthusianism&lt;/em&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Malthusianism is the ideals has population growth is potentially exponential while the growth of the food supply or other resources is linear.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Since everyone in the brave new world is born from artificial embryos, suppression of normal human conception is clearly important. The Malthusian belt must actually be some sort of birth control device that women generally wear.&lt;/p&gt;
+
+&lt;p&gt;It&#39;s a very interesting conceptual device and it makes me wonder about how on Earth Huxley came up with this idea.&lt;/p&gt;
+
+&lt;p&gt;While this may have been obvious to some from the name of it, or perhaps even the context in the book, it wasn&#39;t obvious to me. Not understanding the phrase prompted me to look it up. And hey, now I have a lot about Malthusiamism to read about.&lt;/p&gt;
+
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Malthusianism&#34;&gt;https://en.wikipedia.org/wiki/Malthusianism&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;/div&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>Quick setup script with tmux</title>
+   <updated>2020-09-09T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-09-09:posts/2020-09-09-tmux.html</id>
+   <link href="https://zakaria.org/posts/2020-09-09-tmux.html"></link>
+   <summary type="html">&lt;h1 id=&#34;quick-setup-script-with-tmux&#34;&gt;Quick setup script with &lt;code&gt;tmux&lt;/code&gt;&lt;/h1&gt;
+
+&lt;p&gt;In my network security class we ssh into a handful of VMs pretty often.&lt;br /&gt;
+Instead of trying to juggle 5 open terminal windows I tried to make this a bit easier to manage by having all my ssh sessions run in separate tmux windows - switching between them with &lt;code&gt;C-b {1,2,3,etc}&lt;/code&gt; when necessary. I found myself doing this every time I&#39;d load up my Kali Linux VM:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tmux
+C-b c
+ssh bastion
+C-b c
+ssh proxyserver
+C-b c
+ssh edgerouter
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But then I thought, why not script this process? It should be easy enough. And it sure was easy. Here&#39;s what I came up with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+tmux new-session -d
+tmux new-window -n &amp;quot;bastion&amp;quot; ssh bastion
+tmux new-window -n &amp;quot;proxyserver&amp;quot; ssh proxyserver
+tmux new-window -n &amp;quot;appserver&amp;quot; ssh appserver
+tmux new-window -n &amp;quot;edgerouter&amp;quot; ssh edgerouter
+tmux selectw -t 0
+
+tmux attach-session -d
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First, the script creates a new tmux session in the background. Then it opens a new window for each ssh session, naming them appropriately. After that it switches back to the first window (which is just a local shell), and finally it attaches the tmux session to the current terminal session.&lt;/p&gt;
+
+&lt;p&gt;Now after I start my VM all I have to do is run the script (I called it &lt;code&gt;setupsess&lt;/code&gt;), and I&#39;m ready to start hacking away at my messy nftables configs.&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>M4 Troubles</title>
+   <updated>2020-08-03T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-08-03:posts/2020-08-03-m4.html</id>
+   <link href="https://zakaria.org/posts/2020-08-03-m4.html"></link>
+   <summary type="html">&lt;h1 id=&#34;m4-troubles&#34;&gt;M4 Troubles...&lt;/h1&gt;
+
+&lt;p&gt;In my &lt;a href=&#34;https://zakaria.org/posts/2020-08-01-shblog&#34;&gt;previous post&lt;/a&gt; I wrote about mostly M4 templates.
+Well, it turns out I&#39;ve run into some issues.&lt;/p&gt;
+
+&lt;h2 id=&#34;chapter-i-the-problem&#34;&gt;Chapter I: The Problem&lt;/h2&gt;
+
+&lt;p&gt;I ran my blog script to convert my markdown into a nice HTML webpage, but then something happened. Nothing. Nothing happened. The script just sat there, stuck. This was odd because the script usually runs in under a second, so something had to have gone wrong...&lt;/p&gt;
+
+&lt;h2 id=&#34;chapter-ii-the-quick-fix&#34;&gt;Chapter II: The Quick Fix&lt;/h2&gt;
+
+&lt;p&gt;I turned on tracing in my &lt;code&gt;head.m4&lt;/code&gt; by adding &lt;code&gt;traceon&lt;/code&gt; to the start of the file then I ran the script again. I knew instantly what had gone wrong... M4 was spitting out the same HTML over and over and over again: It was expanding the macros I had written in my post! Creating an infinite loop.&lt;/p&gt;
+
+&lt;p&gt;As a quick fix in the post I replaced all occurrences of my actual macros with ones that were slightly different. It worked! ...but then M4 gave another error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;m4: unexpected end of input, unclosed parenthesis:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;chapter-iii-the-root-of-all-evil&#34;&gt;Chapter III: The Root of All Evil&lt;/h2&gt;
+
+&lt;p&gt;In my search for answers I came across this post: &lt;a href=&#34;http://silas.net.br/tech/devel/m4.html&#34;&gt;http://silas.net.br/tech/devel/m4.html&lt;/a&gt;. While the particular issue in on the webpage wasn&#39;t &lt;em&gt;my&lt;/em&gt; issue, it gave me a hint as to what had gone wrong. M4 must have been trying to expand or evaluate something else in my post&#39;s text. Eventually I figured out that M4 was trying to run all the &lt;code&gt;define()&lt;/code&gt; and &lt;code&gt;include()&lt;/code&gt; statements I had written in my post. Needless to say, writing a post about M4 while using M4 for my templates was causing some issues...&lt;/p&gt;
+
+&lt;p&gt;As a crappy bandaid I added a couple of &lt;code&gt;sed&lt;/code&gt;s to my script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;article_html=$(echo &amp;quot;$article_html&amp;quot; |  sed -E -e &amp;quot;s/define\(/\&#39;!define\(!\&amp;quot;/g&amp;quot; -e &amp;quot;s/include\(/\&#39;!include\(!\&amp;quot;/g&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Because I only wrote &lt;code&gt;define&lt;/code&gt; and &lt;code&gt;include&lt;/code&gt; in my M4 code snippets for the post, this worked just fine. (Hopefully it works for this post too).&lt;/p&gt;
+
+&lt;p&gt;I may have to rethink using M4 completely because I won&#39;t lie I have no idea what I&#39;m doing - it seems like I&#39;m bound to run into this issue or a similar one in the future. Maybe Timmy was wrong; maybe I should just &lt;code&gt;echo&lt;/code&gt; a bunch of HTML in my script instead, surely it can&#39;t be that messy. We&#39;ll have to see what I come up with.&lt;/p&gt;
+
+&lt;h2 id=&#34;chapter-iv-going-forward&#34;&gt;Chapter IV: Going Forward&lt;/h2&gt;
+
+&lt;p&gt;For now, consider my &lt;a href=&#34;https://zakaria.org/posts/2020-08-01-shblog&#34;&gt;previous post&lt;/a&gt; to be non-cannon in the &lt;code&gt;/bin/sh&lt;/code&gt; blog series (if you can really call it a series - there hasn&#39;t even been a part II yet!).&lt;/p&gt;
+</summary>
+  </entry>
+  <entry>
+   <title>The /bin/sh blog</title>
+   <updated>2020-08-01T00:00:00Z</updated>
+   <id>tag:zakaria.org,2020-08-01:posts/2020-08-01-shblog.html</id>
+   <link href="https://zakaria.org/posts/2020-08-01-shblog.html"></link>
+   <summary type="html">&lt;h1 id=&#34;the-bin-sh-blog-part-i-timmy-s-templates&#34;&gt;The /bin/sh Blog. Part I: Timmy&#39;s Templates&lt;/h1&gt;
+
+&lt;p&gt;I love Unix shell scripting, in fact I may enjoy it more than &amp;quot;actual&amp;quot; programming. I say &amp;quot;&lt;a href=&#34;https://wikipedia.org/wiki/Shell_script&#34;&gt;shell scripts&lt;/a&gt;&amp;quot;, as opposed to &amp;quot;bash scripts&amp;quot;, simply because I don&#39;t use bash for my scripts. The reason why is not relevant to this post. What &lt;em&gt;is&lt;/em&gt; relevant is &lt;em&gt;why&lt;/em&gt; make a blog using shell scripts?&lt;br /&gt;
+Well, &lt;em&gt;why not&lt;/em&gt;? After all, Makefile blogs are a &lt;a href=&#34;https://lobste.rs/s/0skwhg/idea_makefile_blog&#34;&gt;thing&lt;/a&gt; that &lt;a href=&#34;https://github.com/MaskRay/makefile-blog&#34;&gt;exist&lt;/a&gt;, and Makefiles are just one way of running commands to do &lt;em&gt;something&lt;/em&gt;. Hmm. I wonder, what&#39;s another way of running a bunch of commands?&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Oh! I know!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Well, what is it Timmy?&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Why, shell scripts of course!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Woah, thanks Timmy, why that&#39;s correct.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;But how will you ever manage a website&#39;s HTML layout all in a shell script?
+Wouldn&#39;t that get messy?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Why yes Timmy, it would get pretty messy. What we need is some kind of &amp;quot;template&amp;quot; which can take some input and output HTML which we can serve...&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;What about that old M4 thing?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&amp;quot;M4&amp;quot;, Timmy? What on earth is that?&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;RFTM dude: &lt;a href=&#34;https://en.wikipedia.org/wiki/M4_(computer_language&#34;&gt;https://en.wikipedia.org/wiki/M4_(computer_language&lt;/a&gt;), &lt;a href=&#34;https://man.openbsd.org/m4&#34;&gt;https://man.openbsd.org/m4&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Okay Timmy, no need to be rude now. We have guests, remember?&lt;/p&gt;
+
+&lt;p&gt;Ignoring Timmy&#39;s rude nature, we now have a way of making &amp;quot;templates&amp;quot; of sorts, to make building the HTML a little easier. First, we&#39;ll start with something (almost) every HTML document on the web has, a &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;define(`_HTMLHEAD&#39;, `&amp;lt;head&amp;gt;   
+&amp;lt;title&amp;gt;My Blog Lol&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&amp;quot;stylsheet&amp;quot; href=&amp;quot;/style.css&amp;quot;/&amp;gt;
+&amp;lt;/head&amp;gt;&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Okay so now we have a &lt;code&gt;_HTMLHEAD&lt;/code&gt; macro defined. In our m4 file, whenever we type &lt;code&gt;_HTMLHEAD&lt;/code&gt;, the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; containing our blog&#39;s title and a link to our stylesheet will be printed. There&#39;s only one problem, currently on every page our title is exactly the same. That is fine for some things, but for actual posts we should be able to set our &lt;code&gt;&amp;lt;title&amp;gt;&lt;/code&gt; to be the title of our post. With M4 this is a piece of cake:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-m4&#34;&gt;define(`_HTMLHEAD&#39;, `&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;$1 - My Blog Lol&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&amp;quot;stylsheet&amp;quot; href=&amp;quot;/style.css&amp;quot;/&amp;gt;
+&amp;lt;/head&amp;gt;&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Well, what changed?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;See Timmy, on the second line, there is now a &lt;code&gt;$1 -&lt;/code&gt; before the rest of the blog title.&lt;br /&gt;
+In M4, macros can have arguments that can be placed into the macro&#39;s content. Now, if we call &lt;code&gt;_HTMLHEAD(`This is a post&#39;)&lt;/code&gt;, the resulting HTML will be:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-HTML&#34;&gt;&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;This is a post - My Blog Lol&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&amp;quot;stylsheet&amp;quot; href=&amp;quot;/style.css&amp;quot;/&amp;gt;
+&amp;lt;/head&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;$1&lt;/code&gt; has been replaced by our first argument, as expected. Nice. We can define more macros; for the navigation, footer, whatever you like. Here&#39;s a simple one that includes a &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; and also a &lt;code&gt;&amp;lt;nav&amp;gt;&lt;/code&gt; block containing our site&#39;s navigation links:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-m4&#34;&gt;define(`_HTMLHEAD&#39;,`&amp;lt;head&amp;gt;
+&amp;lt;meta http-equiv=&amp;quot;content-type&amp;quot; content=&amp;quot;text/html; charset=utf-8&amp;quot;&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;$1 - zakaria.org&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;/style.css&amp;quot;/&amp;gt;
+&amp;lt;/head&amp;gt;&#39;
+)
+
+define(`_HTMLNAV&#39;, `&amp;lt;nav&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;zakaria.org&amp;lt;/a&amp;gt;&amp;lt;br/&amp;gt;&amp;lt;a href=&amp;quot;/posts/&amp;quot;&amp;gt;blog&amp;lt;/a&amp;gt; / &amp;lt;a href=&amp;quot;/rss.xml&amp;quot;&amp;gt;rss&amp;lt;/a&amp;gt; / &amp;lt;a href=&amp;quot;https://github.com/e-zk/&amp;quot;&amp;gt;gh&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt; 
+&amp;lt;/nav&amp;gt;&#39;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the sake of neatness, I&#39;ve placed this code in &lt;code&gt;head.m4&lt;/code&gt;.
+For our individual posts, we need to write more M4. Here&#39;s a simple post template, we&#39;ll call it &lt;code&gt;post.m4&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-m4&#34;&gt;include(m4/head.m4)dnl
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+_HTMLHEAD(POSTTILE)
+&amp;lt;body&amp;gt;
+_HTMLNAV
+&amp;lt;main&amp;gt;
+POSTCONTENT
+&amp;lt;/main&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On the first line, we include the macros in our &lt;code&gt;head.m4&lt;/code&gt;, then on line 4 we &amp;quot;call&amp;quot; our &lt;code&gt;_HTMLHEAD&lt;/code&gt; macro, then shortly after we call our &lt;code&gt;_HTMLNAV&lt;/code&gt; macro. M4 fills in these macros with whatever they&#39;re defined as, in our case our &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;nav&amp;gt;&lt;/code&gt; blocks of HTML. Neat? Right?&lt;br /&gt;
+Moving on-&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I&#39;m confused&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;About what, Timmy?&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Those strange upper-case words littered throughout the file: &lt;code&gt;POSTTILE&lt;/code&gt; and &lt;code&gt;POSTCONTENT&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Oh! Thank you Timmy, I almost forgot. These are also macros, much the same as our &lt;code&gt;_HTMLNAV&lt;/code&gt; and &lt;code&gt;_HTMLHEAD&lt;/code&gt; ones, but they aren&#39;t defined in any of the M4 files we&#39;re using. That&#39;s because we define these macros when we &lt;em&gt;run&lt;/em&gt; &lt;code&gt;m4&lt;/code&gt; itself:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ m4 -DPOSTTILE=&amp;quot;Hello?&amp;quot; post.m4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;-D&lt;/code&gt; argument defines a symbol to have some value. In this case &lt;code&gt;POSTTILE&lt;/code&gt; now becomes &lt;code&gt;Hello?&lt;/code&gt; after M4 is done running. Try running:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ m4 -DPOSTTILE=&amp;quot;Test&amp;quot; -DPOSTCONTENT=&amp;quot;&amp;lt;h1&amp;gt;Test :P&amp;lt;/h1&amp;gt;&amp;quot; post.m4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;M4 should output a &amp;quot;complete&amp;quot; HTML document, with the title &amp;quot;Test&amp;quot; and with a single heading reading &amp;quot;Test :P&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Now that we have a (an?) M4 template set up, instead of &lt;code&gt;echo&lt;/code&gt;ing a bunch of &lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt; in our script, now all we have to do is call &lt;code&gt;m4&lt;/code&gt; and pass arguments to it for our content to show up in the resulting HTML.&lt;/p&gt;
+
+&lt;p&gt;Don&#39;t be mad. But that&#39;s the end of this post. &lt;em&gt;I know, I know&lt;/em&gt; we didn&#39;t actually write any shell script just yet, (Timmy is giving me the stink eye right now), but that&#39;s for another time.&lt;br /&gt;
+Stay tuned for part II.&lt;/p&gt;
+</summary>
+  </entry>
+ </feed>
