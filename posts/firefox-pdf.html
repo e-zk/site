@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1" name="viewport">
+<link rel="preload" as="font" href="/static/fonts/InterVariable.woff2" crossorigin="" type="font/woff2">
+<link rel="preload" as="font" href="/static/fonts/CommitMono VariableFont.woff2" crossorigin="" type="font/woff2">
+<link href="/style.css" rel="stylesheet" type="text/css" title="default">
+<link href="/style-paper.css" rel="alternate stylesheet" type="text/css" title="paper">
+<link href="/static/fonts/fonts.css" rel="stylesheet" type="text/css">
+<link href="/rss.xml" rel="alternate" type="application/rss+xml">
+<title>Using Firefox as a PDF editor</title>
+</head>
+<body>
+<header>
+<nav>
+<p>
+<a href="/" class="index">zakaria.org</a> <a href="/posts">Blog</a> <a href="/projects.html">Projects</a> <a href="/about.html">About</a>
+</p>
+</nav>
+</header>
+<main>
+<section id="Using-Firefox-as-a-PDF-editor">
+<h1>Using Firefox as a PDF editor</h1>
+<p>I had to sign some documents recently. As most people do at some point in
+their lives. What I tend to do in this situation is use a browser. Because
+browsers are ubiquitous now, and most come with in-built PDF viewers.
+Usually they not only let you view PDFs, but also highlight text, add text,
+and add signatures. It&rsquo;s pretty cool. I don&rsquo;t need to
+touch the Adobe or Microsoft suite of crap. Plus, since I run OpenBSD, none
+of those are available anyway (that&rsquo;s for better, defintely not for worse).</p>
+<p>I wrote a helper script that opens a new instance of Firefox with a fresh
+<a href="/posts/temporarybrowsing.html#1-temporary-profile">browser profile in a temporary directory</a>) for this purpose:</p>
+<pre><code class="language-bash">#!/bin/sh
+# pdfedit [options]
+
+trap cleanup 1 2 3 6 15
+
+PROFILE_DIR="$(mktemp -d -p /tmp 'pdfedit.XXXXXX')"
+
+cleanup() {
+        rm -rf "$PROFILE_DIR"
+}
+
+cat &lt;&lt;EOF &gt; "${PROFILE_DIR}/user.js"
+// user.js
+// disable javascript by default
+user_pref("javascript.enabled", false);
+EOF
+
+firefox --new-instance --no-remote --offline --profile "$PROFILE_DIR" "$@"
+cleanup
+</code></pre>
+<p>The script passes through any arguments you give it directly to Firefox, but I
+find running the script then opening PDFs through the &ldquo;file open&rdquo; dialog more
+intuitive.</p>
+<p>To minimise the attack surface available to potentially malicious PDFs the
+script also uses an
+undocumented flag the puts Firefox in &ldquo;offline mode&rdquo; so it can&rsquo;t access
+the internet (I don&rsquo;t need that when opening PDFs). JavaScript is also
+disabled in user.js, however I&rsquo;m unsure if that actually disables embedded JS
+from running in PDFs.</p>
+</section>
+
+<hr/><p>Published on 2026-04-06</p>
+</main>
+<footer>
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="/posts/firefox-pdf.djot">plaintext</a> <a href="http://64wv2uqwjacqer7z5d6ooqgrvjwlioizmo7hgmxm7zxerbvgnoqhafid.onion/posts/firefox-pdf.html">onion</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# Using Firefox as a PDF editor
+
+I had to sign some documents recently. As most people do at some point in
+their lives. What I tend to do in this situation is use a browser. Because
+browsers are ubiquitous now, and most come with in-built PDF viewers.
+Usually they not only let you view PDFs, but also highlight text, add text,
+and add signatures. It's pretty cool. I don't need to
+touch the Adobe or Microsoft suite of crap. Plus, since I run OpenBSD, none
+of those are available anyway (that's for better, defintely not for worse).
+
+I wrote a helper script that opens a new instance of Firefox with a fresh
+[browser profile in a temporary directory][tempdir]) for this purpose:
+
+```bash
+#!/bin/sh
+# pdfedit [options]
+
+trap cleanup 1 2 3 6 15
+
+PROFILE_DIR="$(mktemp -d -p /tmp 'pdfedit.XXXXXX')"
+
+cleanup() {
+        rm -rf "$PROFILE_DIR"
+}
+
+cat <<EOF > "${PROFILE_DIR}/user.js"
+// user.js
+// disable javascript by default
+user_pref("javascript.enabled", false);
+EOF
+
+firefox --new-instance --no-remote --offline --profile "$PROFILE_DIR" "$@"
+cleanup
+```
+
+The script passes through any arguments you give it directly to Firefox, but I
+find running the script then opening PDFs through the "file open" dialog more
+intuitive.
+
+To minimise the attack surface available to potentially malicious PDFs the
+script also uses an
+undocumented flag the puts Firefox in "offline mode" so it can't access
+the internet (I don't need that when opening PDFs). JavaScript is also
+disabled in user.js, however I'm unsure if that actually disables embedded JS
+from running in PDFs.
+
+[tempdir]: /posts/temporarybrowsing.html#1-temporary-profile
