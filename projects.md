@@ -87,7 +87,7 @@ decryption and shows a summary of the algorithm inputs:
 ## page
 
 A command-line password manager written in Go that uses the 
-[age](https://age-encryption.org/) encryption algorithm for storing secrets 
+[age](https://age-encryption.org/) encryption algorithm for storing secrets.  
 It uses `$EDITOR` to edit entries, supports decrypting+copying secrets to the
 clipboard, random string password generation.
 
