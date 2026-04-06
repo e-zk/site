@@ -1,13 +1,16 @@
 .POSIX:
-.PHONY: update rss serve
+.PHONY: update index bookshelf serve
 
-all: update rss serve
+all: update index bookshelf
 
 update:
-	../site-gen/site-gen .
+	~/var/go/src/site-gen/site-gen compile
 
-rss:
-	echo stub
+index:
+	~/var/go/src/site-gen/site-gen index
+
+bookshelf:
+	~/var/go/src/site-gen/site-gen bookshelf
 
 # serve (for testing only)
 serve:
