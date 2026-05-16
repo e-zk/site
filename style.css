@@ -1,22 +1,19 @@
 :root {
-	--a: #fff;
-	--b: #ccc;
-	--c: #555;
-	--d: #222;
-	--s: 1rem;
-	--t: var(--s);
-	--f: "InterVariable","Inter",-apple-system,BlinkMacSystemFont,"San Francisco",Roboto,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+	--a: #aaafa0;
+	--b: #555f50;
+	--c: #353f30;
+	--d: #252f20;
+	--f: serif;
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
-	font-feature-settings: 'calt' 1, 'ss01' 1;
 	--bw: 1px;
 }
-::selection { color: #111; background: #bcbeb4 }
+::selection { color: #111; background: #e0e000 }
 @media(prefers-color-scheme:dark) {
 	:root {
-		--a: #000;
-		--b: #3c3b35;
-		--c: #bcbbb5;
-		--d: #cccbc3;
+		--a: #000a00;
+		--b: #304a40;
+		--c: #b0cac0;
+		--d: #c0dad0;
 	}
 }
 
@@ -37,9 +34,8 @@ body {
 	word-break: break-word;
 	max-width: 580px;
 	min-height: 100vh;
-	margin: var(--t) auto; padding: 0 var(--s) var(--s);
+	margin: 1rem auto; padding: 0 1rem 1rem;
 	font-family: var(--f);
-	font-weight: 400;
 	background: var(--a);
 	color: var(--c);
 }
@@ -54,15 +50,15 @@ h1,h2,h3,h4,h5,h6 {
 	margin-block-end: 1em;
 	margin-bottom: 1em;
 }
-h1 { border-bottom: var(--bw) solid var(--b); padding: 0 0 var(--t) 0 }
-h2 { font-weight: 600 }
-b, strong { font-weight: 500 }
+h1 { border-bottom: var(--bw) solid var(--b); padding: 0 0 1rem 0 }
+h2 { font-weight: bold }
+b, strong { font-weight: bold }
 ul, ol {
-	padding-inline-start: var(--t);
-	margin: 0 0 0 calc(var(--s)/2);
+	padding-inline-start: 1rem;
+	margin: 0 0 0 calc(1rem/2);
 }
 ul > li, ol > li {
-	padding-inline-start: calc(var(--t)/4)
+	padding-inline-start: calc(1rem/4)
 }
 ol > li::marker, ul > li::marker {
 	color: var(--d);
@@ -73,7 +69,7 @@ blockquote {
 	font-family: inherit;
 	font-style: italic;
 	font-weight: normal;
-	padding: calc(var(--t)/4) var(--t);
+	padding: calc(1rem/4) 1rem;
 	margin: 0;
 	border-right: none;
 	border-left: var(--bw) solid var(--b);
@@ -81,7 +77,7 @@ blockquote {
 	border-inline-end: none;
 }
 blockquote p {
-	margin: var(--t) 0;
+	margin: 1rem 0;
 	color: var(--c);
 }
 blockquote footer {
@@ -90,11 +86,11 @@ blockquote footer {
 }
 
 /*header + footer + nav*/
-body header, body footer { padding: var(--t) 0 }
+body header, body footer { padding: 1rem 0 3rem 0 }
 body header nav p,
 body footer p {
 	display: flex;
-	column-gap: calc(var(--t) * 0.75);
+	column-gap: calc(1rem * 0.75);
 	text-transform: lowercase;
 }
 body header nav p a,
@@ -118,7 +114,7 @@ code {
 pre code {
 	background: transparent;
 	display: block;
-	padding: var(--t);
+	padding: 1rem;
 	line-height: 1.3;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -127,7 +123,7 @@ pre code {
 }
 
 /*misc*/
-img,picture,video { max-width: 100%; margin: var(--t) 0; display: block; border-radius: 8px }
+img,picture,video { max-width: 100%; margin: 1rem 0; display: block; border-radius: 8px }
 hr { box-sizing: content-box; height: 0; border: 0; border-top: var(--bw) solid var(--b) }
 
 /*link styles*/
@@ -149,21 +145,13 @@ a[href]:not(:where(
   [href^="./"]:not([href^=".//"]),
   [href*="//zakaria.org"]
 ))::after {
-	/*content: '  \2197';*/
-	content: '  \25CB';
-	font-size: 0.5em;
+	content: '  \2197';
+	/*content: '  \02E5';*/
 	display: inline-block;
 	position: relative;
-	bottom: 1.5ch;
-	right: 0px;
+	/*bottom: 0.4rem;*/
+	padding: 0 0.125rem;
 }
-a[href]:not(:where(
-  [href^="#"],
-  /* exclude relative but not double slash only links */
-  [href^="/"]:not([href^="//"]),
-  [href^="./"]:not([href^=".//"]),
-  [href*="//zakaria.org"]
-)):hover::after { 	content: '  \25CF' }
 
 /*tables*/
 table { border-collapse: collapse;  table-layout: fixed }
