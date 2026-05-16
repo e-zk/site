@@ -6,7 +6,7 @@ browsers are ubiquitous now, and most come with in-built PDF viewers.
 Usually they not only let you view PDFs, but also highlight text, add text,
 and add signatures. It's pretty cool. I don't need to
 touch the Adobe or Microsoft suite of crap. Plus, since I run OpenBSD, none
-of those are available anyway (that's for better, defintely not for worse).
+of those are available anyway (that's for better, definitely not for worse).
 
 I wrote a helper script that opens a new instance of Firefox with a fresh
 [browser profile in a temporary directory][tempdir]) for this purpose:
