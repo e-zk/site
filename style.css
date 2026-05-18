@@ -3,20 +3,19 @@
 	--b: #555f50;
 	--c: #353f30;
 	--d: #252f20;
-	--f: serif;
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
 	--bw: 1px;
 }
 ::selection { color: #111; background: #e0e000 }
 @media(prefers-color-scheme:dark) {
 	:root {
-		--a: #000a00;
+		--a: #000000;
 		--b: #304a40;
 		--c: #b0cac0;
 		--d: #c0dad0;
 	}
 }
-
+*, *::before, *::after { box-sizing: inherit }
 html {
 	height: 100%;
 	scroll-behavior: smooth;
@@ -24,18 +23,15 @@ html {
 	-moz-text-size-adjust: none;
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
-	line-height: 1.6;
+	line-height: 1.5;
+	font-family: serif;
 	font-size: 16px;
-}
-*, *::before, *::after {
-	box-sizing: inherit;
 }
 body {
 	word-break: break-word;
 	max-width: 580px;
 	min-height: 100vh;
 	margin: 1rem auto; padding: 0 1rem 1rem;
-	font-family: var(--f);
 	background: var(--a);
 	color: var(--c);
 }
@@ -138,19 +134,6 @@ a {
 a:hover, a:active, a:focus {
 	color: var(--d);
 	text-decoration-color: var(--c);
-}
-a[href]:not(:where(
-  [href^="#"],
-  [href^="/"]:not([href^="//"]),
-  [href^="./"]:not([href^=".//"]),
-  [href*="//zakaria.org"]
-))::after {
-	content: '  \2197';
-	/*content: '  \02E5';*/
-	display: inline-block;
-	position: relative;
-	/*bottom: 0.4rem;*/
-	padding: 0 0.125rem;
 }
 
 /*tables*/
