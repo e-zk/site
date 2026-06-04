@@ -1,5 +1,5 @@
 :root {
-	--a: #aaafa0;
+	--a: #ffffff;
 	--b: #555f50;
 	--c: #353f30;
 	--d: #252f20;
@@ -31,7 +31,7 @@ body {
 	word-break: break-word;
 	max-width: 580px;
 	min-height: 100vh;
-	margin: 1rem auto; padding: 0 1rem 1rem;
+	margin: 0 auto; padding: 2rem;
 	background: var(--a);
 	color: var(--c);
 }
@@ -82,7 +82,8 @@ blockquote footer {
 }
 
 /*header + footer + nav*/
-body header, body footer { padding: 1rem 0 3rem 0 }
+body header { padding: 0 0 1rem 0 }
+body footer { padding: 1rem 0 0 0 }
 body header nav p,
 body footer p {
 	display: flex;
