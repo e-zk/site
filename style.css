@@ -1,12 +1,12 @@
 :root {
-	--a: #ffffff;
-	--b: #555f50;
-	--c: #353f30;
-	--d: #252f20;
+	--a: #fefefe;
+	--b: rgb(51 51 51 / 20%);
+	--c: #333;
+	--d: #000;
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
 	--bw: 1px;
 }
-::selection { color: #111; background: #e0e000 }
+::selection { color: #000; background: #ffff00 }
 @media(prefers-color-scheme:dark) {
 	:root {
 		--a: #000000;
