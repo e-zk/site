@@ -46,13 +46,6 @@ h1,h2,h3,h4,h5,h6 {
 	margin-top: 2rem;
 	margin-block-start: 2rem;
 }
-h1::after {
-	display: block;
-	content: '\2014';
-	color: var(--b);
-	margin-top: 0;
-	margin-block-start: 0;
-}
 h1 { font-size:1.476rem;margin-top:0;margin-block-start:0;margin-bottom:2rem;margin-block-end:2rem }
 h1 { font-size: 1.476rem }
 h2 { font-size: 1.383rem }
@@ -95,20 +88,19 @@ blockquote footer {
 /*header + footer + nav*/
 body header { margin: 0 0 2rem 0 }
 body footer { margin: 2rem 0 0 0 }
-body header nav p,
-body footer p {
-	margin: 0;
+body header nav,
+body footer {
 	display: flex;
 	column-gap: calc(1rem * 0.75);
 	text-transform: lowercase;
 }
-body header nav p a,
-body footer p a {
+body header nav a,
+body footer a {
 	font-weight: 500;
 	color: var(--c);
 	text-decoration: none;
 }
-body header nav p a:hover {
+body header nav a:hover {
 	color: var(--d);
 }
 
@@ -159,6 +151,7 @@ th { border-bottom: var(--bw) solid var(--b); color: var(--d); font-weight: 500;
 td.postdate { padding-left: 0; white-space: nowrap; width: 10ch; font-family: var(--e); font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1 }
 td.postlink { white-space: normal }
 
+.dinkus { color: var(--b); margin: 1rem 0; text-align: center }
 .box {
 	display: block;
 	background: transparent;
