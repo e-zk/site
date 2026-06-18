@@ -6,7 +6,6 @@
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
 	--bw: 1px;
 }
-::selection { color: #000; background: #ffff00 }
 @media(prefers-color-scheme:dark) {
 	:root {
 		--a: #000000;
@@ -14,6 +13,7 @@
 		--c: #b0cac0;
 		--d: #c0dad0;
 	}
+	::selection { color: #000; background: #ffff00 }
 }
 *, *::before, *::after { box-sizing: inherit }
 html {
