@@ -3,7 +3,7 @@
   <title>zakaria&#39;s web log</title>
   <subtitle>that means blog</subtitle>
   <id>https://zakaria.org/posts/</id>
-  <updated>2026-05-18T20:13:15+10:00</updated>
+  <updated>2026-06-18T22:47:05+10:00</updated>
   <link href="https://zakaria.org/feed.xml" rel="self"></link>
   <author>
    <name>zakaria</name>
@@ -12,8 +12,8 @@
   <entry>
    <title>Using Firefox as a PDF editor</title>
    <updated>2026-04-06T00:00:00Z</updated>
-   <id>tag:zakaria.org,2026-04-06:posts/firefox-pdf.html</id>
-   <link href="https://zakaria.org/posts/firefox-pdf.html"></link>
+   <id>tag:zakaria.org,2026-04-06:posts/firefox-pdf</id>
+   <link href="https://zakaria.org/posts/firefox-pdf"></link>
    <summary type="html">&lt;section id=&#34;Using-Firefox-as-a-PDF-editor&#34;&gt;
 &lt;h1&gt;Using Firefox as a PDF editor&lt;/h1&gt;
 &lt;p&gt;I had to sign some documents recently. As most people do at some point in
@@ -60,8 +60,8 @@ from running in PDFs.&lt;/p&gt;
   <entry>
    <title>I don&#39;t like it when computers talk to me</title>
    <updated>2025-12-07T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-12-07:posts/talking-computers.html</id>
-   <link href="https://zakaria.org/posts/talking-computers.html"></link>
+   <id>tag:zakaria.org,2025-12-07:posts/talking-computers</id>
+   <link href="https://zakaria.org/posts/talking-computers"></link>
    <summary type="html">&lt;h1 id=&#34;i-don-t-like-it-when-computers-talk-to-me&#34;&gt;I don&#39;t like it when computers talk to me&lt;/h1&gt;
 
 &lt;p&gt;The recent, ongoing, AI-chatbot boom has made me realise how annoying I think
@@ -126,8 +126,8 @@ computer, and I hate it when it &amp;quot;speaks&amp;quot; back.&lt;/p&gt;
   <entry>
    <title>Goodbye wiki.zakaria.org</title>
    <updated>2025-09-07T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-09-07:posts/wiki-archive.html</id>
-   <link href="https://zakaria.org/posts/wiki-archive.html"></link>
+   <id>tag:zakaria.org,2025-09-07:posts/wiki-archive</id>
+   <link href="https://zakaria.org/posts/wiki-archive"></link>
    <summary type="html">&lt;h1 id=&#34;goodbye-wiki-zakaria-org-for-now&#34;&gt;Goodbye wiki.zakaria.org (for now)&lt;/h1&gt;
 
 &lt;p&gt;&lt;img src=&#34;/static/img/wiki.png&#34; alt=&#34;wiki homepage&#34; /&gt;&lt;/p&gt;
@@ -229,8 +229,8 @@ new side project either. We&#39;ll see.&lt;/p&gt;
   <entry>
    <title>There&#39;s nothing to do</title>
    <updated>2025-08-16T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-08-16:posts/nothing-to-do.html</id>
-   <link href="https://zakaria.org/posts/nothing-to-do.html"></link>
+   <id>tag:zakaria.org,2025-08-16:posts/nothing-to-do</id>
+   <link href="https://zakaria.org/posts/nothing-to-do"></link>
    <summary type="html">&lt;h1 id=&#34;there-s-nothing-to-do&#34;&gt;There&#39;s nothing to do&lt;/h1&gt;
 
 &lt;p&gt;You ever feel like there&#39;s nothing to do?&lt;/p&gt;
@@ -261,8 +261,8 @@ To be honest, me neither.&lt;/p&gt;
   <entry>
    <title>Soft uptime</title>
    <updated>2025-06-21T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-06-21:posts/soft-uptime.html</id>
-   <link href="https://zakaria.org/posts/soft-uptime.html"></link>
+   <id>tag:zakaria.org,2025-06-21:posts/soft-uptime</id>
+   <link href="https://zakaria.org/posts/soft-uptime"></link>
    <summary type="html">&lt;h1 id=&#34;soft-uptime&#34;&gt;Soft uptime&lt;/h1&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-powershell&#34;&gt;PS&amp;gt; Get-Uptime
@@ -330,8 +330,8 @@ it gives me a good enough idea. I don&#39;t need it to be very accurate.&lt;/p&g
   <entry>
    <title>Thoughts on &#34;Thoughts on Thinking&#34;</title>
    <updated>2025-06-20T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-06-20:posts/thoughts-on-thinking.html</id>
-   <link href="https://zakaria.org/posts/thoughts-on-thinking.html"></link>
+   <id>tag:zakaria.org,2025-06-20:posts/thoughts-on-thinking</id>
+   <link href="https://zakaria.org/posts/thoughts-on-thinking"></link>
    <summary type="html">&lt;h1 id=&#34;thoughts-on-thoughts-on-thinking&#34;&gt;Thoughts on &amp;quot;Thoughts on Thinking&amp;quot;&lt;/h1&gt;
 
 &lt;p&gt;I came across &lt;a href=&#34;https://dcurt.is/thinking&#34;&gt;this post&lt;/a&gt;
@@ -500,8 +500,8 @@ Have bad ideas and forget them.&lt;/p&gt;
   <entry>
    <title>Paste as plaintext</title>
    <updated>2025-02-28T00:00:00Z</updated>
-   <id>tag:zakaria.org,2025-02-28:posts/paste-plaintext.html</id>
-   <link href="https://zakaria.org/posts/paste-plaintext.html"></link>
+   <id>tag:zakaria.org,2025-02-28:posts/paste-plaintext</id>
+   <link href="https://zakaria.org/posts/paste-plaintext"></link>
    <summary type="html">&lt;h1 id=&#34;paste-as-plaintext&#34;&gt;Paste as plaintext&lt;/h1&gt;
 
 &lt;p&gt;I use Windows for work. I used to use it at home. But now I only use it at
@@ -577,8 +577,8 @@ trash.&lt;/p&gt;
   <entry>
    <title>YubiKey resident SSH keys on Windows+WSL</title>
    <updated>2022-03-23T00:00:00Z</updated>
-   <id>tag:zakaria.org,2022-03-23:posts/resident-ssh-keys-on-windows.html</id>
-   <link href="https://zakaria.org/posts/resident-ssh-keys-on-windows.html"></link>
+   <id>tag:zakaria.org,2022-03-23:posts/resident-ssh-keys-on-windows</id>
+   <link href="https://zakaria.org/posts/resident-ssh-keys-on-windows"></link>
    <summary type="html">&lt;h1 id=&#34;yubikey-resident-ssh-keys-on-windows-wsl&#34;&gt;YubiKey resident SSH keys on Windows+WSL&lt;/h1&gt;
 
 &lt;p&gt;This is a guide that documents how to use YubiKey resident SSH keys on Windows, with passthrough to WSL2 via &lt;code&gt;npiperelay&lt;/code&gt; and &lt;code&gt;socat&lt;/code&gt;.&lt;/p&gt;
@@ -680,8 +680,8 @@ ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
   <entry>
    <title>Installing Headscale on OpenBSD</title>
    <updated>2022-02-15T00:00:00Z</updated>
-   <id>tag:zakaria.org,2022-02-15:posts/headscale-setup.html</id>
-   <link href="https://zakaria.org/posts/headscale-setup.html"></link>
+   <id>tag:zakaria.org,2022-02-15:posts/headscale-setup</id>
+   <link href="https://zakaria.org/posts/headscale-setup"></link>
    <summary type="html">&lt;h1 id=&#34;installing-headscale-on-openbsd&#34;&gt;Installing headscale on OpenBSD&lt;/h1&gt;
 &lt;section&gt;
 &lt;p&gt;&lt;strong&gt;This guide is severely out of date:&lt;/strong&gt; I&#39;ve received a couple emails about
@@ -832,8 +832,8 @@ headscale(ok)
   <entry>
    <title>My stagit setup</title>
    <updated>2022-02-14T00:00:00Z</updated>
-   <id>tag:zakaria.org,2022-02-14:posts/stagit-setup.html</id>
-   <link href="https://zakaria.org/posts/stagit-setup.html"></link>
+   <id>tag:zakaria.org,2022-02-14:posts/stagit-setup</id>
+   <link href="https://zakaria.org/posts/stagit-setup"></link>
    <summary type="html">&lt;h1 id=&#34;stagit-setup-on-openbsd&#34;&gt;stagit setup on OpenBSD&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://codemadness.org/stagit.html&#34;&gt;stagit&lt;/a&gt; is a static page generator for git repos. It&#39;s very minimal - which I like.&lt;/p&gt;
@@ -1101,8 +1101,8 @@ server &amp;quot;git.zakaria.org&amp;quot; {
   <entry>
    <title>Temporary web browsing</title>
    <updated>2021-12-13T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-12-13:posts/temporarybrowsing.html</id>
-   <link href="https://zakaria.org/posts/temporarybrowsing.html"></link>
+   <id>tag:zakaria.org,2021-12-13:posts/temporarybrowsing</id>
+   <link href="https://zakaria.org/posts/temporarybrowsing"></link>
    <summary type="html">&lt;h1 id=&#34;temporary-web-browsing&#34;&gt;Temporary web browsing&lt;/h1&gt;
 
 &lt;p&gt;Here&#39;s a few ways of scripting an ephemeral browser environment.&lt;/p&gt;
@@ -1296,8 +1296,8 @@ any scripts for making it truly ephemeral - that might be the focus of a future 
   <entry>
    <title>Breaking promises with LD_PRELOAD</title>
    <updated>2021-12-07T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-12-07:posts/breaking_promises.html</id>
-   <link href="https://zakaria.org/posts/breaking_promises.html"></link>
+   <id>tag:zakaria.org,2021-12-07:posts/breaking_promises</id>
+   <link href="https://zakaria.org/posts/breaking_promises"></link>
    <summary type="html">&lt;h1 id=&#34;breaking-promises-with-ld-preload&#34;&gt;Breaking promises with LD_PRELOAD&lt;/h1&gt;
 
 &lt;p&gt;In this post I show how to simply &lt;a href=&#34;https://wikipedia.org/wiki/NOP_(code)&#34;&gt;noop&lt;/a&gt; calls to OpenBSD&#39;s &lt;a href=&#34;https://man.openbsd.org/pledge&#34;&gt;pledge(1)&lt;/a&gt; using LD_PRELOAD.&lt;/p&gt;
@@ -1425,8 +1425,8 @@ The Linux &lt;a href=&#34;https://linux.die.net/man/8/ld.so&#34;&gt;man page&lt;
   <entry>
    <title>Windows Sandbox</title>
    <updated>2021-08-08T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-08-08:posts/winsandbox.html</id>
-   <link href="https://zakaria.org/posts/winsandbox.html"></link>
+   <id>tag:zakaria.org,2021-08-08:posts/winsandbox</id>
+   <link href="https://zakaria.org/posts/winsandbox"></link>
    <summary type="html">&lt;h1 id=&#34;windows-sandbox&#34;&gt;Windows Sandbox&lt;/h1&gt;
 
 &lt;p&gt;If you[&#39;re forced to] use Windows this might be useful for compartmentalisation.&lt;/p&gt;
@@ -1498,8 +1498,8 @@ This can make it annoying if you wish to sandbox a single program, but have to i
   <entry>
    <title>Feb 2021 Update: Git Server + Hidden Service</title>
    <updated>2021-02-24T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-02-24:posts/2021-02-24-feb.html</id>
-   <link href="https://zakaria.org/posts/2021-02-24-feb.html"></link>
+   <id>tag:zakaria.org,2021-02-24:posts/2021-02-24-feb</id>
+   <link href="https://zakaria.org/posts/2021-02-24-feb"></link>
    <summary type="html">&lt;h1 id=&#34;update-feb-2021-git-server-hidden-service&#34;&gt;Update Feb 2021: git server + hidden service&lt;/h1&gt;
 
 &lt;p&gt;Here&#39;s a little site update.&lt;/p&gt;
@@ -1550,8 +1550,8 @@ I modified some of the scripts provided to suit my workflow.&lt;/p&gt;
   <entry>
    <title>Usbkill the OpenBSD Way</title>
    <updated>2021-01-11T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-01-11:posts/2021-01-11-usbkiller.html</id>
-   <link href="https://zakaria.org/posts/2021-01-11-usbkiller.html"></link>
+   <id>tag:zakaria.org,2021-01-11:posts/2021-01-11-usbkiller</id>
+   <link href="https://zakaria.org/posts/2021-01-11-usbkiller"></link>
    <summary type="html">&lt;h1 id=&#34;usbkill-the-openbsd-way&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt; the OpenBSD way&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/hephaest0s/usbkill&#34;&gt;&lt;code&gt;usbkill&lt;/code&gt;&lt;/a&gt; is a kill-switch that shuts down your computer on any USB change. It does this by watching the output of &lt;code&gt;lsusb&lt;/code&gt; and when there is a change it runs &lt;code&gt;shutdown -h now&lt;/code&gt;.&lt;/p&gt;
@@ -1726,8 +1726,8 @@ Well for starters that isn&#39;t as fun. The main reason is that all this works 
   <entry>
    <title>My xenodm setup</title>
    <updated>2021-01-04T00:00:00Z</updated>
-   <id>tag:zakaria.org,2021-01-04:posts/2021-01-04-xenodm.html</id>
-   <link href="https://zakaria.org/posts/2021-01-04-xenodm.html"></link>
+   <id>tag:zakaria.org,2021-01-04:posts/2021-01-04-xenodm</id>
+   <link href="https://zakaria.org/posts/2021-01-04-xenodm"></link>
    <summary type="html">&lt;h1 id=&#34;my-xenodm-setup&#34;&gt;My xenodm setup&lt;/h1&gt;
 
 &lt;p&gt;OpenBSD uses the &lt;a href=&#34;https://man.openbsd.org/xenodm&#34;&gt;&lt;code&gt;xenodm(1)&lt;/code&gt;&lt;/a&gt; display manager, which is a fork of xdm.&lt;br /&gt;
@@ -1893,8 +1893,8 @@ fi
   <entry>
    <title>OpenBSD Notes</title>
    <updated>2020-12-08T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-12-08:posts/2020-12-08-openbsd-notes.html</id>
-   <link href="https://zakaria.org/posts/2020-12-08-openbsd-notes.html"></link>
+   <id>tag:zakaria.org,2020-12-08:posts/2020-12-08-openbsd-notes</id>
+   <link href="https://zakaria.org/posts/2020-12-08-openbsd-notes"></link>
    <summary type="html">&lt;h1 id=&#34;openbsd-notes&#34;&gt;OpenBSD notes&lt;/h1&gt;
 
 &lt;p&gt;Random notes on running &lt;a href=&#34;https://openbsd.org/&#34;&gt;OpenBSD&lt;/a&gt; (some notes may only be useful for a laptop install). Updated frequently.&lt;/p&gt;
@@ -2033,8 +2033,8 @@ pass in on $vm_int proto tcp to port 6000:6010
   <entry>
    <title>How I (almost) fixed my fonts</title>
    <updated>2020-12-05T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-12-05:posts/2020-12-05-fonts.html</id>
-   <link href="https://zakaria.org/posts/2020-12-05-fonts.html"></link>
+   <id>tag:zakaria.org,2020-12-05:posts/2020-12-05-fonts</id>
+   <link href="https://zakaria.org/posts/2020-12-05-fonts"></link>
    <summary type="html">&lt;h1 id=&#34;how-i-almost-fixed-my-fonts&#34;&gt;How I (almost) fixed my fonts&lt;/h1&gt;
 
 &lt;p&gt;This site goes through CSS changes daily. Yes, daily. I can&#39;t stop changing the CSS. It&#39;s gotten to the point where I focus more on the CSS of this site than, evidently, writing posts for it.&lt;/p&gt;
@@ -2101,8 +2101,8 @@ Sans-serif looks better for this site anyways :P&lt;/p&gt;
   <entry>
    <title>Malthusian Belt</title>
    <updated>2020-11-07T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-11-07:posts/2020-11-07-malthusian-belt.html</id>
-   <link href="https://zakaria.org/posts/2020-11-07-malthusian-belt.html"></link>
+   <id>tag:zakaria.org,2020-11-07:posts/2020-11-07-malthusian-belt</id>
+   <link href="https://zakaria.org/posts/2020-11-07-malthusian-belt"></link>
    <summary type="html">&lt;h1 id=&#34;malthusian-belt&#34;&gt;Malthusian Belt&lt;/h1&gt;
 
 &lt;p&gt;I&#39;m reading Aldous Huxtley&#39;s Brave New World and as with most books I read I&#39;ve come accross many words and phrases that I don&#39;t understand. One of which was Lenina&#39;s &amp;quot;Malthusian belt&amp;quot;. At first I thought &amp;quot;Malthusian&amp;quot; refered to the belt&#39;s geographical origin (Malta? No, that would be &lt;em&gt;Maltese&lt;/em&gt;), but the word didn&#39;t fit any place I knew of so naturally I looked it up.&lt;/p&gt;
@@ -2133,8 +2133,8 @@ Sans-serif looks better for this site anyways :P&lt;/p&gt;
   <entry>
    <title>Quick setup script with tmux</title>
    <updated>2020-09-09T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-09-09:posts/2020-09-09-tmux.html</id>
-   <link href="https://zakaria.org/posts/2020-09-09-tmux.html"></link>
+   <id>tag:zakaria.org,2020-09-09:posts/2020-09-09-tmux</id>
+   <link href="https://zakaria.org/posts/2020-09-09-tmux"></link>
    <summary type="html">&lt;h1 id=&#34;quick-setup-script-with-tmux&#34;&gt;Quick setup script with &lt;code&gt;tmux&lt;/code&gt;&lt;/h1&gt;
 
 &lt;p&gt;In my network security class we ssh into a handful of VMs pretty often.&lt;br /&gt;
@@ -2171,8 +2171,8 @@ tmux attach-session -d
   <entry>
    <title>M4 Troubles</title>
    <updated>2020-08-03T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-08-03:posts/2020-08-03-m4.html</id>
-   <link href="https://zakaria.org/posts/2020-08-03-m4.html"></link>
+   <id>tag:zakaria.org,2020-08-03:posts/2020-08-03-m4</id>
+   <link href="https://zakaria.org/posts/2020-08-03-m4"></link>
    <summary type="html">&lt;h1 id=&#34;m4-troubles&#34;&gt;M4 Troubles...&lt;/h1&gt;
 
 &lt;p&gt;In my &lt;a href=&#34;https://zakaria.org/posts/2020-08-01-shblog&#34;&gt;previous post&lt;/a&gt; I wrote about mostly M4 templates.
@@ -2212,8 +2212,8 @@ Well, it turns out I&#39;ve run into some issues.&lt;/p&gt;
   <entry>
    <title>The /bin/sh blog</title>
    <updated>2020-08-01T00:00:00Z</updated>
-   <id>tag:zakaria.org,2020-08-01:posts/2020-08-01-shblog.html</id>
-   <link href="https://zakaria.org/posts/2020-08-01-shblog.html"></link>
+   <id>tag:zakaria.org,2020-08-01:posts/2020-08-01-shblog</id>
+   <link href="https://zakaria.org/posts/2020-08-01-shblog"></link>
    <summary type="html">&lt;h1 id=&#34;the-bin-sh-blog-part-i-timmy-s-templates&#34;&gt;The /bin/sh Blog. Part I: Timmy&#39;s Templates&lt;/h1&gt;
 
 &lt;p&gt;I love Unix shell scripting, in fact I may enjoy it more than &amp;quot;actual&amp;quot; programming. I say &amp;quot;&lt;a href=&#34;https://wikipedia.org/wiki/Shell_script&#34;&gt;shell scripts&lt;/a&gt;&amp;quot;, as opposed to &amp;quot;bash scripts&amp;quot;, simply because I don&#39;t use bash for my scripts. The reason why is not relevant to this post. What &lt;em&gt;is&lt;/em&gt; relevant is &lt;em&gt;why&lt;/em&gt; make a blog using shell scripts?&lt;br /&gt;
