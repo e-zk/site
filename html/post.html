@@ -2,4 +2,4 @@
 {{define "title"}}{{.Metadata.Title}}{{end}}
 {{define "body"}}{{.Content}}{{end}}
 {{define "date"}}{{if .Metadata.Date}}<hr/><p>Published on {{.Metadata.Date}}{{if .LastModified}}{{if ne .Metadata.Date .LastModified}} and updated on {{.LastModified}}{{end}}{{end}}{{if .GitHash}} (<a href="https://github.com/e-zk/site/commit/{{.GitHash}}">commit</a>){{end}}</p>{{end}}{{end}}
-{{define "footer"}}<p><a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="/{{.Metadata.Path}}">plaintext</a> <a href="{{template "onionurl" .}}">onion</a></p>{{end}}
+{{define "footer"}}<a href="https://creativecommons.org/licenses/by-sa/4.0/">&copy; CC BY-SA 4.0</a> <a href="/{{.Metadata.Path}}">plaintext</a> <a href="{{template "onionurl" .}}">onion</a>{{end}}
