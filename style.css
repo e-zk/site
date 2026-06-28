@@ -4,6 +4,7 @@
 	--c: #333;
 	--d: #000;
 	--e: "CommitMonoVariable",Menlo,Consolas,Monaco,"Liberation Mono","Lucida Console",monospace;
+	--e: monospace,monospace;
 	--bw: 1px;
 }
 @media(prefers-color-scheme:dark) {
@@ -38,13 +39,13 @@ body {
 
 /*text styles*/
 h1,h2,h3,h4,h5,h6 {
-	/*text-wrap: balance;*/
-	line-height: 1.125;
+	text-wrap: balance;
+	line-height: 1.25;
 	letter-spacing: -0.01em;
 	color: var(--d);
-	font-weight: 500;
 	margin-top: 2rem;
 	margin-block-start: 2rem;
+	font-weight: 500;
 }
 h1 { font-size:1.476rem;margin-top:0;margin-block-start:0;margin-bottom:2rem;margin-block-end:2rem }
 h1 { font-size: 1.476rem }
@@ -53,7 +54,7 @@ h3 { font-size: 1.296rem }
 h4 { font-size: 1.215rem }
 h5 { font-size: 1.138rem }
 h6 { font-size: 1.067rem }
-b, strong { font-weight: bold }
+b, strong { font-weight: 700 }
 ul, ol {
 	padding-inline-start: 1rem;
 	margin: 0 0 0 calc(1rem/2);
