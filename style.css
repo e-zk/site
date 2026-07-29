@@ -1,17 +1,21 @@
 :root {
 	--a: #fefefe;
-	--b: rgb(51 51 51 / 20%);
-	--c: #333;
-	--d: #000;
-	--e: monospace,monospace;
+	--b: rgba(0,0,0,0.1);
+	--c: rgba(0,0,0,0.6);
+	--d: rgba(0,0,0,0.9);
+	--e: monospace, monospace;
 	--bw: 1px;
 }
 @media(prefers-color-scheme:dark) {
 	:root {
+		/*--a: #000000;*/
+		/*--b: #304a40;*/
+		/*--c: #b0cac0;*/
+		/*--d: #c0dad0;*/
 		--a: #000000;
-		--b: #304a40;
-		--c: #b0cac0;
-		--d: #c0dad0;
+		--b: rgba(255,255,255,0.2);
+		--c: rgba(255,255,255,0.6);
+		--d: rgba(255,255,255,0.9);
 	}
 	::selection { color: #000; background: #ffff00 }
 }
