@@ -176,7 +176,7 @@ hr {
 }
 .dinkus {
 	color: var(--b);
-	margin: 2rem 0 0 0;
+	margin: 2rem 0;
 	text-align: center;
 }
 .box {
