@@ -51,7 +51,6 @@ h1,h2,h3,h4,h5,h6 {
 	font-weight: 500;
 }
 h1 {
-	font-size: 1.476rem;
 	margin-top: 0;
 	margin-block-start: 0;
 	margin-bottom: 2rem;
@@ -93,15 +92,17 @@ blockquote footer {
 }
 /*header + footer + nav*/
 body header { margin: 0 0 2rem 0 }
-body footer { margin: 2rem 0 0 0 }
-body header nav,
 body footer {
+	font-size: calc(1em - 2px);
+	margin: 2rem 0 0 0;
+	text-align: center;
+}
+body header nav {
 	display: flex;
 	column-gap: calc(1rem * 0.75);
 	text-transform: lowercase;
 }
-body header nav a,
-body footer a {
+body header nav a {
 	font-weight: 500;
 	color: var(--c);
 	text-decoration: none;
@@ -109,12 +110,11 @@ body footer a {
 body header nav a:hover { color: var(--d) }
 
 /*code styles*/
+code, .mono { font-family: var(--e) }
 code {
-	font-family: var(--e);
 	font-size: calc(1em - 2px);
 	font-weight: normal;
 	padding: 2px 4px;
-	font-feature-settings: 'ss03' 1, 'ss04' 1, 'ss05' 1;
 }
 pre code {
 	background: transparent;
@@ -157,7 +157,7 @@ td.postdate {
 	padding-left: 0;
 	white-space: nowrap;
 	width: 10ch;
-	font-family: var(--e);
+	/*font-family: var(--e);*/
 }
 td.postlink { white-space: normal }
 
@@ -176,7 +176,7 @@ hr {
 }
 .dinkus {
 	color: var(--b);
-	margin: 1rem 0;
+	margin: 2rem 0 0 0;
 	text-align: center;
 }
 .box {
