@@ -110,10 +110,12 @@ User-agent: Datenbank Crawler
 User-agent: DeepSeekBot
 User-agent: Devin
 User-agent: Diffbot
+User-agent: Diffbot-User
 User-agent: DuckAssistBot
 User-agent: Echobot Bot
 User-agent: EchoboxBot
 User-agent: ExaBot
+User-agent: ExaSearchBot
 User-agent: FacebookBot
 User-agent: facebookexternalhit
 User-agent: Factset_spyderbot
@@ -137,7 +139,6 @@ User-agent: HenkBot
 User-agent: iAskBot
 User-agent: iaskspider
 User-agent: iaskspider/2.0
-User-agent: IbouBot
 User-agent: ICC-Crawler
 User-agent: ImagesiftBot
 User-agent: imageSpider
@@ -151,6 +152,7 @@ User-agent: KunatoCrawler
 User-agent: laion-huggingface-processor
 User-agent: LAIONDownloader
 User-agent: LCC
+User-agent: Lightpanda
 User-agent: LinerBot
 User-agent: Linguee Bot
 User-agent: LinkupBot
@@ -189,6 +191,7 @@ User-agent: Querit-SearchBot
 User-agent: QueritBot
 User-agent: QuillBot
 User-agent: quillbot.com
+User-agent: Reflectionbot
 User-agent: SBIntuitionsBot
 User-agent: Scrapy
 User-agent: SemrushBot-OCOB
